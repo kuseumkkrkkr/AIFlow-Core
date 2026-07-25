@@ -29,6 +29,7 @@
 python engine/problem_generation_loop.py
 # SUMMARY passed=60 total=60 rate=1.000
 python engine/problem_generation_loop.py --min-grade 수1 --max-grade 수2 --repeats 10 --seed 99 --output docs/s1s2_report.json
+python engine/problem_generation_loop.py --difficulty hard --repeats 5 --seed 2026 --output docs/hard_report.json
 ```
 
 결과는 `docs/generated_validation_report.json`에 UTF-8로 기록된다. 이 보고서는 “생성 성공”만 세지 않고 `status=PASS`, 기대 정답 일치, `verified=true`, 풀이 trace 존재를 모두 만족해야 통과시킨다. 실제 시중 모의고사 원문 전체를 자동 수집·복제한 결과는 아니며, 저작권을 피한 독립 변형 기반의 회귀 기준선이다.
@@ -51,6 +52,7 @@ POST /api/generate
 ```
 
 응답에는 `summary`(총 문항·통과율)와 각 문항의 문제, 기대 정답, 실제 정답, 공식, 풀이 trace, 독립 검산 결과가 포함된다. `repeats`는 운영 보호를 위해 1~20으로 제한한다.
+난이도 파라미터는 `basic`, `mixed`, `hard`를 지원하며 basic은 중3·고1 템플릿, hard는 수1·수2·고2 모의고사형 템플릿을 선택한다.
 
 ## 문제집 코퍼스 검증
 

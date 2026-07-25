@@ -47,9 +47,13 @@ class handler(BaseHTTPRequestHandler):
                 repeats=repeats,
                 seed=seed,
                 include_mock=bool(payload.get("include_mock", True)),
+                difficulty=str(payload.get("difficulty", "mixed")),
             )
             if config.min_grade not in {"중3", "고1", "수1", "수2", "고2"} or config.max_grade not in {"중3", "고1", "수1", "수2", "고2"}:
                 self._send(400, {"status": "FAIL", "reason": "학년은 중3·고1·수1·수2·고2 중 하나여야 합니다."})
+                return
+            if config.difficulty not in {"basic", "mixed", "hard"}:
+                self._send(400, {"status": "FAIL", "reason": "difficulty는 basic·mixed·hard 중 하나여야 합니다."})
                 return
             report = generate_and_validate(config)
             self._send(200, {"status": "PASS" if report["failed"] == 0 else "FAIL", "summary": {key: report[key] for key in ("config", "total", "passed", "failed", "pass_rate")}, "cases": report["cases"]})

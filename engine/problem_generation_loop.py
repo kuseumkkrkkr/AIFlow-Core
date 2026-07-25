@@ -20,6 +20,7 @@ class GenerationConfig:
     repeats: int = 3
     seed: int = 2026
     include_mock: bool = True
+    difficulty: str = "mixed"
 
 
 @dataclass(frozen=True)
@@ -31,6 +32,7 @@ class GeneratedCase:
     mock_style: str
     question: str
     expected: Any
+    difficulty: str = "mixed"
 
 
 def _cases(rng: random.Random, include_mock: bool) -> list[GeneratedCase]:
@@ -84,6 +86,9 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
         else:
             allowed = set().union(*profile_groups.values())
         for case in _cases(rng, config.include_mock):
+            case_difficulty = "basic" if case.case_id.startswith(("m3", "h1")) else "hard"
+            if config.difficulty not in {"mixed", case_difficulty}:
+                continue
             if case.curriculum not in allowed:
                 continue
             parsed = classify(case.question)
@@ -97,6 +102,7 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
             rows.append({
                 "repeat": repeat + 1,
                 **asdict(case),
+                "difficulty": case_difficulty,
                 "domain": parsed.get("domain"),
                 "rule_path": path.get("path", []),
                 "answer": result.get("answer"),
@@ -119,9 +125,10 @@ def main() -> int:
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--no-mock", action="store_true", help="모의고사 스타일 문항 제외")
+    parser.add_argument("--difficulty", choices=["basic", "mixed", "hard"], default="mixed")
     parser.add_argument("--output", default="docs/generated_validation_report.json")
     args = parser.parse_args()
-    report = generate_and_validate(GenerationConfig(args.min_grade, args.max_grade, max(1, args.repeats), args.seed, not args.no_mock))
+    report = generate_and_validate(GenerationConfig(args.min_grade, args.max_grade, max(1, args.repeats), args.seed, not args.no_mock, args.difficulty))
     output = Path(args.output)
     if not output.is_absolute():
         output = Path(__file__).resolve().parents[1] / output

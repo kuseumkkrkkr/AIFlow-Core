@@ -2,7 +2,7 @@
 
 ## 무엇을 가지고 있는가
 
-`knowledge/`는 UTF-8 JSON 지식 베이스다. `concept_graph.json`은 개념·별칭·선행관계, `rule_library.json`은 적용 조건·필요 변수·공식·검산 정책, `template_pack.json`은 문제 생성 템플릿, `validation_contract.json`은 PASS/FAIL 계약을 담는다. 현재 일차·이차방정식, 비율, 집합, 확률·조합·순열, 기본 도형, 등차수열, 함수값·합성함수·역함수, 인수분해·나머지정리, 조건부확률, 지수·로그, 특수각 삼각함수, 다항식 극한, 거듭제곱 미분, 단항식 정적분을 다룬다.
+`knowledge/`는 UTF-8 JSON 지식 베이스다. `concept_graph.json`은 개념·별칭·선행관계, `rule_library.json`은 적용 조건·필요 변수·공식·검산 정책, `template_pack.json`은 문제 생성 템플릿, `validation_contract.json`은 PASS/FAIL 계약을 담는다. 현재 일차·이차방정식, 비율, 집합, 확률·조합·순열, 기본 도형, 등차수열, 함수값·합성함수·역함수, 인수분해·나머지정리, 조건부확률, 지수·로그와 지수·로그 방정식, 특수각 삼각함수, 다항식 극한, 거듭제곱 미분·접선 기울기, 단항식 정적분을 다룬다.
 
 ## 처리 파이프라인
 

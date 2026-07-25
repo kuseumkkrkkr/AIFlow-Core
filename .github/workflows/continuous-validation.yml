@@ -1,0 +1,32 @@
+name: AIFlow-Core continuous validation
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run core and corpus tests
+        run: |
+          python tests/test_rule_based_nlp.py
+          python tests/test_generation_loop.py
+          python tests/test_generation_validation.py
+          python tests/test_benchmark_matrix.py
+          python tests/test_corpus_runner.py
+      - name: Run market-style corpus
+        run: python engine/corpus_runner.py benchmarks/market_style_corpus.json --output /tmp/corpus_report.json
+      - name: Run multi-seed regression matrix
+        run: python engine/run_benchmark_matrix.py --seeds 1,2,3,4,5 --repeats 2 --output /tmp/matrix_report.json

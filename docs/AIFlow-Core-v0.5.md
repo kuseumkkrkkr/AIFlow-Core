@@ -35,6 +35,8 @@ python engine/problem_generation_loop.py --min-grade 수1 --max-grade 수2 --rep
 
 ## 다중 seed 벤치마크
 
+대규모 실행 기록: seed 1~20을 5회 반복해 총 2,000문항을 생성했고 2,000/2,000 PASS(100%)였다. 상세 결과는 `docs/benchmark_matrix_2000_report.json`에 저장했다. 이 수치는 현재 생성 템플릿과 명시적 규칙 범위의 회귀 안정성을 의미하며 실제 시중 문제집 전체의 일반화 정확도와 동일한 의미는 아니다.
+
 `engine/run_benchmark_matrix.py`는 중3·고1·수1·수2·고2 프로필을 여러 seed로 반복한다. 현재 `11,22,33,44,55` seed와 2회 반복으로 총 200문항을 실행했고 200/200 PASS였다. `docs/benchmark_matrix_report.json`에는 도메인별 통과율도 저장된다.
 
 ```powershell

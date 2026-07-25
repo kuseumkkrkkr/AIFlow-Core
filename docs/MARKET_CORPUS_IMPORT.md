@@ -23,10 +23,11 @@
 
 ```powershell
 python engine/corpus_runner.py C:/private/my_questions.jsonl `
+  --repeats 10 `
   --output docs/private_corpus_report.json
 ```
 
-보고서에는 실제 답, 기대 답, 분류 도메인, 선택 규칙, 공식, 풀이 단계, 독립 검산, 실패 사유가 기록된다.
+보고서에는 실제 답, 기대 답, 분류 도메인, 선택 규칙, 공식, 풀이 단계, 독립 검산, 실패 사유가 기록된다. `--repeats`를 사용하면 동일 코퍼스를 여러 번 실행해 결과 결정성도 `deterministic` 필드로 확인한다.
 
 ## 온라인 검증
 

@@ -19,7 +19,7 @@
 
 ## 검증과 한계
 
-독립 변형 문항 12개와 고난도 변형 문항 11개가 현재 100% 통과한다. 생성 루프에는 새 수1·수2 영역을 포함해 20개 템플릿을 3회 반복한 60개 케이스가 들어가며 현재 60/60 통과한다. 이는 명시적으로 지원하는 구조에 대한 결과이지 모든 시중 문제집의 정확도를 의미하지 않는다. 다음 단계는 함수의 정의역·치역, 다항식 나머지의 일반형, 도형 조건 해석, 자연어 애매성 평가를 확장하는 것이다.
+독립 변형 문항 23개가 현재 100% 통과한다. 생성 루프에는 새 수1·수2 영역을 포함한 템플릿이 들어가며, 최신 고1 단독 검증은 100/100, 고2(수1·수2 누적) 검증은 300/300 통과했다. 반복 코퍼스 검증은 23문항을 20회 실행해 460/460 통과하고 결과가 결정적으로 일치했다. 이는 명시적으로 지원하는 구조에 대한 결과이지 모든 시중 문제집의 정확도를 의미하지 않는다. 다음 단계는 함수의 정의역·치역, 다항식 나머지의 일반형, 도형 조건 해석, 자연어 애매성 평가를 확장하는 것이다.
 
 ## 반복 문제 생성 루프
 
@@ -27,7 +27,7 @@
 
 ```powershell
 python engine/problem_generation_loop.py
-# SUMMARY passed=60 total=60 rate=1.000
+# SUMMARY passed=69 total=69 rate=1.000
 python engine/problem_generation_loop.py --min-grade 수1 --max-grade 수2 --repeats 10 --seed 99 --output docs/s1s2_report.json
 python engine/problem_generation_loop.py --difficulty hard --repeats 5 --seed 2026 --output docs/hard_report.json
 ```
@@ -48,7 +48,7 @@ python engine/run_benchmark_matrix.py --seeds 11,22,33,44,55 --repeats 2
 
 ```json
 POST /api/generate
-{"min_grade":"수1","max_grade":"수2","repeats":2,"seed":101,"include_mock":false}
+{"min_grade":"수1","max_grade":"수2","repeats":2,"seed":101,"include_mock":false,"difficulty":"mixed"}
 ```
 
 응답에는 `summary`(총 문항·통과율)와 각 문항의 문제, 기대 정답, 실제 정답, 공식, 풀이 trace, 독립 검산 결과가 포함된다. `repeats`는 운영 보호를 위해 1~20으로 제한한다.

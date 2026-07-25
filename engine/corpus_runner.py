@@ -60,14 +60,21 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="AIFlow-Core 문제 코퍼스 검증")
     parser.add_argument("corpus")
     parser.add_argument("--output", default="docs/corpus_validation_report.json")
+    parser.add_argument("--repeats", type=int, default=1)
     args = parser.parse_args()
-    report = run_corpus(args.corpus)
+    runs = [run_corpus(args.corpus) for _ in range(max(1, args.repeats))]
+    report = runs[0]
+    stable = all([(run["passed"], run["failed"], [case["answer"] for case in run["cases"]]) == (report["passed"], report["failed"], [case["answer"] for case in report["cases"]]) for run in runs])
+    report["repeats"] = len(runs)
+    report["deterministic"] = stable
+    if not stable:
+        report["failed"] += 1
     output = Path(args.output)
     if not output.is_absolute():
         output = Path(__file__).resolve().parents[1] / output
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"SUMMARY passed={report['passed']} total={report['total']} rate={report['pass_rate']:.3f}")
-    return 0 if report["failed"] == 0 else 1
+    return 0 if report["failed"] == 0 and stable else 1
 
 
 if __name__ == "__main__":

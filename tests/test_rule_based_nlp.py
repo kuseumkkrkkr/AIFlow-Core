@@ -27,6 +27,12 @@ def test_core_domains() -> None:
         ("원의 넓이 반지름 2", "cm_geometry", 3.141592653589793 * 4),
         ("직사각형 넓이 가로 5 세로 3", "cm_geometry", 15),
         ("직사각형 둘레 가로 5 세로 3", "cm_geometry", 16),
+        ("지수 2^5", "hs1_exponential_log", 32),
+        ("log_2 8", "hs1_exponential_log", 3),
+        ("삼각함수 sin 30", "hs1_trigonometry", 0.5),
+        ("극한 lim x->2 x²+3x", "hs2_limit", 10),
+        ("미분 f(x)=x^3, x=2", "hs2_derivative", 12),
+        ("정적분 0부터 2 x^1", "hs2_integral", 2),
     ]
     for text, domain, expected in cases:
         parsed = classify(text)

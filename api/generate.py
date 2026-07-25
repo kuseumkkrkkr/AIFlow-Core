@@ -52,6 +52,10 @@ class handler(BaseHTTPRequestHandler):
             if config.min_grade not in {"중3", "고1", "수1", "수2", "고2"} or config.max_grade not in {"중3", "고1", "수1", "수2", "고2"}:
                 self._send(400, {"status": "FAIL", "reason": "학년은 중3·고1·수1·수2·고2 중 하나여야 합니다."})
                 return
+            order = ["중3", "고1", "수1", "수2", "고2"]
+            if order.index(config.min_grade) > order.index(config.max_grade):
+                self._send(400, {"status": "FAIL", "reason": "최소 학년은 최대 학년보다 앞서야 합니다."})
+                return
             if config.difficulty not in {"basic", "mixed", "hard"}:
                 self._send(400, {"status": "FAIL", "reason": "difficulty는 basic·mixed·hard 중 하나여야 합니다."})
                 return

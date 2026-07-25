@@ -70,10 +70,16 @@ def _cases(rng: random.Random, include_mock: bool) -> list[GeneratedCase]:
 
 def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
     """필요 변수: GenerationConfig. 작동 원리: 반복 생성 후 분류·계산·검산·trace를 모두 기록한다."""
+    grade_order = ["중3", "고1", "수1", "수2", "고2"]
+    if config.min_grade not in grade_order or config.max_grade not in grade_order:
+        raise ValueError("학년은 중3·고1·수1·수2·고2 중 하나여야 합니다.")
+    if grade_order.index(config.min_grade) > grade_order.index(config.max_grade):
+        raise ValueError("min_grade는 max_grade보다 앞서야 합니다.")
+    if config.difficulty not in {"basic", "mixed", "hard"}:
+        raise ValueError("difficulty는 basic·mixed·hard 중 하나여야 합니다.")
     rng = random.Random(config.seed)
     rows: list[dict[str, Any]] = []
     for repeat in range(max(1, config.repeats)):
-        grade_order = ["중3", "고1", "수1", "수2", "고2"]
         profile_groups = {
             "중3": {"중3"},
             "고1": {"고1"},

@@ -1,0 +1,2676 @@
+{
+  "config": {
+    "min_grade": "고1",
+    "max_grade": "고1",
+    "repeats": 20,
+    "seed": 404,
+    "include_mock": true,
+    "difficulty": "mixed"
+  },
+  "total": 100,
+  "passed": 100,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "cases": [
+    {
+      "repeat": 1,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 -3, 공차 1일 때 a3",
+      "expected": -1,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": -1,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': -3, 'd': 1, 'n': 3}을 공식에 대입해 -1를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 -2, 공차 0일 때 a7",
+      "expected": -2,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": -2,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': -2, 'd': 0, 'n': 7}을 공식에 대입해 -2를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 -5, 공차 5일 때 a18",
+      "expected": 80,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 80,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': -5, 'd': 5, 'n': 18}을 공식에 대입해 80를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 4,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 -5, 공차 -3일 때 a8",
+      "expected": -26,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": -26,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': -5, 'd': -3, 'n': 8}을 공식에 대입해 -26를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 4,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 4,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 4,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 4,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 5,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 11, 공차 6일 때 a7",
+      "expected": 47,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 47,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 11, 'd': 6, 'n': 7}을 공식에 대입해 47를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 5,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 5,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 5,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 5,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 6,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 3, 공차 3일 때 a4",
+      "expected": 12,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 12,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 3, 'd': 3, 'n': 4}을 공식에 대입해 12를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 6,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 6,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 6,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 6,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 7,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 12, 공차 4일 때 a9",
+      "expected": 44,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 44,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 12, 'd': 4, 'n': 9}을 공식에 대입해 44를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 7,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 7,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 7,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 7,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 8,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 3, 공차 -4일 때 a16",
+      "expected": -57,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": -57,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 3, 'd': -4, 'n': 16}을 공식에 대입해 -57를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 8,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 8,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 8,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 8,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 9,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 8, 공차 4일 때 a8",
+      "expected": 36,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 36,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 8, 'd': 4, 'n': 8}을 공식에 대입해 36를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 9,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 9,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 9,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 9,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 10,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 7, 공차 -4일 때 a9",
+      "expected": -25,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": -25,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 7, 'd': -4, 'n': 9}을 공식에 대입해 -25를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 10,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 10,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 10,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 10,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 11,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 4, 공차 -5일 때 a13",
+      "expected": -56,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": -56,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 4, 'd': -5, 'n': 13}을 공식에 대입해 -56를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 11,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 11,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 11,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 11,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 12,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 3, 공차 5일 때 a9",
+      "expected": 43,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 43,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 3, 'd': 5, 'n': 9}을 공식에 대입해 43를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 12,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 12,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 12,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 12,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 13,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 1, 공차 2일 때 a10",
+      "expected": 19,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 19,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 1, 'd': 2, 'n': 10}을 공식에 대입해 19를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 13,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 13,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 13,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 13,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 14,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 3, 공차 3일 때 a12",
+      "expected": 36,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 36,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 3, 'd': 3, 'n': 12}을 공식에 대입해 36를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 14,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 14,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 14,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 14,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 15,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 -4, 공차 -3일 때 a14",
+      "expected": -43,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": -43,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': -4, 'd': -3, 'n': 14}을 공식에 대입해 -43를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 15,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 15,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 15,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 15,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 16,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 -5, 공차 2일 때 a16",
+      "expected": 25,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 25,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': -5, 'd': 2, 'n': 16}을 공식에 대입해 25를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 16,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 16,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 16,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 16,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 17,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 11, 공차 0일 때 a4",
+      "expected": 11,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 11,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 11, 'd': 0, 'n': 4}을 공식에 대입해 11를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 17,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 17,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 17,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 17,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 18,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 3, 공차 3일 때 a12",
+      "expected": 36,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 36,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 3, 'd': 3, 'n': 12}을 공식에 대입해 36를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 18,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 18,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 18,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 18,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 19,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 4, 공차 5일 때 a9",
+      "expected": 44,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 44,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 4, 'd': 5, 'n': 9}을 공식에 대입해 44를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 19,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 19,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 19,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 19,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 20,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 0, 공차 4일 때 a5",
+      "expected": 16,
+      "difficulty": "basic",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 16,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 0, 'd': 4, 'n': 5}을 공식에 대입해 16를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 20,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "difficulty": "basic",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 20,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "difficulty": "basic",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 20,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "difficulty": "basic",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 20,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "difficulty": "basic",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    }
+  ]
+}

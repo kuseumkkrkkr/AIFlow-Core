@@ -55,9 +55,12 @@ def _cases(rng: random.Random, include_mock: bool) -> list[GeneratedCase]:
         GeneratedCase("s2-conditional", "수2", "고2 모의고사", "조건부확률 P(A∩B)=1/10, P(B)=1/2일 때 P(A|B)", 0.2),
         GeneratedCase("s1-exp", "수1", "고2 모의고사", "지수 2^8", 256),
         GeneratedCase("s1-log", "수1", "고2 모의고사", "log_3 27", 3),
+        GeneratedCase("s1-exp-eq", "수1", "고2 모의고사", "지수방정식 2^x=16", 4),
+        GeneratedCase("s1-log-eq", "수1", "고2 모의고사", "로그방정식 log_3 x=2", 9),
         GeneratedCase("s1-trig", "수1", "고2 모의고사", "삼각함수 cos 60", 0.5),
         GeneratedCase("s2-limit", "수2", "고2 모의고사", "극한 lim x->3 x²+3x", 18),
         GeneratedCase("s2-derivative", "수2", "고2 모의고사", "미분 f(x)=x^4, x=2", 32),
+        GeneratedCase("s2-tangent", "수2", "고2 모의고사", "접선의 기울기 f(x)=x^3, x=2", 12),
         GeneratedCase("s2-integral", "수2", "고2 모의고사", "정적분 0부터 3 x^2", 9),
     ]
     if include_mock:

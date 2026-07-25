@@ -36,7 +36,7 @@ python engine/problem_generation_loop.py --difficulty hard --repeats 5 --seed 20
 
 ## 다중 seed 벤치마크
 
-대규모 실행 기록: seed 1~20을 5회 반복해 총 3,100문항을 생성했고 3,100/3,100 PASS(100%)였다. 고2 프로필은 수1·수2·고2 누적 범위로 집계한다. 상세 결과는 `docs/benchmark_matrix_3100_report.json`에 저장했다. 이 수치는 현재 생성 템플릿과 명시적 규칙 범위의 회귀 안정성을 의미하며 실제 시중 문제집 전체의 일반화 정확도와 동일한 의미는 아니다.
+대규모 실행 기록: seed 1~20을 5회 반복해 총 3,700문항을 생성했고 3,700/3,700 PASS(100%)였다. 고2 프로필은 수1·수2·고2 누적 범위로 집계한다. 상세 결과는 `docs/benchmark_matrix_3100_report.json`에 저장했다. 이 수치는 현재 생성 템플릿과 명시적 규칙 범위의 회귀 안정성을 의미하며 실제 시중 문제집 전체의 일반화 정확도와 동일한 의미는 아니다.
 
 `engine/run_benchmark_matrix.py`는 중3·고1·수1·수2·고2 프로필을 여러 seed로 반복한다. 현재 `11,22,33,44,55` seed와 2회 반복으로 총 200문항을 실행했고 200/200 PASS였다. `docs/benchmark_matrix_report.json`에는 도메인별 통과율도 저장된다.
 

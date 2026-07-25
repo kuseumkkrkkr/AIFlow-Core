@@ -40,3 +40,12 @@ python engine/problem_generation_loop.py --min-grade 수1 --max-grade 수2 --rep
 ```powershell
 python engine/run_benchmark_matrix.py --seeds 11,22,33,44,55 --repeats 2
 ```
+
+웹 생성 API도 같은 계약을 사용한다.
+
+```json
+POST /api/generate
+{"min_grade":"수1","max_grade":"수2","repeats":2,"seed":101,"include_mock":false}
+```
+
+응답에는 `summary`(총 문항·통과율)와 각 문항의 문제, 기대 정답, 실제 정답, 공식, 풀이 trace, 독립 검산 결과가 포함된다. `repeats`는 운영 보호를 위해 1~20으로 제한한다.

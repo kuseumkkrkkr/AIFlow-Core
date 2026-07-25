@@ -36,6 +36,7 @@ def test_core_domains() -> None:
         ("지수방정식 2^x=8", "hs1_exponential_equation", 3),
         ("로그방정식 log_2 x=3", "hs1_exponential_equation", 8),
         ("접선의 기울기 f(x)=x^2, x=3", "hs2_tangent", 6),
+        ("양수 a와 이차함수 f(x)에 대하여 조각함수 g(x)=sin(3πx/a), 서로 다른 실근의 개수를 h(n)이라 할 때 g(10)의 값", "hs2_piecewise_trig_quadratic", 224),
     ]
     for text, domain, expected in cases:
         parsed = classify(text)

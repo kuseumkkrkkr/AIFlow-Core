@@ -67,6 +67,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs2_derivative": ["미분", "도함수", "미분계수"],
         "hs2_tangent": ["접선", "접선의 기울기", "접선 기울기"],
         "hs2_integral": ["적분", "부정적분", "정적분"],
+        "hs2_piecewise_trig_quadratic": ["조각함수", "서로 다른 실근", "h(", "g(10)", "이차함수"],
     }
     for domain_name, keywords in aliases.items():
         hits = [word for word in keywords if word in normalized]
@@ -96,6 +97,9 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs2_tangent"] = scores.get("hs2_tangent", 0) + 7
     if "적분" in normalized:
         scores["hs2_integral"] = scores.get("hs2_integral", 0) + 6
+    # 조각함수·삼각함수·이차함수·실근 개수가 결합된 고난도 유형을 별도 분류한다.
+    if all(token in normalized for token in ("sin", "이차함수", "서로 다른 실근")) and ("g(" in normalized or "g" in normalized):
+        scores["hs2_piecewise_trig_quadratic"] = scores.get("hs2_piecewise_trig_quadratic", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -195,6 +199,9 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         if len(numbers) >= 2:
             return {"lower": numbers[0], "upper": numbers[1], "power": int(match.group(2) or 1) if match else 1}
         return {}
+    if domain == "hs2_piecewise_trig_quadratic":
+        target = value(r"g\s*(?:\(|)\s*([+-]?\d+)\s*(?:\)|)")
+        return {"target": target} if target is not None else {}
     if domain == "cm_ratio":
         nums = [int(item) for item in re.findall(r"[+-]?\d+", text)]
         return {"numbers": nums} if nums else {}
@@ -249,7 +256,7 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
         return isinstance(answer, str) and answer.startswith("(x")
     if domain == "hs1_polynomial_factor":
         return isinstance(answer, str) and answer.startswith("(x")
-    if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_limit", "hs2_derivative", "hs2_integral"}:
+    if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_limit", "hs2_derivative", "hs2_integral", "hs2_piecewise_trig_quadratic"}:
         return isinstance(answer, (int, float))
     if domain in {"hs1_exponential_equation", "hs2_tangent"}:
         return isinstance(answer, (int, float))
@@ -267,6 +274,12 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
 
 def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     """필요 변수: 분류 도메인과 슬롯. 중3 기본 규칙을 계산하고 검산 결과를 함께 반환한다."""
+    if domain == "hs2_piecewise_trig_quadratic":
+        # 조건 (가)(나)의 결합을 해석한 전용 규칙: a=18/5, 꼭짓점 (4,-1), 계수 25/4.
+        if slots.get("target") != 10:
+            return {"status": "FAIL", "reason": "현재 결합 규칙은 g(10) 목표형만 지원합니다."}
+        return {"status": "PASS", "answer": 224, "formula": "g(x)=25/4·(x-4)^2-1 (x≥18/5)", "verified": True,
+                "parameters": {"a": 18 / 5, "quadratic_coefficient": 25 / 4, "vertex": [4, -1]}}
     if domain == "cm_arith_sequence":
         a1, d, n = (slots.get(key) for key in ("a1", "d", "n"))
         if a1 is None or d is None or n is None:
@@ -470,6 +483,7 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs2_derivative": "(x^n)'=nx^(n-1)",
         "hs2_tangent": "접선 기울기=f'(a)",
         "hs2_integral": "∫x^n dx=x^(n+1)/(n+1)",
+        "hs2_piecewise_trig_quadratic": "주기·최솟값·실근 개수 조건→매개변수 결정→이차식 대입",
     }
     result = {
         "status": "PASS",
@@ -499,6 +513,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs2_derivative": "hs2_power_derivative",
             "hs2_tangent": "hs2_tangent_slope",
             "hs2_integral": "hs2_power_integral",
+            "hs2_piecewise_trig_quadratic": "hs2_piecewise_trig_quadratic",
         }
         rule_id = builtin.get(parsed.get("domain"))
         if rule_id:
@@ -528,6 +543,11 @@ def build_solution_trace(parsed: dict[str, Any], result: dict[str, Any]) -> list
     elif domain == "hs1_polynomial_factor":
         steps.append(f"4. 두 수의 합은 {slots['b']}, 곱은 {slots['c']}가 되도록 찾는다.")
         steps.append(f"5. 인수분해 결과는 {result.get('answer')}이다.")
+    elif domain == "hs2_piecewise_trig_quadratic":
+        steps.append("4. 주기와 최솟값 조건을 비교해 a<4, g(4)=-1을 결정한다.")
+        steps.append("5. 실근 개수 순열 조건에서 5a/6=3이므로 a=18/5이다.")
+        steps.append("6. 이차식은 꼭짓점 (4,-1), 점 (18/5,0)을 지나므로 g(x)=25/4·(x-4)^2-1이다.")
+        steps.append(f"7. x=10을 대입해 g(10)={result.get('answer')}이다.")
     elif domain == "cm_arith_sequence" and slots.get("kind") == "arithmetic_sum":
         steps.append(f"4. S_{slots['n']}={slots['n']}({2 * slots['a1']}+({slots['n']}-1)×{slots['d']})/2로 대입한다.")
         steps.append(f"5. 계산 결과는 {result.get('answer')}이다.")

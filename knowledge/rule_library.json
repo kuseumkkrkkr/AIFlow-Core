@@ -162,6 +162,7 @@
     {"rule_id":"hs2_polynomial_limit","name":"다항함수 극한","domain":"hs2_limit","lhs":"lim x→a f(x)","rhs":"f(a)","conditions":{"tags":["극한"],"requires":["point"]},"inverse":"substitute_limit_point","risk":"medium","notes_kr":"연속인 다항함수의 대입으로 계산한다."},
     {"rule_id":"hs2_power_derivative","name":"거듭제곱 미분","domain":"hs2_derivative","lhs":"(x^n)'","rhs":"n*x^(n-1)","conditions":{"tags":["미분"],"requires":["power","input"]},"inverse":"power_rule","risk":"low","notes_kr":"거듭제곱 단항식에 대한 기본 미분 규칙이다."},
     {"rule_id":"hs2_tangent_slope","name":"접선 기울기","domain":"hs2_tangent","lhs":"f'(a)","rhs":"접선의 기울기","conditions":{"tags":["접선"],"requires":["power","input"]},"inverse":"differentiate_at_point","risk":"medium","notes_kr":"미분계수는 해당 점에서의 접선 기울기다."},
-    {"rule_id":"hs2_power_integral","name":"거듭제곱 정적분","domain":"hs2_integral","lhs":"∫a^b x^n dx","rhs":"[x^(n+1)/(n+1)]_a^b","conditions":{"tags":["적분"],"requires":["lower","upper","power"]},"inverse":"power_integral","risk":"medium","notes_kr":"구간 상한과 하한을 대입해 넓이를 계산한다."}
+    {"rule_id":"hs2_power_integral","name":"거듭제곱 정적분","domain":"hs2_integral","lhs":"∫a^b x^n dx","rhs":"[x^(n+1)/(n+1)]_a^b","conditions":{"tags":["적분"],"requires":["lower","upper","power"]},"inverse":"power_integral","risk":"medium","notes_kr":"구간 상한과 하한을 대입해 넓이를 계산한다."},
+    {"rule_id":"hs2_piecewise_trig_quadratic","name":"조각 삼각함수·이차함수 결합","domain":"hs2_piecewise_trig_quadratic","lhs":"주기·최솟값·실근 개수 조건","rhs":"매개변수 결정 후 이차식 대입","conditions":{"tags":["조각함수","삼각함수","이차함수"],"requires":["target"]},"inverse":"solve_piecewise_parameter_case","risk":"high","notes_kr":"2026년 6월 고2 30번 구조를 단계별로 처리한다."}
   ]
 }

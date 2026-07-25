@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import random
+import argparse
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -67,7 +68,11 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
     rng = random.Random(config.seed)
     rows: list[dict[str, Any]] = []
     for repeat in range(max(1, config.repeats)):
+        grade_order = ["중3", "고1", "수1", "수2", "고2"]
+        allowed = set(grade_order[grade_order.index(config.min_grade) : grade_order.index(config.max_grade) + 1]) if config.min_grade in grade_order and config.max_grade in grade_order else set(grade_order)
         for case in _cases(rng, config.include_mock):
+            if case.curriculum not in allowed:
+                continue
             parsed = classify(case.question)
             result = solve_rule(parsed["domain"], parsed["slots"])
             path = select_optimal_rule(parsed)
@@ -82,6 +87,9 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
                 "domain": parsed.get("domain"),
                 "rule_path": path.get("path", []),
                 "answer": result.get("answer"),
+                "formula": result.get("formula", ""),
+                "reason": result.get("reason", ""),
+                "trace": build_solution_trace(parsed, result) if result.get("status") == "PASS" else [],
                 "verified": result.get("verified", False),
                 "trace_steps": len(build_solution_trace(parsed, result)) if result.get("status") == "PASS" else 0,
                 "status": "PASS" if passed else "FAIL",
@@ -92,8 +100,18 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
 
 def main() -> int:
     """명령행에서 고교 범위 반복 검증 보고서를 UTF-8 JSON으로 저장한다."""
-    report = generate_and_validate(GenerationConfig())
-    output = Path(__file__).resolve().parents[1] / "docs" / "generated_validation_report.json"
+    parser = argparse.ArgumentParser(description="AIFlow-Core 문제 생성·정답·풀이 검증 루프")
+    parser.add_argument("--min-grade", default="중3", choices=["중3", "고1", "수1", "수2", "고2"])
+    parser.add_argument("--max-grade", default="고2", choices=["중3", "고1", "수1", "수2", "고2"])
+    parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--seed", type=int, default=2026)
+    parser.add_argument("--no-mock", action="store_true", help="모의고사 스타일 문항 제외")
+    parser.add_argument("--output", default="docs/generated_validation_report.json")
+    args = parser.parse_args()
+    report = generate_and_validate(GenerationConfig(args.min_grade, args.max_grade, max(1, args.repeats), args.seed, not args.no_mock))
+    output = Path(args.output)
+    if not output.is_absolute():
+        output = Path(__file__).resolve().parents[1] / output
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"SUMMARY passed={report['passed']} total={report['total']} rate={report['pass_rate']:.3f}")
     return 0 if report["failed"] == 0 else 1

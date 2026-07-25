@@ -57,6 +57,11 @@ class handler(BaseHTTPRequestHandler):
                 "path": path,
                 "result": result,
                 "steps": build_solution_trace(parsed, result) if result.get("status") == "PASS" else [],
+                "summary": (
+                    f"{parsed.get('domain')} 규칙을 적용해 정답 {result.get('answer')}를 계산하고 재검산했습니다."
+                    if result.get("status") == "PASS"
+                    else str(result.get("reason", "문제를 해석하지 못했습니다."))
+                ),
             }
             self._send(200, response)
         except (ValueError, TypeError, json.JSONDecodeError) as exc:

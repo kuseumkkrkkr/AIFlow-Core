@@ -23,6 +23,15 @@
         "linear_balance"
       ],
       "answer": 6,
+      "formula": "x = (c-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_linear으로 분류한다.",
+        "2. 적용 규칙: linear_balance",
+        "3. 공식: x = (c-b)/a",
+        "4. 추출한 값 {'a': 3, 'b': 5, 'c': 23}을 공식에 대입해 6를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -39,6 +48,15 @@
         "set_union_identity"
       ],
       "answer": 25,
+      "formula": "|A∪B| = |A| + |B| - |A∩B|",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_set으로 분류한다.",
+        "2. 적용 규칙: set_union_identity",
+        "3. 공식: |A∪B| = |A| + |B| - |A∩B|",
+        "4. 추출한 값 {'a': 18, 'b': 12, 'c': 5}을 공식에 대입해 25를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -55,6 +73,15 @@
         "pythagorean_identity"
       ],
       "answer": 15,
+      "formula": "c = √(a²+b²)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: c = √(a²+b²)",
+        "4. 추출한 값 {'numbers': [9, 12]}을 공식에 대입해 15를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -71,6 +98,15 @@
         "ar_seq_an_formula"
       ],
       "answer": -2,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': -2, 'd': 0, 'n': 6}을 공식에 대입해 -2를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -87,6 +123,15 @@
         "hs1_function_value"
       ],
       "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -103,6 +148,16 @@
         "hs1_function_composition"
       ],
       "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -119,6 +174,16 @@
         "hs1_inverse_function"
       ],
       "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -135,6 +200,16 @@
         "hs1_factor_remainder"
       ],
       "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -151,6 +226,15 @@
         "quad_delta_root"
       ],
       "answer": 9,
+      "formula": "x = (-b ± √(b²-4ac)) / 2a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_quadratic으로 분류한다.",
+        "2. 적용 규칙: quad_delta_root",
+        "3. 공식: x = (-b ± √(b²-4ac)) / 2a",
+        "4. 추출한 값 {'a': 1, 'b': -13, 'c': 36}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -167,6 +251,16 @@
         "probability_basic"
       ],
       "answer": 0.375,
+      "formula": "P(E) = 유리한 경우 / 전체 경우",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: P(E) = 유리한 경우 / 전체 경우",
+        "4. 추출한 값 {'numbers': [3, 8]}을 공식에 대입해 0.375를 계산한다.",
+        "기약분수로 정리하면 3/8이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -183,6 +277,15 @@
         "probability_basic"
       ],
       "answer": 120,
+      "formula": "nCr = n!/(r!(n-r)!)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: nCr = n!/(r!(n-r)!)",
+        "4. 추출한 값 {'kind': 'combination', 'numbers': [10, 3]}을 공식에 대입해 120를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -199,6 +302,16 @@
         "ar_seq_an_formula"
       ],
       "answer": 60,
+      "formula": "S_n = n(2a1+(n-1)d)/2",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: S_n = n(2a1+(n-1)d)/2",
+        "4. S_6=6(10+(6-1)×2)/2로 대입한다.",
+        "5. 계산 결과는 60이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -215,6 +328,16 @@
         "hs1_conditional_probability"
       ],
       "answer": 0.2,
+      "formula": "P(A|B)=P(A∩B)/P(B)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_conditional_probability으로 분류한다.",
+        "2. 적용 규칙: hs1_conditional_probability",
+        "3. 공식: P(A|B)=P(A∩B)/P(B)",
+        "4. 추출한 값 {'joint': Fraction(1, 10), 'condition': Fraction(1, 2)}을 공식에 대입해 0.2를 계산한다.",
+        "기약분수로 정리하면 1/5이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -229,6 +352,15 @@
       "domain": "hs1_exponential_log",
       "rule_path": [],
       "answer": 256,
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'power', 'base': 2, 'exponent': 8}을 공식에 대입해 256를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -243,6 +375,15 @@
       "domain": "hs1_exponential_log",
       "rule_path": [],
       "answer": 3,
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'log', 'base': 3, 'value': 27}을 공식에 대입해 3를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -257,6 +398,15 @@
       "domain": "hs1_trigonometry",
       "rule_path": [],
       "answer": 0.5,
+      "formula": "특수각 삼각함수 값",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_trigonometry으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: 특수각 삼각함수 값",
+        "4. 추출한 값 {'kind': 'cos', 'angle': 60}을 공식에 대입해 0.5를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -271,6 +421,15 @@
       "domain": "hs2_limit",
       "rule_path": [],
       "answer": 18,
+      "formula": "lim x→a f(x)=f(a)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_limit으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: lim x→a f(x)=f(a)",
+        "4. 추출한 값 {'point': 3, 'coefficients': [3, 2, 3]}을 공식에 대입해 18를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -285,6 +444,15 @@
       "domain": "hs2_derivative",
       "rule_path": [],
       "answer": 32,
+      "formula": "(x^n)'=nx^(n-1)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_derivative으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: (x^n)'=nx^(n-1)",
+        "4. 추출한 값 {'power': 4, 'input': 2}을 공식에 대입해 32를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -299,6 +467,15 @@
       "domain": "hs2_integral",
       "rule_path": [],
       "answer": 9.0,
+      "formula": "∫x^n dx=x^(n+1)/(n+1)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_integral으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: ∫x^n dx=x^(n+1)/(n+1)",
+        "4. 추출한 값 {'lower': 0, 'upper': 3, 'power': 2}을 공식에 대입해 9.0를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -315,6 +492,15 @@
         "pythagorean_identity"
       ],
       "answer": 28.274333882308138,
+      "formula": "원의 넓이 = πr²",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: 원의 넓이 = πr²",
+        "4. 추출한 값 {'kind': 'circle_area', 'numbers': [3]}을 공식에 대입해 28.274333882308138를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -331,6 +517,15 @@
         "linear_balance"
       ],
       "answer": 6,
+      "formula": "x = (c-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_linear으로 분류한다.",
+        "2. 적용 규칙: linear_balance",
+        "3. 공식: x = (c-b)/a",
+        "4. 추출한 값 {'a': 8, 'b': 7, 'c': 55}을 공식에 대입해 6를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -347,6 +542,15 @@
         "set_union_identity"
       ],
       "answer": 25,
+      "formula": "|A∪B| = |A| + |B| - |A∩B|",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_set으로 분류한다.",
+        "2. 적용 규칙: set_union_identity",
+        "3. 공식: |A∪B| = |A| + |B| - |A∩B|",
+        "4. 추출한 값 {'a': 18, 'b': 12, 'c': 5}을 공식에 대입해 25를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -363,6 +567,15 @@
         "pythagorean_identity"
       ],
       "answer": 15,
+      "formula": "c = √(a²+b²)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: c = √(a²+b²)",
+        "4. 추출한 값 {'numbers': [9, 12]}을 공식에 대입해 15를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -379,6 +592,15 @@
         "ar_seq_an_formula"
       ],
       "answer": 29,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 12, 'd': 1, 'n': 18}을 공식에 대입해 29를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -395,6 +617,15 @@
         "hs1_function_value"
       ],
       "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -411,6 +642,16 @@
         "hs1_function_composition"
       ],
       "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -427,6 +668,16 @@
         "hs1_inverse_function"
       ],
       "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -443,6 +694,16 @@
         "hs1_factor_remainder"
       ],
       "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -459,6 +720,15 @@
         "quad_delta_root"
       ],
       "answer": 9,
+      "formula": "x = (-b ± √(b²-4ac)) / 2a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_quadratic으로 분류한다.",
+        "2. 적용 규칙: quad_delta_root",
+        "3. 공식: x = (-b ± √(b²-4ac)) / 2a",
+        "4. 추출한 값 {'a': 1, 'b': -13, 'c': 36}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -475,6 +745,16 @@
         "probability_basic"
       ],
       "answer": 0.375,
+      "formula": "P(E) = 유리한 경우 / 전체 경우",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: P(E) = 유리한 경우 / 전체 경우",
+        "4. 추출한 값 {'numbers': [3, 8]}을 공식에 대입해 0.375를 계산한다.",
+        "기약분수로 정리하면 3/8이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -491,6 +771,15 @@
         "probability_basic"
       ],
       "answer": 120,
+      "formula": "nCr = n!/(r!(n-r)!)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: nCr = n!/(r!(n-r)!)",
+        "4. 추출한 값 {'kind': 'combination', 'numbers': [10, 3]}을 공식에 대입해 120를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -507,6 +796,16 @@
         "ar_seq_an_formula"
       ],
       "answer": 60,
+      "formula": "S_n = n(2a1+(n-1)d)/2",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: S_n = n(2a1+(n-1)d)/2",
+        "4. S_6=6(10+(6-1)×2)/2로 대입한다.",
+        "5. 계산 결과는 60이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -523,6 +822,16 @@
         "hs1_conditional_probability"
       ],
       "answer": 0.2,
+      "formula": "P(A|B)=P(A∩B)/P(B)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_conditional_probability으로 분류한다.",
+        "2. 적용 규칙: hs1_conditional_probability",
+        "3. 공식: P(A|B)=P(A∩B)/P(B)",
+        "4. 추출한 값 {'joint': Fraction(1, 10), 'condition': Fraction(1, 2)}을 공식에 대입해 0.2를 계산한다.",
+        "기약분수로 정리하면 1/5이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -537,6 +846,15 @@
       "domain": "hs1_exponential_log",
       "rule_path": [],
       "answer": 256,
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'power', 'base': 2, 'exponent': 8}을 공식에 대입해 256를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -551,6 +869,15 @@
       "domain": "hs1_exponential_log",
       "rule_path": [],
       "answer": 3,
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'log', 'base': 3, 'value': 27}을 공식에 대입해 3를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -565,6 +892,15 @@
       "domain": "hs1_trigonometry",
       "rule_path": [],
       "answer": 0.5,
+      "formula": "특수각 삼각함수 값",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_trigonometry으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: 특수각 삼각함수 값",
+        "4. 추출한 값 {'kind': 'cos', 'angle': 60}을 공식에 대입해 0.5를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -579,6 +915,15 @@
       "domain": "hs2_limit",
       "rule_path": [],
       "answer": 18,
+      "formula": "lim x→a f(x)=f(a)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_limit으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: lim x→a f(x)=f(a)",
+        "4. 추출한 값 {'point': 3, 'coefficients': [3, 2, 3]}을 공식에 대입해 18를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -593,6 +938,15 @@
       "domain": "hs2_derivative",
       "rule_path": [],
       "answer": 32,
+      "formula": "(x^n)'=nx^(n-1)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_derivative으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: (x^n)'=nx^(n-1)",
+        "4. 추출한 값 {'power': 4, 'input': 2}을 공식에 대입해 32를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -607,6 +961,15 @@
       "domain": "hs2_integral",
       "rule_path": [],
       "answer": 9.0,
+      "formula": "∫x^n dx=x^(n+1)/(n+1)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_integral으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: ∫x^n dx=x^(n+1)/(n+1)",
+        "4. 추출한 값 {'lower': 0, 'upper': 3, 'power': 2}을 공식에 대입해 9.0를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -623,6 +986,15 @@
         "pythagorean_identity"
       ],
       "answer": 28.274333882308138,
+      "formula": "원의 넓이 = πr²",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: 원의 넓이 = πr²",
+        "4. 추출한 값 {'kind': 'circle_area', 'numbers': [3]}을 공식에 대입해 28.274333882308138를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -639,6 +1011,15 @@
         "linear_balance"
       ],
       "answer": 6,
+      "formula": "x = (c-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_linear으로 분류한다.",
+        "2. 적용 규칙: linear_balance",
+        "3. 공식: x = (c-b)/a",
+        "4. 추출한 값 {'a': 6, 'b': 1, 'c': 37}을 공식에 대입해 6를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -655,6 +1036,15 @@
         "set_union_identity"
       ],
       "answer": 25,
+      "formula": "|A∪B| = |A| + |B| - |A∩B|",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_set으로 분류한다.",
+        "2. 적용 규칙: set_union_identity",
+        "3. 공식: |A∪B| = |A| + |B| - |A∩B|",
+        "4. 추출한 값 {'a': 18, 'b': 12, 'c': 5}을 공식에 대입해 25를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -671,6 +1061,15 @@
         "pythagorean_identity"
       ],
       "answer": 15,
+      "formula": "c = √(a²+b²)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: c = √(a²+b²)",
+        "4. 추출한 값 {'numbers': [9, 12]}을 공식에 대입해 15를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -687,6 +1086,15 @@
         "ar_seq_an_formula"
       ],
       "answer": 5,
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 9, 'd': -2, 'n': 3}을 공식에 대입해 5를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -703,6 +1111,15 @@
         "hs1_function_value"
       ],
       "answer": 17,
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -719,6 +1136,16 @@
         "hs1_function_composition"
       ],
       "answer": 29,
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -735,6 +1162,16 @@
         "hs1_inverse_function"
       ],
       "answer": "(x+7)/4",
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -751,6 +1188,16 @@
         "hs1_factor_remainder"
       ],
       "answer": "(x-5)(x-4)",
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -767,6 +1214,15 @@
         "quad_delta_root"
       ],
       "answer": 9,
+      "formula": "x = (-b ± √(b²-4ac)) / 2a",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_quadratic으로 분류한다.",
+        "2. 적용 규칙: quad_delta_root",
+        "3. 공식: x = (-b ± √(b²-4ac)) / 2a",
+        "4. 추출한 값 {'a': 1, 'b': -13, 'c': 36}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -783,6 +1239,16 @@
         "probability_basic"
       ],
       "answer": 0.375,
+      "formula": "P(E) = 유리한 경우 / 전체 경우",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: P(E) = 유리한 경우 / 전체 경우",
+        "4. 추출한 값 {'numbers': [3, 8]}을 공식에 대입해 0.375를 계산한다.",
+        "기약분수로 정리하면 3/8이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -799,6 +1265,15 @@
         "probability_basic"
       ],
       "answer": 120,
+      "formula": "nCr = n!/(r!(n-r)!)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: nCr = n!/(r!(n-r)!)",
+        "4. 추출한 값 {'kind': 'combination', 'numbers': [10, 3]}을 공식에 대입해 120를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -815,6 +1290,16 @@
         "ar_seq_an_formula"
       ],
       "answer": 60,
+      "formula": "S_n = n(2a1+(n-1)d)/2",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: S_n = n(2a1+(n-1)d)/2",
+        "4. S_6=6(10+(6-1)×2)/2로 대입한다.",
+        "5. 계산 결과는 60이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -831,6 +1316,16 @@
         "hs1_conditional_probability"
       ],
       "answer": 0.2,
+      "formula": "P(A|B)=P(A∩B)/P(B)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_conditional_probability으로 분류한다.",
+        "2. 적용 규칙: hs1_conditional_probability",
+        "3. 공식: P(A|B)=P(A∩B)/P(B)",
+        "4. 추출한 값 {'joint': Fraction(1, 10), 'condition': Fraction(1, 2)}을 공식에 대입해 0.2를 계산한다.",
+        "기약분수로 정리하면 1/5이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 6,
       "status": "PASS"
@@ -845,6 +1340,15 @@
       "domain": "hs1_exponential_log",
       "rule_path": [],
       "answer": 256,
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'power', 'base': 2, 'exponent': 8}을 공식에 대입해 256를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -859,6 +1363,15 @@
       "domain": "hs1_exponential_log",
       "rule_path": [],
       "answer": 3,
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'log', 'base': 3, 'value': 27}을 공식에 대입해 3를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -873,6 +1386,15 @@
       "domain": "hs1_trigonometry",
       "rule_path": [],
       "answer": 0.5,
+      "formula": "특수각 삼각함수 값",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs1_trigonometry으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: 특수각 삼각함수 값",
+        "4. 추출한 값 {'kind': 'cos', 'angle': 60}을 공식에 대입해 0.5를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -887,6 +1409,15 @@
       "domain": "hs2_limit",
       "rule_path": [],
       "answer": 18,
+      "formula": "lim x→a f(x)=f(a)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_limit으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: lim x→a f(x)=f(a)",
+        "4. 추출한 값 {'point': 3, 'coefficients': [3, 2, 3]}을 공식에 대입해 18를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -901,6 +1432,15 @@
       "domain": "hs2_derivative",
       "rule_path": [],
       "answer": 32,
+      "formula": "(x^n)'=nx^(n-1)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_derivative으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: (x^n)'=nx^(n-1)",
+        "4. 추출한 값 {'power': 4, 'input': 2}을 공식에 대입해 32를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -915,6 +1455,15 @@
       "domain": "hs2_integral",
       "rule_path": [],
       "answer": 9.0,
+      "formula": "∫x^n dx=x^(n+1)/(n+1)",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs2_integral으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: ∫x^n dx=x^(n+1)/(n+1)",
+        "4. 추출한 값 {'lower': 0, 'upper': 3, 'power': 2}을 공식에 대입해 9.0를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"
@@ -931,6 +1480,15 @@
         "pythagorean_identity"
       ],
       "answer": 28.274333882308138,
+      "formula": "원의 넓이 = πr²",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: 원의 넓이 = πr²",
+        "4. 추출한 값 {'kind': 'circle_area', 'numbers': [3]}을 공식에 대입해 28.274333882308138를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ],
       "verified": true,
       "trace_steps": 5,
       "status": "PASS"

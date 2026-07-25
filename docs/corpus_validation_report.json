@@ -1,7 +1,7 @@
 {
   "source": "benchmarks\\market_style_corpus.json",
-  "total": 20,
-  "passed": 20,
+  "total": 23,
+  "passed": 23,
   "failed": 0,
   "pass_rate": 1.0,
   "cases": [
@@ -455,6 +455,69 @@
         "2. 적용 규칙: probability_basic",
         "3. 공식: nPr = n!/(n-r)!",
         "4. 추출한 값 {'kind': 'permutation', 'numbers': [6, 2]}을 공식에 대입해 30를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-006",
+      "source_label": "독립 고2 모의고사형",
+      "curriculum": "수1",
+      "question": "지수방정식 2^x=16",
+      "expected": 4,
+      "answer": 4,
+      "status": "PASS",
+      "domain": "hs1_exponential_equation",
+      "rule_path": [],
+      "formula": "a^x=b 또는 log_a x=b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: a^x=b 또는 log_a x=b",
+        "4. 추출한 값 {'kind': 'power_equation', 'base': 2, 'value': 16}을 공식에 대입해 4를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-007",
+      "source_label": "독립 고2 모의고사형",
+      "curriculum": "수1",
+      "question": "로그방정식 log_3 x=2",
+      "expected": 9,
+      "answer": 9,
+      "status": "PASS",
+      "domain": "hs1_exponential_equation",
+      "rule_path": [],
+      "formula": "a^x=b 또는 log_a x=b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: a^x=b 또는 log_a x=b",
+        "4. 추출한 값 {'kind': 'log_equation', 'base': 3, 'exponent': 2}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-006",
+      "source_label": "독립 고2 모의고사형",
+      "curriculum": "수2",
+      "question": "접선의 기울기 f(x)=x^3, x=2",
+      "expected": 12,
+      "answer": 12,
+      "status": "PASS",
+      "domain": "hs2_tangent",
+      "rule_path": [],
+      "formula": "접선 기울기=f'(a)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_tangent으로 분류한다.",
+        "2. 적용 규칙: 내장 규칙",
+        "3. 공식: 접선 기울기=f'(a)",
+        "4. 추출한 값 {'power': 3, 'input': 2}을 공식에 대입해 12를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
       ]
     }

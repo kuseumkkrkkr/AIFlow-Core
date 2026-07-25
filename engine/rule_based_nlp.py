@@ -61,9 +61,11 @@ def classify(text: str) -> dict[str, Any]:
         "hs1_conditional_probability": ["조건부확률", "P(A|B)", "P(A∩B)"],
         "hs1_polynomial_factor": ["다항식", "인수분해", "인수정리", "나머지정리"],
         "hs1_exponential_log": ["지수", "로그", "log", "log_"],
+        "hs1_exponential_equation": ["지수방정식", "로그방정식", "2^x", "log_2 x"],
         "hs1_trigonometry": ["삼각함수", "sin", "cos", "tan", "사인", "코사인", "탄젠트"],
         "hs2_limit": ["극한", "lim", "수렴"],
         "hs2_derivative": ["미분", "도함수", "미분계수"],
+        "hs2_tangent": ["접선", "접선의 기울기", "접선 기울기"],
         "hs2_integral": ["적분", "부정적분", "정적분"],
     }
     for domain_name, keywords in aliases.items():
@@ -80,6 +82,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs1_function_composition"] = scores.get("hs1_function_composition", 0) + 5
     if "역함수" in normalized or "f⁻¹" in normalized or "f^-1" in normalized:
         scores["hs1_inverse_function"] = scores.get("hs1_inverse_function", 0) + 5
+    if "지수방정식" in normalized or "로그방정식" in normalized or re.search(r"(?:\^\s*x|log\s*_?\s*\d+\s*x)\s*=", normalized, flags=re.IGNORECASE):
+        scores["hs1_exponential_equation"] = scores.get("hs1_exponential_equation", 0) + 7
     if re.search(r"(?:^|\s)(?:lim|log_?)", normalized, flags=re.IGNORECASE):
         scores["hs1_exponential_log"] = scores.get("hs1_exponential_log", 0) + 4
     if any(token in normalized for token in ("sin", "cos", "tan", "사인", "코사인", "탄젠트")):
@@ -88,6 +92,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs2_limit"] = scores.get("hs2_limit", 0) + 6
     if "미분" in normalized or "도함수" in normalized:
         scores["hs2_derivative"] = scores.get("hs2_derivative", 0) + 6
+    if "접선" in normalized:
+        scores["hs2_tangent"] = scores.get("hs2_tangent", 0) + 7
     if "적분" in normalized:
         scores["hs2_integral"] = scores.get("hs2_integral", 0) + 6
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
@@ -162,6 +168,14 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         if power:
             return {"kind": "power", "base": int(power.group(1)), "exponent": int(power.group(2))}
         return {}
+    if domain == "hs1_exponential_equation":
+        power = re.search(r"([0-9]+)\s*\^\s*x\s*=\s*([0-9]+)", text, flags=re.IGNORECASE)
+        log_eq = re.search(r"log\s*_?\s*([0-9]+)\s*x\s*=\s*([0-9]+)", text, flags=re.IGNORECASE)
+        if power:
+            return {"kind": "power_equation", "base": int(power.group(1)), "value": int(power.group(2))}
+        if log_eq:
+            return {"kind": "log_equation", "base": int(log_eq.group(1)), "exponent": int(log_eq.group(2))}
+        return {}
     if domain == "hs1_trigonometry":
         match = re.search(r"(sin|cos|tan|사인|코사인|탄젠트)\s*([0-9]+)", text, flags=re.IGNORECASE)
         return {"kind": match.group(1).lower(), "angle": int(match.group(2))} if match else {}
@@ -170,6 +184,9 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         coeffs = [int(item) for item in re.findall(r"[+-]?\d+", text)]
         return {"point": point, "coefficients": coeffs} if point is not None else {}
     if domain == "hs2_derivative":
+        match = re.search(r"f\s*\(x\)\s*=\s*x\s*\^\s*([0-9]+).*?(?:x\s*=|at\s*)([+-]?\d+)", text, flags=re.IGNORECASE)
+        return {"power": int(match.group(1)), "input": int(match.group(2))} if match else {}
+    if domain == "hs2_tangent":
         match = re.search(r"f\s*\(x\)\s*=\s*x\s*\^\s*([0-9]+).*?(?:x\s*=|at\s*)([+-]?\d+)", text, flags=re.IGNORECASE)
         return {"power": int(match.group(1)), "input": int(match.group(2))} if match else {}
     if domain == "hs2_integral":
@@ -233,6 +250,8 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
     if domain == "hs1_polynomial_factor":
         return isinstance(answer, str) and answer.startswith("(x")
     if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_limit", "hs2_derivative", "hs2_integral"}:
+        return isinstance(answer, (int, float))
+    if domain in {"hs1_exponential_equation", "hs2_tangent"}:
         return isinstance(answer, (int, float))
     if domain == "cm_quadratic":
         a, b, c = (slots.get(key) for key in ("a", "b", "c"))
@@ -320,6 +339,20 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
                 return {"status": "FAIL", "reason": "정수 지수 로그만 지원합니다."}
         else:
             return {"status": "FAIL", "reason": "a^n 또는 log_a b 형식이 필요합니다."}
+    elif domain == "hs1_exponential_equation":
+        if slots.get("kind") == "power_equation":
+            base, value, exponent = slots["base"], slots["value"], 0
+            current = 1
+            while current < value and value % base == 0:
+                current *= base
+                exponent += 1
+            if current != value:
+                return {"status": "FAIL", "reason": "정수 지수 해를 찾지 못했습니다."}
+            answer = exponent
+        elif slots.get("kind") == "log_equation":
+            answer = slots["base"] ** slots["exponent"]
+        else:
+            return {"status": "FAIL", "reason": "a^x=b 또는 log_a x=b 형식이 필요합니다."}
     elif domain == "hs1_trigonometry":
         values = {"sin": {0: 0, 30: 0.5, 90: 1}, "cos": {0: 1, 60: 0.5, 90: 0}, "tan": {0: 0, 45: 1}}
         answer = values.get(slots.get("kind"), {}).get(slots.get("angle"))
@@ -334,6 +367,11 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         power, input_value = slots.get("power"), slots.get("input")
         if power is None or input_value is None:
             return {"status": "FAIL", "reason": "x^n과 입력값이 필요합니다."}
+        answer = power * (input_value ** (power - 1))
+    elif domain == "hs2_tangent":
+        power, input_value = slots.get("power"), slots.get("input")
+        if power is None or input_value is None:
+            return {"status": "FAIL", "reason": "접선 기울기를 구할 x^n과 입력값이 필요합니다."}
         answer = power * (input_value ** (power - 1))
     elif domain == "hs2_integral":
         lower, upper, power = slots.get("lower"), slots.get("upper"), slots.get("power")
@@ -426,9 +464,11 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs1_conditional_probability": "P(A|B)=P(A∩B)/P(B)",
         "hs1_polynomial_factor": "x²+bx+c=(x+u)(x+v)",
         "hs1_exponential_log": "a^n 또는 log_a b",
+        "hs1_exponential_equation": "a^x=b 또는 log_a x=b",
         "hs1_trigonometry": "특수각 삼각함수 값",
         "hs2_limit": "lim x→a f(x)=f(a)",
         "hs2_derivative": "(x^n)'=nx^(n-1)",
+        "hs2_tangent": "접선 기울기=f'(a)",
         "hs2_integral": "∫x^n dx=x^(n+1)/(n+1)",
     }
     result = {

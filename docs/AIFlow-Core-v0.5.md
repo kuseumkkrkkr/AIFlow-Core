@@ -60,5 +60,5 @@ POST /api/generate
 python engine/corpus_runner.py path/to/questions.jsonl --output docs/corpus_validation_report.json
 ```
 
-각 레코드는 최소 `question`, `expected`를 가지며 `case_id`, `source_label`, `curriculum`을 선택적으로 기록한다. 저장소의 `benchmarks/market_style_corpus.json`은 원문 문제집을 복제하지 않은 독립 모의고사형 20문항 예제이며 현재 20/20 통과한다.
+각 레코드는 최소 `question`, `expected`를 가지며 `case_id`, `source_label`, `curriculum`을 선택적으로 기록한다. 저장소의 `benchmarks/market_style_corpus.json`은 원문 문제집을 복제하지 않은 독립 모의고사형 23문항 예제이며 현재 23/23 통과한다. 지수·로그 방정식과 접선 기울기 문항도 포함한다.
 

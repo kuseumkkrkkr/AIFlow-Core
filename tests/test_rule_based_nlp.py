@@ -33,6 +33,9 @@ def test_core_domains() -> None:
         ("극한 lim x->2 x²+3x", "hs2_limit", 10),
         ("미분 f(x)=x^3, x=2", "hs2_derivative", 12),
         ("정적분 0부터 2 x^1", "hs2_integral", 2),
+        ("지수방정식 2^x=8", "hs1_exponential_equation", 3),
+        ("로그방정식 log_2 x=3", "hs1_exponential_equation", 8),
+        ("접선의 기울기 f(x)=x^2, x=3", "hs2_tangent", 6),
     ]
     for text, domain, expected in cases:
         parsed = classify(text)

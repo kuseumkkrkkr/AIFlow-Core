@@ -18,5 +18,8 @@
   {"case_id":"s2-004","source_label":"독립 고2 모의고사형","curriculum":"수2","question":"미분 f(x)=x^3, x=3","expected":27},
   {"case_id":"s2-005","source_label":"독립 고2 모의고사형","curriculum":"수2","question":"정적분 0부터 4 x^1","expected":8},
   {"case_id":"mock-001","source_label":"독립 고2 모의고사형","curriculum":"고2","question":"원의 넓이 반지름 5","expected":78.53981633974483},
-  {"case_id":"mock-002","source_label":"독립 고2 모의고사형","curriculum":"고2","question":"6개 중 2개를 순서 있게 뽑는 순열","expected":30}
+  {"case_id":"mock-002","source_label":"독립 고2 모의고사형","curriculum":"고2","question":"6개 중 2개를 순서 있게 뽑는 순열","expected":30},
+  {"case_id":"s1-006","source_label":"독립 고2 모의고사형","curriculum":"수1","question":"지수방정식 2^x=16","expected":4},
+  {"case_id":"s1-007","source_label":"독립 고2 모의고사형","curriculum":"수1","question":"로그방정식 log_3 x=2","expected":9},
+  {"case_id":"s2-006","source_label":"독립 고2 모의고사형","curriculum":"수2","question":"접선의 기울기 f(x)=x^3, x=2","expected":12}
 ]

@@ -11,7 +11,7 @@ from corpus_runner import run_corpus  # noqa: E402
 def test_sample_corpus() -> None:
     """샘플 모의고사형 코퍼스가 모두 통과하는지 확인한다."""
     report = run_corpus(Path(__file__).resolve().parents[1] / "benchmarks" / "market_style_corpus.json")
-    assert report["total"] == 20
+    assert report["total"] == 23
     assert report["failed"] == 0
 
 

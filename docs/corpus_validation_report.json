@@ -224,13 +224,15 @@
       "answer": 81,
       "status": "PASS",
       "domain": "hs1_exponential_log",
-      "rule_path": [],
+      "rule_path": [
+        "hs1_exponential_log_basic"
+      ],
       "formula": "a^n 또는 log_a b",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs1_exponential_log_basic",
         "3. 공식: a^n 또는 log_a b",
         "4. 추출한 값 {'kind': 'power', 'base': 3, 'exponent': 4}을 공식에 대입해 81를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
@@ -245,13 +247,15 @@
       "answer": 3,
       "status": "PASS",
       "domain": "hs1_exponential_log",
-      "rule_path": [],
+      "rule_path": [
+        "hs1_exponential_log_basic"
+      ],
       "formula": "a^n 또는 log_a b",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs1_exponential_log_basic",
         "3. 공식: a^n 또는 log_a b",
         "4. 추출한 값 {'kind': 'log', 'base': 5, 'value': 125}을 공식에 대입해 3를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
@@ -266,13 +270,15 @@
       "answer": 1,
       "status": "PASS",
       "domain": "hs1_trigonometry",
-      "rule_path": [],
+      "rule_path": [
+        "hs1_special_angle_trig"
+      ],
       "formula": "특수각 삼각함수 값",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs1_trigonometry으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs1_special_angle_trig",
         "3. 공식: 특수각 삼각함수 값",
         "4. 추출한 값 {'kind': 'sin', 'angle': 90}을 공식에 대입해 1를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
@@ -358,13 +364,15 @@
       "answer": 28,
       "status": "PASS",
       "domain": "hs2_limit",
-      "rule_path": [],
+      "rule_path": [
+        "hs2_polynomial_limit"
+      ],
       "formula": "lim x→a f(x)=f(a)",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs2_limit으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs2_polynomial_limit",
         "3. 공식: lim x→a f(x)=f(a)",
         "4. 추출한 값 {'point': 4, 'coefficients': [4, 2, 3]}을 공식에 대입해 28를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
@@ -379,13 +387,15 @@
       "answer": 27,
       "status": "PASS",
       "domain": "hs2_derivative",
-      "rule_path": [],
+      "rule_path": [
+        "hs2_power_derivative"
+      ],
       "formula": "(x^n)'=nx^(n-1)",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs2_derivative으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs2_power_derivative",
         "3. 공식: (x^n)'=nx^(n-1)",
         "4. 추출한 값 {'power': 3, 'input': 3}을 공식에 대입해 27를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
@@ -400,13 +410,15 @@
       "answer": 8.0,
       "status": "PASS",
       "domain": "hs2_integral",
-      "rule_path": [],
+      "rule_path": [
+        "hs2_power_integral"
+      ],
       "formula": "∫x^n dx=x^(n+1)/(n+1)",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs2_integral으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs2_power_integral",
         "3. 공식: ∫x^n dx=x^(n+1)/(n+1)",
         "4. 추출한 값 {'lower': 0, 'upper': 4, 'power': 1}을 공식에 대입해 8.0를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
@@ -467,13 +479,15 @@
       "answer": 4,
       "status": "PASS",
       "domain": "hs1_exponential_equation",
-      "rule_path": [],
+      "rule_path": [
+        "hs1_exponential_equation_basic"
+      ],
       "formula": "a^x=b 또는 log_a x=b",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs1_exponential_equation_basic",
         "3. 공식: a^x=b 또는 log_a x=b",
         "4. 추출한 값 {'kind': 'power_equation', 'base': 2, 'value': 16}을 공식에 대입해 4를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
@@ -488,13 +502,15 @@
       "answer": 9,
       "status": "PASS",
       "domain": "hs1_exponential_equation",
-      "rule_path": [],
+      "rule_path": [
+        "hs1_exponential_equation_basic"
+      ],
       "formula": "a^x=b 또는 log_a x=b",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs1_exponential_equation_basic",
         "3. 공식: a^x=b 또는 log_a x=b",
         "4. 추출한 값 {'kind': 'log_equation', 'base': 3, 'exponent': 2}을 공식에 대입해 9를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."
@@ -509,13 +525,15 @@
       "answer": 12,
       "status": "PASS",
       "domain": "hs2_tangent",
-      "rule_path": [],
+      "rule_path": [
+        "hs2_tangent_slope"
+      ],
       "formula": "접선 기울기=f'(a)",
       "reason": "",
       "verified": true,
       "trace": [
         "1. 문제 유형을 hs2_tangent으로 분류한다.",
-        "2. 적용 규칙: 내장 규칙",
+        "2. 적용 규칙: hs2_tangent_slope",
         "3. 공식: 접선 기울기=f'(a)",
         "4. 추출한 값 {'power': 3, 'input': 2}을 공식에 대입해 12를 계산한다.",
         "5. 원래 조건에 재대입해 검산한다: 통과."

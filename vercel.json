@@ -1,7 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
+  "functions": {
+    "api/solve.py": { "maxDuration": 30 }
+  },
   "rewrites": [
+    { "source": "/api/solve", "destination": "/api/solve.py" },
     { "source": "/", "destination": "/aiflow-core.html" },
     { "source": "/aiflow-core", "destination": "/aiflow-core.html" }
   ]

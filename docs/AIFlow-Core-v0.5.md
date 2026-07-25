@@ -49,3 +49,13 @@ POST /api/generate
 ```
 
 응답에는 `summary`(총 문항·통과율)와 각 문항의 문제, 기대 정답, 실제 정답, 공식, 풀이 trace, 독립 검산 결과가 포함된다. `repeats`는 운영 보호를 위해 1~20으로 제한한다.
+
+## 문제집 코퍼스 검증
+
+사용자가 보유한 합법적인 JSONL/JSON 문제 파일은 다음처럼 검증할 수 있다.
+
+```powershell
+python engine/corpus_runner.py path/to/questions.jsonl --output docs/corpus_validation_report.json
+```
+
+각 레코드는 최소 `question`, `expected`를 가지며 `case_id`, `source_label`, `curriculum`을 선택적으로 기록한다. 저장소의 `benchmarks/market_style_corpus.json`은 원문 문제집을 복제하지 않은 독립 모의고사형 20문항 예제이며 현재 20/20 통과한다.

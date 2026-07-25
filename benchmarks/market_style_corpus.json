@@ -1,0 +1,22 @@
+[
+  {"case_id":"m3-001","source_label":"독립 중3 모의고사형","curriculum":"중3","question":"4x+3=27에서 x의 값","expected":6},
+  {"case_id":"m3-002","source_label":"독립 중3 모의고사형","curriculum":"중3","question":"|A|=22, |B|=15, |A∩B|=7일 때 |A∪B|","expected":30},
+  {"case_id":"m3-003","source_label":"독립 중3 모의고사형","curriculum":"중3","question":"피타고라스 직각삼각형의 두 변 8,15일 때 빗변","expected":17},
+  {"case_id":"m3-004","source_label":"독립 중3 모의고사형","curriculum":"중3","question":"확률 7/20","expected":0.35},
+  {"case_id":"h1-001","source_label":"독립 고1 내신형","curriculum":"고1","question":"등차수열 첫항 3, 공차 4일 때 a9","expected":35},
+  {"case_id":"h1-002","source_label":"독립 고1 내신형","curriculum":"고1","question":"함수 f(x)=5x-2, x=6일 때 함숫값","expected":28},
+  {"case_id":"h1-003","source_label":"독립 고1 내신형","curriculum":"고1","question":"합성함수 f(x)=3x-1, g(x)=2x+4에서 f(g(5))","expected":41},
+  {"case_id":"h1-004","source_label":"독립 고1 내신형","curriculum":"고1","question":"인수분해 x²-11x+28","expected":"(x-7)(x-4)"},
+  {"case_id":"s1-001","source_label":"독립 고2 모의고사형","curriculum":"수1","question":"이차방정식 1x²-9x+14=0의 정수근","expected":7},
+  {"case_id":"s1-002","source_label":"독립 고2 모의고사형","curriculum":"수1","question":"지수 3^4","expected":81},
+  {"case_id":"s1-003","source_label":"독립 고2 모의고사형","curriculum":"수1","question":"log_5 125","expected":3},
+  {"case_id":"s1-004","source_label":"독립 고2 모의고사형","curriculum":"수1","question":"삼각함수 sin 90","expected":1},
+  {"case_id":"s1-005","source_label":"독립 고2 모의고사형","curriculum":"수1","question":"8개 중 2개를 뽑는 조합의 수","expected":28},
+  {"case_id":"s2-001","source_label":"독립 고2 모의고사형","curriculum":"수2","question":"등차수열 첫항 2, 공차 3의 첫 5항의 합","expected":40},
+  {"case_id":"s2-002","source_label":"독립 고2 모의고사형","curriculum":"수2","question":"조건부확률 P(A∩B)=1/8, P(B)=1/2일 때 P(A|B)","expected":0.25},
+  {"case_id":"s2-003","source_label":"독립 고2 모의고사형","curriculum":"수2","question":"극한 lim x->4 x²+3x","expected":28},
+  {"case_id":"s2-004","source_label":"독립 고2 모의고사형","curriculum":"수2","question":"미분 f(x)=x^3, x=3","expected":27},
+  {"case_id":"s2-005","source_label":"독립 고2 모의고사형","curriculum":"수2","question":"정적분 0부터 4 x^1","expected":8},
+  {"case_id":"mock-001","source_label":"독립 고2 모의고사형","curriculum":"고2","question":"원의 넓이 반지름 5","expected":78.53981633974483},
+  {"case_id":"mock-002","source_label":"독립 고2 모의고사형","curriculum":"고2","question":"6개 중 2개를 순서 있게 뽑는 순열","expected":30}
+]

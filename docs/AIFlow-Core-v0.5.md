@@ -32,3 +32,11 @@ python engine/problem_generation_loop.py --min-grade 수1 --max-grade 수2 --rep
 ```
 
 결과는 `docs/generated_validation_report.json`에 UTF-8로 기록된다. 이 보고서는 “생성 성공”만 세지 않고 `status=PASS`, 기대 정답 일치, `verified=true`, 풀이 trace 존재를 모두 만족해야 통과시킨다. 실제 시중 모의고사 원문 전체를 자동 수집·복제한 결과는 아니며, 저작권을 피한 독립 변형 기반의 회귀 기준선이다.
+
+## 다중 seed 벤치마크
+
+`engine/run_benchmark_matrix.py`는 중3·고1·수1·수2·고2 프로필을 여러 seed로 반복한다. 현재 `11,22,33,44,55` seed와 2회 반복으로 총 200문항을 실행했고 200/200 PASS였다. `docs/benchmark_matrix_report.json`에는 도메인별 통과율도 저장된다.
+
+```powershell
+python engine/run_benchmark_matrix.py --seeds 11,22,33,44,55 --repeats 2
+```

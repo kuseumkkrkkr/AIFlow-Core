@@ -19,11 +19,8 @@ def _same_answer(actual: Any, expected: Any) -> bool:
         return False
 
 
-def run_corpus(path: str | Path) -> dict[str, Any]:
-    """필요 변수: UTF-8 JSON/JSONL 경로. 작동 원리: 각 문항을 독립적으로 분류·계산·검산한다."""
-    source = Path(path)
-    raw = source.read_text(encoding="utf-8").strip()
-    records = json.loads(raw) if source.suffix.lower() == ".json" else [json.loads(line) for line in raw.splitlines() if line.strip()]
+def evaluate_records(records: list[dict[str, Any]], source: str = "inline") -> dict[str, Any]:
+    """필요 변수: 문제 레코드 배열. 작동 원리: 각 문항을 독립적으로 분류·계산·검산한다."""
     cases: list[dict[str, Any]] = []
     for index, item in enumerate(records, start=1):
         question = str(item.get("question", "")).strip()
@@ -48,6 +45,14 @@ def run_corpus(path: str | Path) -> dict[str, Any]:
         })
     passed_count = sum(case["status"] == "PASS" for case in cases)
     return {"source": str(source), "total": len(cases), "passed": passed_count, "failed": len(cases) - passed_count, "pass_rate": passed_count / len(cases) if cases else 0.0, "cases": cases}
+
+
+def run_corpus(path: str | Path) -> dict[str, Any]:
+    """필요 변수: UTF-8 JSON/JSONL 경로. 작동 원리: 파일을 읽어 공통 레코드 평가기로 전달한다."""
+    source = Path(path)
+    raw = source.read_text(encoding="utf-8").strip()
+    records = json.loads(raw) if source.suffix.lower() == ".json" else [json.loads(line) for line in raw.splitlines() if line.strip()]
+    return evaluate_records(records, str(source))
 
 
 def main() -> int:

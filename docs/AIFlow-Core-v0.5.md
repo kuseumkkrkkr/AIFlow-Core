@@ -56,6 +56,13 @@ POST /api/generate
 
 ## 문제집 코퍼스 검증
 
+온라인 API로도 최대 100문항을 한 번에 검증할 수 있다.
+
+```json
+POST /api/corpus
+{"cases":[{"case_id":"q1","curriculum":"수1","question":"지수방정식 2^x=16","expected":4}]}
+```
+
 사용자가 보유한 합법적인 JSONL/JSON 문제 파일은 다음처럼 검증할 수 있다.
 
 ```powershell

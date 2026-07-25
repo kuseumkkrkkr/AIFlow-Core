@@ -69,7 +69,20 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     for repeat in range(max(1, config.repeats)):
         grade_order = ["중3", "고1", "수1", "수2", "고2"]
-        allowed = set(grade_order[grade_order.index(config.min_grade) : grade_order.index(config.max_grade) + 1]) if config.min_grade in grade_order and config.max_grade in grade_order else set(grade_order)
+        profile_groups = {
+            "중3": {"중3"},
+            "고1": {"고1"},
+            "수1": {"수1"},
+            "수2": {"수2"},
+            # 고2 모의고사는 수1·수2 누적 범위를 포함한다.
+            "고2": {"수1", "수2", "고2"},
+        }
+        if config.min_grade in profile_groups and config.max_grade in profile_groups:
+            start = grade_order.index(config.min_grade)
+            end = grade_order.index(config.max_grade)
+            allowed = set().union(*(profile_groups[grade] for grade in grade_order[start : end + 1]))
+        else:
+            allowed = set().union(*profile_groups.values())
         for case in _cases(rng, config.include_mock):
             if case.curriculum not in allowed:
                 continue

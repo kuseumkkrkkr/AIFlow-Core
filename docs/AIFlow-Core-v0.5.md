@@ -1,4 +1,4 @@
-# AIFlow-Core v0.5 설계 문서
+﻿# AIFlow-Core v0.5 설계 문서
 
 ## 무엇을 가지고 있는가
 
@@ -35,7 +35,7 @@ python engine/problem_generation_loop.py --min-grade 수1 --max-grade 수2 --rep
 
 ## 다중 seed 벤치마크
 
-대규모 실행 기록: seed 1~20을 5회 반복해 총 2,000문항을 생성했고 2,000/2,000 PASS(100%)였다. 상세 결과는 `docs/benchmark_matrix_2000_report.json`에 저장했다. 이 수치는 현재 생성 템플릿과 명시적 규칙 범위의 회귀 안정성을 의미하며 실제 시중 문제집 전체의 일반화 정확도와 동일한 의미는 아니다.
+대규모 실행 기록: seed 1~20을 5회 반복해 총 3,100문항을 생성했고 3,100/3,100 PASS(100%)였다. 고2 프로필은 수1·수2·고2 누적 범위로 집계한다. 상세 결과는 `docs/benchmark_matrix_3100_report.json`에 저장했다. 이 수치는 현재 생성 템플릿과 명시적 규칙 범위의 회귀 안정성을 의미하며 실제 시중 문제집 전체의 일반화 정확도와 동일한 의미는 아니다.
 
 `engine/run_benchmark_matrix.py`는 중3·고1·수1·수2·고2 프로필을 여러 seed로 반복한다. 현재 `11,22,33,44,55` seed와 2회 반복으로 총 200문항을 실행했고 200/200 PASS였다. `docs/benchmark_matrix_report.json`에는 도메인별 통과율도 저장된다.
 
@@ -61,3 +61,4 @@ python engine/corpus_runner.py path/to/questions.jsonl --output docs/corpus_vali
 ```
 
 각 레코드는 최소 `question`, `expected`를 가지며 `case_id`, `source_label`, `curriculum`을 선택적으로 기록한다. 저장소의 `benchmarks/market_style_corpus.json`은 원문 문제집을 복제하지 않은 독립 모의고사형 20문항 예제이며 현재 20/20 통과한다.
+

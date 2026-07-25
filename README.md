@@ -8,6 +8,7 @@
 python engine/rule_based_nlp.py "2x+7=19에서 x의 값"
 python tests/validate_market_style_cases.py
 python tests/validate_high_difficulty_cases.py
+python engine/problem_generation_loop.py
 ```
 
 브라우저 데모는 `aiflow-core.html`이며 `/aiflow-core` 경로로 배포할 수 있습니다.

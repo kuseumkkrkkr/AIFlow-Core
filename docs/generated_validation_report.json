@@ -1,0 +1,687 @@
+{
+  "config": {
+    "min_grade": "중3",
+    "max_grade": "고2",
+    "repeats": 3,
+    "seed": 2026,
+    "include_mock": true
+  },
+  "total": 42,
+  "passed": 42,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "cases": [
+    {
+      "repeat": 1,
+      "case_id": "m3-linear",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "3x+5=23에서 x의 값",
+      "expected": 6,
+      "domain": "cm_linear",
+      "rule_path": [
+        "linear_balance"
+      ],
+      "answer": 6,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "m3-set",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "|A|=18, |B|=12, |A∩B|=5일 때 |A∪B|",
+      "expected": 25,
+      "domain": "cm_set",
+      "rule_path": [
+        "set_union_identity"
+      ],
+      "answer": 25,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "m3-geometry",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "피타고라스 직각삼각형의 두 변 9, 12일 때 빗변",
+      "expected": 15,
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "answer": 15,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 -2, 공차 0일 때 a6",
+      "expected": -2,
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": -2,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "s1-quadratic",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "이차방정식 1x²-13x+36=0의 정수근",
+      "expected": 9,
+      "domain": "cm_quadratic",
+      "rule_path": [
+        "quad_delta_root"
+      ],
+      "answer": 9,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "s1-probability",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "확률 3/8",
+      "expected": 0.375,
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "answer": 0.375,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "s1-combination",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "10개 중 3개를 뽑는 조합의 수",
+      "expected": 120,
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "answer": 120,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "s2-seq-sum",
+      "curriculum": "수2",
+      "mock_style": "고2 모의고사",
+      "question": "등차수열 첫항 5, 공차 2의 첫 6항의 합",
+      "expected": 60,
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 60,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "s2-conditional",
+      "curriculum": "수2",
+      "mock_style": "고2 모의고사",
+      "question": "조건부확률 P(A∩B)=1/10, P(B)=1/2일 때 P(A|B)",
+      "expected": 0.2,
+      "domain": "hs1_conditional_probability",
+      "rule_path": [
+        "hs1_conditional_probability"
+      ],
+      "answer": 0.2,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 1,
+      "case_id": "mock-mixed",
+      "curriculum": "고2",
+      "mock_style": "고2 모의고사",
+      "question": "원의 넓이 반지름 3",
+      "expected": 28.274333882308138,
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "answer": 28.274333882308138,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "m3-linear",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "8x+7=55에서 x의 값",
+      "expected": 6,
+      "domain": "cm_linear",
+      "rule_path": [
+        "linear_balance"
+      ],
+      "answer": 6,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "m3-set",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "|A|=18, |B|=12, |A∩B|=5일 때 |A∪B|",
+      "expected": 25,
+      "domain": "cm_set",
+      "rule_path": [
+        "set_union_identity"
+      ],
+      "answer": 25,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "m3-geometry",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "피타고라스 직각삼각형의 두 변 9, 12일 때 빗변",
+      "expected": 15,
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "answer": 15,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 12, 공차 1일 때 a18",
+      "expected": 29,
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 29,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "s1-quadratic",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "이차방정식 1x²-13x+36=0의 정수근",
+      "expected": 9,
+      "domain": "cm_quadratic",
+      "rule_path": [
+        "quad_delta_root"
+      ],
+      "answer": 9,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "s1-probability",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "확률 3/8",
+      "expected": 0.375,
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "answer": 0.375,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "s1-combination",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "10개 중 3개를 뽑는 조합의 수",
+      "expected": 120,
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "answer": 120,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "s2-seq-sum",
+      "curriculum": "수2",
+      "mock_style": "고2 모의고사",
+      "question": "등차수열 첫항 5, 공차 2의 첫 6항의 합",
+      "expected": 60,
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 60,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "s2-conditional",
+      "curriculum": "수2",
+      "mock_style": "고2 모의고사",
+      "question": "조건부확률 P(A∩B)=1/10, P(B)=1/2일 때 P(A|B)",
+      "expected": 0.2,
+      "domain": "hs1_conditional_probability",
+      "rule_path": [
+        "hs1_conditional_probability"
+      ],
+      "answer": 0.2,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "mock-mixed",
+      "curriculum": "고2",
+      "mock_style": "고2 모의고사",
+      "question": "원의 넓이 반지름 3",
+      "expected": 28.274333882308138,
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "answer": 28.274333882308138,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "m3-linear",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "6x+1=37에서 x의 값",
+      "expected": 6,
+      "domain": "cm_linear",
+      "rule_path": [
+        "linear_balance"
+      ],
+      "answer": 6,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "m3-set",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "|A|=18, |B|=12, |A∩B|=5일 때 |A∪B|",
+      "expected": 25,
+      "domain": "cm_set",
+      "rule_path": [
+        "set_union_identity"
+      ],
+      "answer": 25,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "m3-geometry",
+      "curriculum": "중3",
+      "mock_style": "중3 모의고사",
+      "question": "피타고라스 직각삼각형의 두 변 9, 12일 때 빗변",
+      "expected": 15,
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "answer": 15,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-seq",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "등차수열 첫항 9, 공차 -2일 때 a3",
+      "expected": 5,
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 5,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-function",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "answer": 17,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-composition",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "answer": 29,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-inverse",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "answer": "(x+7)/4",
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "h1-factor",
+      "curriculum": "고1",
+      "mock_style": "고1 내신형",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "answer": "(x-5)(x-4)",
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "s1-quadratic",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "이차방정식 1x²-13x+36=0의 정수근",
+      "expected": 9,
+      "domain": "cm_quadratic",
+      "rule_path": [
+        "quad_delta_root"
+      ],
+      "answer": 9,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "s1-probability",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "확률 3/8",
+      "expected": 0.375,
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "answer": 0.375,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "s1-combination",
+      "curriculum": "수1",
+      "mock_style": "고2 모의고사",
+      "question": "10개 중 3개를 뽑는 조합의 수",
+      "expected": 120,
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "answer": 120,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "s2-seq-sum",
+      "curriculum": "수2",
+      "mock_style": "고2 모의고사",
+      "question": "등차수열 첫항 5, 공차 2의 첫 6항의 합",
+      "expected": 60,
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "answer": 60,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "s2-conditional",
+      "curriculum": "수2",
+      "mock_style": "고2 모의고사",
+      "question": "조건부확률 P(A∩B)=1/10, P(B)=1/2일 때 P(A|B)",
+      "expected": 0.2,
+      "domain": "hs1_conditional_probability",
+      "rule_path": [
+        "hs1_conditional_probability"
+      ],
+      "answer": 0.2,
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "mock-mixed",
+      "curriculum": "고2",
+      "mock_style": "고2 모의고사",
+      "question": "원의 넓이 반지름 3",
+      "expected": 28.274333882308138,
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "answer": 28.274333882308138,
+      "verified": true,
+      "trace_steps": 5,
+      "status": "PASS"
+    }
+  ]
+}

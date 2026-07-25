@@ -20,3 +20,14 @@
 ## 검증과 한계
 
 독립 변형 문항 12개와 고난도 변형 문항 11개가 현재 100% 통과한다. 이는 명시적으로 지원하는 구조에 대한 결과이지 모든 시중 문제집의 정확도를 의미하지 않는다. 다음 단계는 함수의 정의역·치역, 다항식 나머지의 일반형, 도형 조건 해석, 자연어 애매성 평가를 확장하는 것이다.
+
+## 반복 문제 생성 루프
+
+`engine/problem_generation_loop.py`의 `GenerationConfig`는 `min_grade`, `max_grade`, `repeats`, `seed`, `include_mock`를 입력으로 받는다. 생성기는 원문 문제집을 복제하지 않고 중3·고1·수1·수2·고2 모의고사 스타일의 구조화된 변형 문항을 만든다. 각 문항은 독립 기대 정답, 분류 도메인, 선택 규칙, 풀이 단계 수, 검산 결과를 함께 저장한다.
+
+```powershell
+python engine/problem_generation_loop.py
+# SUMMARY passed=42 total=42 rate=1.000
+```
+
+결과는 `docs/generated_validation_report.json`에 UTF-8로 기록된다. 이 보고서는 “생성 성공”만 세지 않고 `status=PASS`, 기대 정답 일치, `verified=true`, 풀이 trace 존재를 모두 만족해야 통과시킨다. 실제 시중 모의고사 원문 전체를 자동 수집·복제한 결과는 아니며, 저작권을 피한 독립 변형 기반의 회귀 기준선이다.

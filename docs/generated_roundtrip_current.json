@@ -1,0 +1,1616 @@
+{
+  "source": "generated-roundtrip",
+  "generated_total": 69,
+  "generated_passed": 69,
+  "corpus_total": 69,
+  "corpus_passed": 69,
+  "corpus_failed": 0,
+  "pass_rate": 1.0,
+  "cases": [
+    {
+      "case_id": "m3-linear-1",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "6x+6=42에서 x의 값",
+      "expected": 6,
+      "answer": 6,
+      "status": "PASS",
+      "domain": "cm_linear",
+      "rule_path": [
+        "linear_balance"
+      ],
+      "formula": "x = (c-b)/a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_linear으로 분류한다.",
+        "2. 적용 규칙: linear_balance",
+        "3. 공식: x = (c-b)/a",
+        "4. 추출한 값 {'a': 6, 'b': 6, 'c': 42}을 공식에 대입해 6를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "m3-set-1",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "|A|=18, |B|=12, |A∩B|=5일 때 |A∪B|",
+      "expected": 25,
+      "answer": 25,
+      "status": "PASS",
+      "domain": "cm_set",
+      "rule_path": [
+        "set_union_identity"
+      ],
+      "formula": "|A∪B| = |A| + |B| - |A∩B|",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_set으로 분류한다.",
+        "2. 적용 규칙: set_union_identity",
+        "3. 공식: |A∪B| = |A| + |B| - |A∩B|",
+        "4. 추출한 값 {'a': 18, 'b': 12, 'c': 5}을 공식에 대입해 25를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "m3-geometry-1",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "피타고라스 직각삼각형의 두 변 9, 12일 때 빗변",
+      "expected": 15,
+      "answer": 15,
+      "status": "PASS",
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "formula": "c = √(a²+b²)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: c = √(a²+b²)",
+        "4. 추출한 값 {'numbers': [9, 12]}을 공식에 대입해 15를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-seq-1",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "등차수열 첫항 -5, 공차 4일 때 a13",
+      "expected": 43,
+      "answer": 43,
+      "status": "PASS",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': -5, 'd': 4, 'n': 13}을 공식에 대입해 43를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-function-1",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "answer": 17,
+      "status": "PASS",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-composition-1",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "answer": 29,
+      "status": "PASS",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-inverse-1",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "answer": "(x+7)/4",
+      "status": "PASS",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-factor-1",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "answer": "(x-5)(x-4)",
+      "status": "PASS",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-quadratic-1",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "이차방정식 1x²-13x+36=0의 정수근",
+      "expected": 9,
+      "answer": 9,
+      "status": "PASS",
+      "domain": "cm_quadratic",
+      "rule_path": [
+        "quad_delta_root"
+      ],
+      "formula": "x = (-b ± √(b²-4ac)) / 2a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_quadratic으로 분류한다.",
+        "2. 적용 규칙: quad_delta_root",
+        "3. 공식: x = (-b ± √(b²-4ac)) / 2a",
+        "4. 추출한 값 {'a': 1, 'b': -13, 'c': 36}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-probability-1",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "확률 3/8",
+      "expected": 0.375,
+      "answer": 0.375,
+      "status": "PASS",
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "formula": "P(E) = 유리한 경우 / 전체 경우",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: P(E) = 유리한 경우 / 전체 경우",
+        "4. 추출한 값 {'numbers': [3, 8]}을 공식에 대입해 0.375를 계산한다.",
+        "기약분수로 정리하면 3/8이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-combination-1",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "10개 중 3개를 뽑는 조합의 수",
+      "expected": 120,
+      "answer": 120,
+      "status": "PASS",
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "formula": "nCr = n!/(r!(n-r)!)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: nCr = n!/(r!(n-r)!)",
+        "4. 추출한 값 {'kind': 'combination', 'numbers': [10, 3]}을 공식에 대입해 120를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-seq-sum-1",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "등차수열 첫항 5, 공차 2의 첫 6항의 합",
+      "expected": 60,
+      "answer": 60,
+      "status": "PASS",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "formula": "S_n = n(2a1+(n-1)d)/2",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: S_n = n(2a1+(n-1)d)/2",
+        "4. S_6=6(10+(6-1)×2)/2로 대입한다.",
+        "5. 계산 결과는 60이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-conditional-1",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "조건부확률 P(A∩B)=1/10, P(B)=1/2일 때 P(A|B)",
+      "expected": 0.2,
+      "answer": 0.2,
+      "status": "PASS",
+      "domain": "hs1_conditional_probability",
+      "rule_path": [
+        "hs1_conditional_probability"
+      ],
+      "formula": "P(A|B)=P(A∩B)/P(B)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_conditional_probability으로 분류한다.",
+        "2. 적용 규칙: hs1_conditional_probability",
+        "3. 공식: P(A|B)=P(A∩B)/P(B)",
+        "4. 추출한 값 {'joint': Fraction(1, 10), 'condition': Fraction(1, 2)}을 공식에 대입해 0.2를 계산한다.",
+        "기약분수로 정리하면 1/5이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-exp-1",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "지수 2^8",
+      "expected": 256,
+      "answer": 256,
+      "status": "PASS",
+      "domain": "hs1_exponential_log",
+      "rule_path": [
+        "hs1_exponential_log_basic"
+      ],
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_log_basic",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'power', 'base': 2, 'exponent': 8}을 공식에 대입해 256를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-log-1",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "log_3 27",
+      "expected": 3,
+      "answer": 3,
+      "status": "PASS",
+      "domain": "hs1_exponential_log",
+      "rule_path": [
+        "hs1_exponential_log_basic"
+      ],
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_log_basic",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'log', 'base': 3, 'value': 27}을 공식에 대입해 3를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-exp-eq-1",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "지수방정식 2^x=16",
+      "expected": 4,
+      "answer": 4,
+      "status": "PASS",
+      "domain": "hs1_exponential_equation",
+      "rule_path": [
+        "hs1_exponential_equation_basic"
+      ],
+      "formula": "a^x=b 또는 log_a x=b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_equation_basic",
+        "3. 공식: a^x=b 또는 log_a x=b",
+        "4. 추출한 값 {'kind': 'power_equation', 'base': 2, 'value': 16}을 공식에 대입해 4를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-log-eq-1",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "로그방정식 log_3 x=2",
+      "expected": 9,
+      "answer": 9,
+      "status": "PASS",
+      "domain": "hs1_exponential_equation",
+      "rule_path": [
+        "hs1_exponential_equation_basic"
+      ],
+      "formula": "a^x=b 또는 log_a x=b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_equation_basic",
+        "3. 공식: a^x=b 또는 log_a x=b",
+        "4. 추출한 값 {'kind': 'log_equation', 'base': 3, 'exponent': 2}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-trig-1",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "삼각함수 cos 60",
+      "expected": 0.5,
+      "answer": 0.5,
+      "status": "PASS",
+      "domain": "hs1_trigonometry",
+      "rule_path": [
+        "hs1_special_angle_trig"
+      ],
+      "formula": "특수각 삼각함수 값",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_trigonometry으로 분류한다.",
+        "2. 적용 규칙: hs1_special_angle_trig",
+        "3. 공식: 특수각 삼각함수 값",
+        "4. 추출한 값 {'kind': 'cos', 'angle': 60}을 공식에 대입해 0.5를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-limit-1",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "극한 lim x->3 x²+3x",
+      "expected": 18,
+      "answer": 18,
+      "status": "PASS",
+      "domain": "hs2_limit",
+      "rule_path": [
+        "hs2_polynomial_limit"
+      ],
+      "formula": "lim x→a f(x)=f(a)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_limit으로 분류한다.",
+        "2. 적용 규칙: hs2_polynomial_limit",
+        "3. 공식: lim x→a f(x)=f(a)",
+        "4. 추출한 값 {'point': 3, 'coefficients': [3, 2, 3]}을 공식에 대입해 18를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-derivative-1",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "미분 f(x)=x^4, x=2",
+      "expected": 32,
+      "answer": 32,
+      "status": "PASS",
+      "domain": "hs2_derivative",
+      "rule_path": [
+        "hs2_power_derivative"
+      ],
+      "formula": "(x^n)'=nx^(n-1)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_derivative으로 분류한다.",
+        "2. 적용 규칙: hs2_power_derivative",
+        "3. 공식: (x^n)'=nx^(n-1)",
+        "4. 추출한 값 {'power': 4, 'input': 2}을 공식에 대입해 32를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-tangent-1",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "접선의 기울기 f(x)=x^3, x=2",
+      "expected": 12,
+      "answer": 12,
+      "status": "PASS",
+      "domain": "hs2_tangent",
+      "rule_path": [
+        "hs2_tangent_slope"
+      ],
+      "formula": "접선 기울기=f'(a)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_tangent으로 분류한다.",
+        "2. 적용 규칙: hs2_tangent_slope",
+        "3. 공식: 접선 기울기=f'(a)",
+        "4. 추출한 값 {'power': 3, 'input': 2}을 공식에 대입해 12를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-integral-1",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "정적분 0부터 3 x^2",
+      "expected": 9,
+      "answer": 9.0,
+      "status": "PASS",
+      "domain": "hs2_integral",
+      "rule_path": [
+        "hs2_power_integral"
+      ],
+      "formula": "∫x^n dx=x^(n+1)/(n+1)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_integral으로 분류한다.",
+        "2. 적용 규칙: hs2_power_integral",
+        "3. 공식: ∫x^n dx=x^(n+1)/(n+1)",
+        "4. 추출한 값 {'lower': 0, 'upper': 3, 'power': 2}을 공식에 대입해 9.0를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "mock-mixed-1",
+      "source_label": "user_corpus",
+      "curriculum": "고2",
+      "question": "원의 넓이 반지름 3",
+      "expected": 28.274333882308138,
+      "answer": 28.274333882308138,
+      "status": "PASS",
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "formula": "원의 넓이 = πr²",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: 원의 넓이 = πr²",
+        "4. 추출한 값 {'kind': 'circle_area', 'numbers': [3]}을 공식에 대입해 28.274333882308138를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "m3-linear-2",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "6x+5=41에서 x의 값",
+      "expected": 6,
+      "answer": 6,
+      "status": "PASS",
+      "domain": "cm_linear",
+      "rule_path": [
+        "linear_balance"
+      ],
+      "formula": "x = (c-b)/a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_linear으로 분류한다.",
+        "2. 적용 규칙: linear_balance",
+        "3. 공식: x = (c-b)/a",
+        "4. 추출한 값 {'a': 6, 'b': 5, 'c': 41}을 공식에 대입해 6를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "m3-set-2",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "|A|=18, |B|=12, |A∩B|=5일 때 |A∪B|",
+      "expected": 25,
+      "answer": 25,
+      "status": "PASS",
+      "domain": "cm_set",
+      "rule_path": [
+        "set_union_identity"
+      ],
+      "formula": "|A∪B| = |A| + |B| - |A∩B|",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_set으로 분류한다.",
+        "2. 적용 규칙: set_union_identity",
+        "3. 공식: |A∪B| = |A| + |B| - |A∩B|",
+        "4. 추출한 값 {'a': 18, 'b': 12, 'c': 5}을 공식에 대입해 25를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "m3-geometry-2",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "피타고라스 직각삼각형의 두 변 9, 12일 때 빗변",
+      "expected": 15,
+      "answer": 15,
+      "status": "PASS",
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "formula": "c = √(a²+b²)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: c = √(a²+b²)",
+        "4. 추출한 값 {'numbers': [9, 12]}을 공식에 대입해 15를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-seq-2",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "등차수열 첫항 12, 공차 2일 때 a3",
+      "expected": 16,
+      "answer": 16,
+      "status": "PASS",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 12, 'd': 2, 'n': 3}을 공식에 대입해 16를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-function-2",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "answer": 17,
+      "status": "PASS",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-composition-2",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "answer": 29,
+      "status": "PASS",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-inverse-2",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "answer": "(x+7)/4",
+      "status": "PASS",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-factor-2",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "answer": "(x-5)(x-4)",
+      "status": "PASS",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-quadratic-2",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "이차방정식 1x²-13x+36=0의 정수근",
+      "expected": 9,
+      "answer": 9,
+      "status": "PASS",
+      "domain": "cm_quadratic",
+      "rule_path": [
+        "quad_delta_root"
+      ],
+      "formula": "x = (-b ± √(b²-4ac)) / 2a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_quadratic으로 분류한다.",
+        "2. 적용 규칙: quad_delta_root",
+        "3. 공식: x = (-b ± √(b²-4ac)) / 2a",
+        "4. 추출한 값 {'a': 1, 'b': -13, 'c': 36}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-probability-2",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "확률 3/8",
+      "expected": 0.375,
+      "answer": 0.375,
+      "status": "PASS",
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "formula": "P(E) = 유리한 경우 / 전체 경우",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: P(E) = 유리한 경우 / 전체 경우",
+        "4. 추출한 값 {'numbers': [3, 8]}을 공식에 대입해 0.375를 계산한다.",
+        "기약분수로 정리하면 3/8이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-combination-2",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "10개 중 3개를 뽑는 조합의 수",
+      "expected": 120,
+      "answer": 120,
+      "status": "PASS",
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "formula": "nCr = n!/(r!(n-r)!)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: nCr = n!/(r!(n-r)!)",
+        "4. 추출한 값 {'kind': 'combination', 'numbers': [10, 3]}을 공식에 대입해 120를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-seq-sum-2",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "등차수열 첫항 5, 공차 2의 첫 6항의 합",
+      "expected": 60,
+      "answer": 60,
+      "status": "PASS",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "formula": "S_n = n(2a1+(n-1)d)/2",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: S_n = n(2a1+(n-1)d)/2",
+        "4. S_6=6(10+(6-1)×2)/2로 대입한다.",
+        "5. 계산 결과는 60이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-conditional-2",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "조건부확률 P(A∩B)=1/10, P(B)=1/2일 때 P(A|B)",
+      "expected": 0.2,
+      "answer": 0.2,
+      "status": "PASS",
+      "domain": "hs1_conditional_probability",
+      "rule_path": [
+        "hs1_conditional_probability"
+      ],
+      "formula": "P(A|B)=P(A∩B)/P(B)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_conditional_probability으로 분류한다.",
+        "2. 적용 규칙: hs1_conditional_probability",
+        "3. 공식: P(A|B)=P(A∩B)/P(B)",
+        "4. 추출한 값 {'joint': Fraction(1, 10), 'condition': Fraction(1, 2)}을 공식에 대입해 0.2를 계산한다.",
+        "기약분수로 정리하면 1/5이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-exp-2",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "지수 2^8",
+      "expected": 256,
+      "answer": 256,
+      "status": "PASS",
+      "domain": "hs1_exponential_log",
+      "rule_path": [
+        "hs1_exponential_log_basic"
+      ],
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_log_basic",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'power', 'base': 2, 'exponent': 8}을 공식에 대입해 256를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-log-2",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "log_3 27",
+      "expected": 3,
+      "answer": 3,
+      "status": "PASS",
+      "domain": "hs1_exponential_log",
+      "rule_path": [
+        "hs1_exponential_log_basic"
+      ],
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_log_basic",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'log', 'base': 3, 'value': 27}을 공식에 대입해 3를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-exp-eq-2",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "지수방정식 2^x=16",
+      "expected": 4,
+      "answer": 4,
+      "status": "PASS",
+      "domain": "hs1_exponential_equation",
+      "rule_path": [
+        "hs1_exponential_equation_basic"
+      ],
+      "formula": "a^x=b 또는 log_a x=b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_equation_basic",
+        "3. 공식: a^x=b 또는 log_a x=b",
+        "4. 추출한 값 {'kind': 'power_equation', 'base': 2, 'value': 16}을 공식에 대입해 4를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-log-eq-2",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "로그방정식 log_3 x=2",
+      "expected": 9,
+      "answer": 9,
+      "status": "PASS",
+      "domain": "hs1_exponential_equation",
+      "rule_path": [
+        "hs1_exponential_equation_basic"
+      ],
+      "formula": "a^x=b 또는 log_a x=b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_equation_basic",
+        "3. 공식: a^x=b 또는 log_a x=b",
+        "4. 추출한 값 {'kind': 'log_equation', 'base': 3, 'exponent': 2}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-trig-2",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "삼각함수 cos 60",
+      "expected": 0.5,
+      "answer": 0.5,
+      "status": "PASS",
+      "domain": "hs1_trigonometry",
+      "rule_path": [
+        "hs1_special_angle_trig"
+      ],
+      "formula": "특수각 삼각함수 값",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_trigonometry으로 분류한다.",
+        "2. 적용 규칙: hs1_special_angle_trig",
+        "3. 공식: 특수각 삼각함수 값",
+        "4. 추출한 값 {'kind': 'cos', 'angle': 60}을 공식에 대입해 0.5를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-limit-2",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "극한 lim x->3 x²+3x",
+      "expected": 18,
+      "answer": 18,
+      "status": "PASS",
+      "domain": "hs2_limit",
+      "rule_path": [
+        "hs2_polynomial_limit"
+      ],
+      "formula": "lim x→a f(x)=f(a)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_limit으로 분류한다.",
+        "2. 적용 규칙: hs2_polynomial_limit",
+        "3. 공식: lim x→a f(x)=f(a)",
+        "4. 추출한 값 {'point': 3, 'coefficients': [3, 2, 3]}을 공식에 대입해 18를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-derivative-2",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "미분 f(x)=x^4, x=2",
+      "expected": 32,
+      "answer": 32,
+      "status": "PASS",
+      "domain": "hs2_derivative",
+      "rule_path": [
+        "hs2_power_derivative"
+      ],
+      "formula": "(x^n)'=nx^(n-1)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_derivative으로 분류한다.",
+        "2. 적용 규칙: hs2_power_derivative",
+        "3. 공식: (x^n)'=nx^(n-1)",
+        "4. 추출한 값 {'power': 4, 'input': 2}을 공식에 대입해 32를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-tangent-2",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "접선의 기울기 f(x)=x^3, x=2",
+      "expected": 12,
+      "answer": 12,
+      "status": "PASS",
+      "domain": "hs2_tangent",
+      "rule_path": [
+        "hs2_tangent_slope"
+      ],
+      "formula": "접선 기울기=f'(a)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_tangent으로 분류한다.",
+        "2. 적용 규칙: hs2_tangent_slope",
+        "3. 공식: 접선 기울기=f'(a)",
+        "4. 추출한 값 {'power': 3, 'input': 2}을 공식에 대입해 12를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-integral-2",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "정적분 0부터 3 x^2",
+      "expected": 9,
+      "answer": 9.0,
+      "status": "PASS",
+      "domain": "hs2_integral",
+      "rule_path": [
+        "hs2_power_integral"
+      ],
+      "formula": "∫x^n dx=x^(n+1)/(n+1)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_integral으로 분류한다.",
+        "2. 적용 규칙: hs2_power_integral",
+        "3. 공식: ∫x^n dx=x^(n+1)/(n+1)",
+        "4. 추출한 값 {'lower': 0, 'upper': 3, 'power': 2}을 공식에 대입해 9.0를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "mock-mixed-2",
+      "source_label": "user_corpus",
+      "curriculum": "고2",
+      "question": "원의 넓이 반지름 3",
+      "expected": 28.274333882308138,
+      "answer": 28.274333882308138,
+      "status": "PASS",
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "formula": "원의 넓이 = πr²",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: 원의 넓이 = πr²",
+        "4. 추출한 값 {'kind': 'circle_area', 'numbers': [3]}을 공식에 대입해 28.274333882308138를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "m3-linear-3",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "2x+4=16에서 x의 값",
+      "expected": 6,
+      "answer": 6,
+      "status": "PASS",
+      "domain": "cm_linear",
+      "rule_path": [
+        "linear_balance"
+      ],
+      "formula": "x = (c-b)/a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_linear으로 분류한다.",
+        "2. 적용 규칙: linear_balance",
+        "3. 공식: x = (c-b)/a",
+        "4. 추출한 값 {'a': 2, 'b': 4, 'c': 16}을 공식에 대입해 6를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "m3-set-3",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "|A|=18, |B|=12, |A∩B|=5일 때 |A∪B|",
+      "expected": 25,
+      "answer": 25,
+      "status": "PASS",
+      "domain": "cm_set",
+      "rule_path": [
+        "set_union_identity"
+      ],
+      "formula": "|A∪B| = |A| + |B| - |A∩B|",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_set으로 분류한다.",
+        "2. 적용 규칙: set_union_identity",
+        "3. 공식: |A∪B| = |A| + |B| - |A∩B|",
+        "4. 추출한 값 {'a': 18, 'b': 12, 'c': 5}을 공식에 대입해 25를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "m3-geometry-3",
+      "source_label": "user_corpus",
+      "curriculum": "중3",
+      "question": "피타고라스 직각삼각형의 두 변 9, 12일 때 빗변",
+      "expected": 15,
+      "answer": 15,
+      "status": "PASS",
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "formula": "c = √(a²+b²)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: c = √(a²+b²)",
+        "4. 추출한 값 {'numbers': [9, 12]}을 공식에 대입해 15를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-seq-3",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "등차수열 첫항 12, 공차 8일 때 a12",
+      "expected": 100,
+      "answer": 100,
+      "status": "PASS",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "formula": "a_n = a1 + (n-1)d",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: a_n = a1 + (n-1)d",
+        "4. 추출한 값 {'a1': 12, 'd': 8, 'n': 12}을 공식에 대입해 100를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-function-3",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "함수 f(x)=3x-4, x=7일 때 함숫값",
+      "expected": 17,
+      "answer": 17,
+      "status": "PASS",
+      "domain": "hs1_function_basic",
+      "rule_path": [
+        "hs1_function_value"
+      ],
+      "formula": "f(x)=ax+b, f(t)=at+b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_function_basic으로 분류한다.",
+        "2. 적용 규칙: hs1_function_value",
+        "3. 공식: f(x)=ax+b, f(t)=at+b",
+        "4. 추출한 값 {'a': 3, 'b': -4, 'input': 7}을 공식에 대입해 17를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-composition-3",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "합성함수 f(x)=2x+1, g(x)=3x+2에서 f(g(4))",
+      "expected": 29,
+      "answer": 29,
+      "status": "PASS",
+      "domain": "hs1_function_composition",
+      "rule_path": [
+        "hs1_function_composition"
+      ],
+      "formula": "f(g(t)) = a(ct+d)+b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_function_composition으로 분류한다.",
+        "2. 적용 규칙: hs1_function_composition",
+        "3. 공식: f(g(t)) = a(ct+d)+b",
+        "4. 안쪽 함수부터 계산한다: g(4)=3×4+2=14.",
+        "5. 바깥 함수에 대입한다: f(14)=2×14+1=29.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-inverse-3",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "f(x)=4x-7의 역함수",
+      "expected": "(x+7)/4",
+      "answer": "(x+7)/4",
+      "status": "PASS",
+      "domain": "hs1_inverse_function",
+      "rule_path": [
+        "hs1_inverse_function"
+      ],
+      "formula": "f⁻¹(x)=(x-b)/a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_inverse_function으로 분류한다.",
+        "2. 적용 규칙: hs1_inverse_function",
+        "3. 공식: f⁻¹(x)=(x-b)/a",
+        "4. y=4x+-7에서 x와 y를 바꾼다.",
+        "5. y를 정리한 결과는 (x+7)/4이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "h1-factor-3",
+      "source_label": "user_corpus",
+      "curriculum": "고1",
+      "question": "인수분해 x²-9x+20",
+      "expected": "(x-5)(x-4)",
+      "answer": "(x-5)(x-4)",
+      "status": "PASS",
+      "domain": "hs1_polynomial_factor",
+      "rule_path": [
+        "hs1_factor_remainder"
+      ],
+      "formula": "x²+bx+c=(x+u)(x+v)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_polynomial_factor으로 분류한다.",
+        "2. 적용 규칙: hs1_factor_remainder",
+        "3. 공식: x²+bx+c=(x+u)(x+v)",
+        "4. 두 수의 합은 -9, 곱은 20가 되도록 찾는다.",
+        "5. 인수분해 결과는 (x-5)(x-4)이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-quadratic-3",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "이차방정식 1x²-13x+36=0의 정수근",
+      "expected": 9,
+      "answer": 9,
+      "status": "PASS",
+      "domain": "cm_quadratic",
+      "rule_path": [
+        "quad_delta_root"
+      ],
+      "formula": "x = (-b ± √(b²-4ac)) / 2a",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_quadratic으로 분류한다.",
+        "2. 적용 규칙: quad_delta_root",
+        "3. 공식: x = (-b ± √(b²-4ac)) / 2a",
+        "4. 추출한 값 {'a': 1, 'b': -13, 'c': 36}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-probability-3",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "확률 3/8",
+      "expected": 0.375,
+      "answer": 0.375,
+      "status": "PASS",
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "formula": "P(E) = 유리한 경우 / 전체 경우",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: P(E) = 유리한 경우 / 전체 경우",
+        "4. 추출한 값 {'numbers': [3, 8]}을 공식에 대입해 0.375를 계산한다.",
+        "기약분수로 정리하면 3/8이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-combination-3",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "10개 중 3개를 뽑는 조합의 수",
+      "expected": 120,
+      "answer": 120,
+      "status": "PASS",
+      "domain": "cm_probability",
+      "rule_path": [
+        "probability_basic"
+      ],
+      "formula": "nCr = n!/(r!(n-r)!)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_probability으로 분류한다.",
+        "2. 적용 규칙: probability_basic",
+        "3. 공식: nCr = n!/(r!(n-r)!)",
+        "4. 추출한 값 {'kind': 'combination', 'numbers': [10, 3]}을 공식에 대입해 120를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-seq-sum-3",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "등차수열 첫항 5, 공차 2의 첫 6항의 합",
+      "expected": 60,
+      "answer": 60,
+      "status": "PASS",
+      "domain": "cm_arith_sequence",
+      "rule_path": [
+        "ar_seq_an_formula"
+      ],
+      "formula": "S_n = n(2a1+(n-1)d)/2",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_arith_sequence으로 분류한다.",
+        "2. 적용 규칙: ar_seq_an_formula",
+        "3. 공식: S_n = n(2a1+(n-1)d)/2",
+        "4. S_6=6(10+(6-1)×2)/2로 대입한다.",
+        "5. 계산 결과는 60이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-conditional-3",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "조건부확률 P(A∩B)=1/10, P(B)=1/2일 때 P(A|B)",
+      "expected": 0.2,
+      "answer": 0.2,
+      "status": "PASS",
+      "domain": "hs1_conditional_probability",
+      "rule_path": [
+        "hs1_conditional_probability"
+      ],
+      "formula": "P(A|B)=P(A∩B)/P(B)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_conditional_probability으로 분류한다.",
+        "2. 적용 규칙: hs1_conditional_probability",
+        "3. 공식: P(A|B)=P(A∩B)/P(B)",
+        "4. 추출한 값 {'joint': Fraction(1, 10), 'condition': Fraction(1, 2)}을 공식에 대입해 0.2를 계산한다.",
+        "기약분수로 정리하면 1/5이다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-exp-3",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "지수 2^8",
+      "expected": 256,
+      "answer": 256,
+      "status": "PASS",
+      "domain": "hs1_exponential_log",
+      "rule_path": [
+        "hs1_exponential_log_basic"
+      ],
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_log_basic",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'power', 'base': 2, 'exponent': 8}을 공식에 대입해 256를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-log-3",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "log_3 27",
+      "expected": 3,
+      "answer": 3,
+      "status": "PASS",
+      "domain": "hs1_exponential_log",
+      "rule_path": [
+        "hs1_exponential_log_basic"
+      ],
+      "formula": "a^n 또는 log_a b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_log으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_log_basic",
+        "3. 공식: a^n 또는 log_a b",
+        "4. 추출한 값 {'kind': 'log', 'base': 3, 'value': 27}을 공식에 대입해 3를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-exp-eq-3",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "지수방정식 2^x=16",
+      "expected": 4,
+      "answer": 4,
+      "status": "PASS",
+      "domain": "hs1_exponential_equation",
+      "rule_path": [
+        "hs1_exponential_equation_basic"
+      ],
+      "formula": "a^x=b 또는 log_a x=b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_equation_basic",
+        "3. 공식: a^x=b 또는 log_a x=b",
+        "4. 추출한 값 {'kind': 'power_equation', 'base': 2, 'value': 16}을 공식에 대입해 4를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-log-eq-3",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "로그방정식 log_3 x=2",
+      "expected": 9,
+      "answer": 9,
+      "status": "PASS",
+      "domain": "hs1_exponential_equation",
+      "rule_path": [
+        "hs1_exponential_equation_basic"
+      ],
+      "formula": "a^x=b 또는 log_a x=b",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_exponential_equation으로 분류한다.",
+        "2. 적용 규칙: hs1_exponential_equation_basic",
+        "3. 공식: a^x=b 또는 log_a x=b",
+        "4. 추출한 값 {'kind': 'log_equation', 'base': 3, 'exponent': 2}을 공식에 대입해 9를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s1-trig-3",
+      "source_label": "user_corpus",
+      "curriculum": "수1",
+      "question": "삼각함수 cos 60",
+      "expected": 0.5,
+      "answer": 0.5,
+      "status": "PASS",
+      "domain": "hs1_trigonometry",
+      "rule_path": [
+        "hs1_special_angle_trig"
+      ],
+      "formula": "특수각 삼각함수 값",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs1_trigonometry으로 분류한다.",
+        "2. 적용 규칙: hs1_special_angle_trig",
+        "3. 공식: 특수각 삼각함수 값",
+        "4. 추출한 값 {'kind': 'cos', 'angle': 60}을 공식에 대입해 0.5를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-limit-3",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "극한 lim x->3 x²+3x",
+      "expected": 18,
+      "answer": 18,
+      "status": "PASS",
+      "domain": "hs2_limit",
+      "rule_path": [
+        "hs2_polynomial_limit"
+      ],
+      "formula": "lim x→a f(x)=f(a)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_limit으로 분류한다.",
+        "2. 적용 규칙: hs2_polynomial_limit",
+        "3. 공식: lim x→a f(x)=f(a)",
+        "4. 추출한 값 {'point': 3, 'coefficients': [3, 2, 3]}을 공식에 대입해 18를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-derivative-3",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "미분 f(x)=x^4, x=2",
+      "expected": 32,
+      "answer": 32,
+      "status": "PASS",
+      "domain": "hs2_derivative",
+      "rule_path": [
+        "hs2_power_derivative"
+      ],
+      "formula": "(x^n)'=nx^(n-1)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_derivative으로 분류한다.",
+        "2. 적용 규칙: hs2_power_derivative",
+        "3. 공식: (x^n)'=nx^(n-1)",
+        "4. 추출한 값 {'power': 4, 'input': 2}을 공식에 대입해 32를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-tangent-3",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "접선의 기울기 f(x)=x^3, x=2",
+      "expected": 12,
+      "answer": 12,
+      "status": "PASS",
+      "domain": "hs2_tangent",
+      "rule_path": [
+        "hs2_tangent_slope"
+      ],
+      "formula": "접선 기울기=f'(a)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_tangent으로 분류한다.",
+        "2. 적용 규칙: hs2_tangent_slope",
+        "3. 공식: 접선 기울기=f'(a)",
+        "4. 추출한 값 {'power': 3, 'input': 2}을 공식에 대입해 12를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "s2-integral-3",
+      "source_label": "user_corpus",
+      "curriculum": "수2",
+      "question": "정적분 0부터 3 x^2",
+      "expected": 9,
+      "answer": 9.0,
+      "status": "PASS",
+      "domain": "hs2_integral",
+      "rule_path": [
+        "hs2_power_integral"
+      ],
+      "formula": "∫x^n dx=x^(n+1)/(n+1)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_integral으로 분류한다.",
+        "2. 적용 규칙: hs2_power_integral",
+        "3. 공식: ∫x^n dx=x^(n+1)/(n+1)",
+        "4. 추출한 값 {'lower': 0, 'upper': 3, 'power': 2}을 공식에 대입해 9.0를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    },
+    {
+      "case_id": "mock-mixed-3",
+      "source_label": "user_corpus",
+      "curriculum": "고2",
+      "question": "원의 넓이 반지름 3",
+      "expected": 28.274333882308138,
+      "answer": 28.274333882308138,
+      "status": "PASS",
+      "domain": "cm_geometry",
+      "rule_path": [
+        "pythagorean_identity"
+      ],
+      "formula": "원의 넓이 = πr²",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 cm_geometry으로 분류한다.",
+        "2. 적용 규칙: pythagorean_identity",
+        "3. 공식: 원의 넓이 = πr²",
+        "4. 추출한 값 {'kind': 'circle_area', 'numbers': [3]}을 공식에 대입해 28.274333882308138를 계산한다.",
+        "5. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    }
+  ]
+}

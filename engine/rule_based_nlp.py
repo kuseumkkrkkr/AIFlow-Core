@@ -70,6 +70,10 @@ def classify(text: str) -> dict[str, Any]:
         "hs2_piecewise_trig_quadratic": ["조각함수", "서로 다른 실근", "h(", "g(10)", "이차함수"],
         "hs_composite_sequence": ["복합중", "a5+a8", "수열합성"],
         "hs_composite_sequence_function": ["복합상", "M=a", "수열함수합성"],
+        "hs1_geometric_sequence": ["등비수열", "공비"],
+        "stat_binomial_distribution": ["이항분포", "이항확률"],
+        "geo_vector_dot": ["벡터 내적", "내적"],
+        "cal_trig_derivative": ["sin x의 도함수", "cos x의 도함수", "삼각함수 미분"],
     }
     for domain_name, keywords in aliases.items():
         hits = [word for word in keywords if word in normalized]
@@ -106,6 +110,14 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs_composite_sequence"] = scores.get("hs_composite_sequence", 0) + 30
     if "복합상" in normalized:
         scores["hs_composite_sequence_function"] = scores.get("hs_composite_sequence_function", 0) + 30
+    if "등비수열" in normalized and "공비" in normalized:
+        scores["hs1_geometric_sequence"] = scores.get("hs1_geometric_sequence", 0) + 12
+    if "이항분포" in normalized:
+        scores["stat_binomial_distribution"] = scores.get("stat_binomial_distribution", 0) + 12
+    if "내적" in normalized:
+        scores["geo_vector_dot"] = scores.get("geo_vector_dot", 0) + 12
+    if "sin x의 도함수" in normalized or "cos x의 도함수" in normalized or "삼각함수 미분" in normalized:
+        scores["cal_trig_derivative"] = scores.get("cal_trig_derivative", 0) + 12
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -148,6 +160,31 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         if "합" in text:
             result["kind"] = "arithmetic_sum"
         return result
+    if domain == "hs1_geometric_sequence":
+        indices = [int(item) for item in re.findall(r"a\s*_?([0-9]+)", text, flags=re.IGNORECASE)]
+        term_counts = [int(item) for item in re.findall(r"([0-9]+)\s*항", text)]
+        n = max(indices + term_counts) if indices or term_counts else None
+        a1 = value(r"(?:첫항|첫째항)\s*(?:은|이)?\s*([+-]?\d+)")
+        ratio = value(r"공비\s*(?:는|가|이)?\s*([+-]?\d+)")
+        result = {k: v for k, v in {"a1": a1, "ratio": ratio, "n": n}.items() if v is not None}
+        if "합" in text:
+            result["kind"] = "geometric_sum"
+        return result
+    if domain == "stat_binomial_distribution":
+        n = value(r"n\s*=\s*(\d+)")
+        numerator = value(r"p\s*=\s*(\d+)\s*/")
+        denominator = value(r"p\s*=\s*\d+\s*/\s*(\d+)")
+        k = value(r"(?:k|X)\s*=\s*(\d+)")
+        if None in (n, numerator, denominator, k) or denominator == 0:
+            return {}
+        return {"n": n, "p": Fraction(numerator, denominator), "k": k}
+    if domain == "geo_vector_dot":
+        match = re.search(r"\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)\s*[·.]\s*\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)", text)
+        return {"x1": int(match.group(1)), "y1": int(match.group(2)), "x2": int(match.group(3)), "y2": int(match.group(4))} if match else {}
+    if domain == "cal_trig_derivative":
+        kind = "sin" if "sin" in text else "cos" if "cos" in text else None
+        input_value = value(r"x\s*=\s*([+-]?\d+)")
+        return {"kind": kind, "input": input_value} if kind and input_value is not None else {}
     if domain == "cm_set":
         return {k: v for k, v in {"a": value(r"\|A\|\s*=\s*([+-]?\d+)"), "b": value(r"\|B\|\s*=\s*([+-]?\d+)"), "c": value(r"\|A∩B\|\s*=\s*([+-]?\d+)")}.items() if v is not None}
     if domain == "cm_linear":
@@ -259,6 +296,23 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
     """필요 변수: 도메인·추출 슬롯·정답. 규칙의 최소 불변식을 재계산해 결과를 검산한다."""
     if domain == "cm_arith_sequence":
         return answer == slots.get("a1") + (slots.get("n") - 1) * slots.get("d")
+    if domain == "hs1_geometric_sequence":
+        a1, ratio, n = (slots.get(key) for key in ("a1", "ratio", "n"))
+        if None in (a1, ratio, n):
+            return False
+        expected = a1 * ratio ** (n - 1)
+        if slots.get("kind") == "geometric_sum":
+            expected = a1 * n if ratio == 1 else a1 * (ratio ** n - 1) / (ratio - 1)
+        return answer == expected
+    if domain == "stat_binomial_distribution":
+        from math import comb
+        return answer == float(comb(slots["n"], slots["k"]) * slots["p"] ** slots["k"] * (1 - slots["p"]) ** (slots["n"] - slots["k"]))
+    if domain == "geo_vector_dot":
+        return answer == slots["x1"] * slots["x2"] + slots["y1"] * slots["y2"]
+    if domain == "cal_trig_derivative":
+        import math
+        expected = math.cos(slots["input"]) if slots["kind"] == "sin" else -math.sin(slots["input"])
+        return abs(answer - expected) < 1e-12
     if domain == "cm_set":
         return answer == slots.get("a") + slots.get("b") - slots.get("c")
     if domain == "cm_linear":
@@ -318,6 +372,37 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         answer = function_value  # log_2(2^(f(g(x))))의 역연산까지 적용한 값이다.
         return {"status": "PASS", "answer": answer, "formula": "a_n→M→g(x)=x+M→f(g(x))→log_2(2^y)=y", "verified": isinstance(answer, int),
                 "knowledge_used": ["ar_seq_an_formula", "ar_seq_an_formula", "addition", "function_substitution", "function_substitution", "power_rule", "log_inverse"]}
+    if domain == "hs1_geometric_sequence":
+        a1, ratio, n = (slots.get(key) for key in ("a1", "ratio", "n"))
+        if None in (a1, ratio, n) or n < 1:
+            return {"status": "FAIL", "reason": "등비수열의 첫항·공비·항 번호가 필요합니다."}
+        if slots.get("kind") == "geometric_sum":
+            answer = a1 * n if ratio == 1 else a1 * (ratio ** n - 1) / (ratio - 1)
+            formula = "S_n=a_1(r^n-1)/(r-1) (r≠1)"
+        else:
+            answer = a1 * ratio ** (n - 1)
+            formula = "a_n=a_1r^(n-1)"
+        return {"status": "PASS", "answer": int(answer) if answer == int(answer) else answer, "formula": formula, "verified": verify_result(domain, slots, answer)}
+    if domain == "stat_binomial_distribution":
+        from math import comb
+        n, p, k = (slots.get(key) for key in ("n", "p", "k"))
+        if None in (n, p, k) or not 0 <= p <= 1 or not 0 <= k <= n:
+            return {"status": "FAIL", "reason": "이항분포의 n, p, k 조건이 올바르지 않습니다."}
+        exact = comb(n, k) * p ** k * (1 - p) ** (n - k)
+        answer = float(exact)
+        return {"status": "PASS", "answer": answer, "fraction": str(exact), "formula": "P(X=k)=nCk·p^k·(1-p)^(n-k)", "verified": verify_result(domain, slots, answer)}
+    if domain == "geo_vector_dot":
+        if any(slots.get(key) is None for key in ("x1", "y1", "x2", "y2")):
+            return {"status": "FAIL", "reason": "두 평면벡터의 성분이 필요합니다."}
+        answer = slots["x1"] * slots["x2"] + slots["y1"] * slots["y2"]
+        return {"status": "PASS", "answer": answer, "formula": "a·b=a_xb_x+a_yb_y", "verified": verify_result(domain, slots, answer)}
+    if domain == "cal_trig_derivative":
+        import math
+        kind, input_value = slots.get("kind"), slots.get("input")
+        if kind not in {"sin", "cos"} or input_value is None:
+            return {"status": "FAIL", "reason": "sin 또는 cos와 대입할 x 값이 필요합니다."}
+        answer = math.cos(input_value) if kind == "sin" else -math.sin(input_value)
+        return {"status": "PASS", "answer": answer, "formula": "(sin x)'=cos x, (cos x)'=-sin x", "verified": verify_result(domain, slots, answer)}
     if domain == "cm_arith_sequence":
         a1, d, n = (slots.get(key) for key in ("a1", "d", "n"))
         if a1 is None or d is None or n is None:
@@ -524,6 +609,10 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs2_piecewise_trig_quadratic": "주기·최솟값·실근 개수 조건→매개변수 결정→이차식 대입",
         "hs_composite_sequence": "a_n=a_1+(n-1)d → a_p+a_q",
         "hs_composite_sequence_function": "수열 → 합성함수 → 지수·로그 역연산",
+        "hs1_geometric_sequence": "a_n=a_1r^(n-1), S_n=a_1(r^n-1)/(r-1)",
+        "stat_binomial_distribution": "P(X=k)=nCk·p^k·(1-p)^(n-k)",
+        "geo_vector_dot": "a·b=a_xb_x+a_yb_y",
+        "cal_trig_derivative": "(sin x)'=cos x, (cos x)'=-sin x",
     }
     result = {
         "status": "PASS",
@@ -556,6 +645,10 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs2_piecewise_trig_quadratic": "hs2_piecewise_trig_quadratic",
             "hs_composite_sequence": "hs_composite_sequence",
             "hs_composite_sequence_function": "hs_composite_sequence_function",
+            "hs1_geometric_sequence": "hs1_geometric_sequence",
+            "stat_binomial_distribution": "stat_binomial_distribution",
+            "geo_vector_dot": "geo_vector_dot",
+            "cal_trig_derivative": "cal_trig_derivative",
         }
         rule_id = builtin.get(parsed.get("domain"))
         if rule_id:

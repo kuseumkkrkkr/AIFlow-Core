@@ -39,6 +39,11 @@ def test_core_domains() -> None:
         ("양수 a와 이차함수 f(x)에 대하여 조각함수 g(x)=sin(3πx/a), 서로 다른 실근의 개수를 h(n)이라 할 때 g(10)의 값", "hs2_piecewise_trig_quadratic", 224),
         ("복합중 등차수열 첫항 2, 공차 3에서 a5+a8의 값", "hs_composite_sequence", 37),
         ("복합상 등차수열 첫항 2, 공차 3에서 M=a5+a8, f(x)=2x+1, g(x)=x+M일 때 log_2(2^(f(g(4)))", "hs_composite_sequence_function", 83),
+        ("등비수열 첫항 3, 공비 2일 때 a5", "hs1_geometric_sequence", 48),
+        ("등비수열 첫항 3, 공비 2의 첫 4항의 합", "hs1_geometric_sequence", 45),
+        ("이항분포 n=5, p=1/2에서 X=2일 확률", "stat_binomial_distribution", 0.3125),
+        ("벡터 내적 (1,2)·(3,4)", "geo_vector_dot", 11),
+        ("sin x의 도함수 x=0", "cal_trig_derivative", 1.0),
     ]
     for text, domain, expected in cases:
         parsed = classify(text)

@@ -7,7 +7,7 @@
       {"id":"s1_logarithm","name":"로그함수","formula":"log_a(MN)=log_a M+log_a N","tags":["로그","로그함수"]},
       {"id":"s1_trigonometry","name":"삼각함수","formula":"sin²x+cos²x=1","tags":["삼각함수","사인","코사인"]},
       {"id":"s1_sine_cosine_law","name":"사인·코사인 법칙","formula":"a/sin A=2R, c²=a²+b²-2ab cos C","tags":["사인법칙","코사인법칙"]},
-      {"id":"s1_sequence","name":"수열","formula":"a_n=a_1+(n-1)d","tags":["등차수열","등비수열","수열"]}
+      {"id":"s1_sequence","name":"수열","formula":"a_n=a_1+(n-1)d, a_n=a_1r^(n-1)","tags":["등차수열","등비수열","수열"],"execution_status":"부분 실행","rule_ids":["cm_arith_sequence","hs1_geometric_sequence"]}
     ],
     "수학Ⅱ": [
       {"id":"s2_limit","name":"함수의 극한","formula":"연속 다항식은 극한점 대입","tags":["극한","lim"]},
@@ -19,7 +19,7 @@
     "미적분": [
       {"id":"cal_limit_sequence","name":"수열의 극한","formula":"등비수열 수렴 조건 |r|<1","tags":["수열의 극한","급수"]},
       {"id":"cal_differentiation","name":"여러 가지 미분법","formula":"(fg)'=f'g+fg'","tags":["곱의 미분","합성함수 미분"]},
-      {"id":"cal_trig_derivative","name":"삼각함수 미분","formula":"(sin x)'=cos x","tags":["삼각함수 미분"]},
+      {"id":"cal_trig_derivative","name":"삼각함수 미분","formula":"(sin x)'=cos x","tags":["삼각함수 미분"],"execution_status":"부분 실행","rule_ids":["cal_trig_derivative"]},
       {"id":"cal_integration","name":"여러 가지 적분법","formula":"∫f'(x)/f(x) dx=ln|f(x)|+C","tags":["치환적분","부분적분"]},
       {"id":"cal_area_volume","name":"넓이와 부피","formula":"회전체 부피=π∫(반지름)^2 dx","tags":["넓이","부피","회전체"]}
     ],
@@ -27,11 +27,11 @@
       {"id":"stat_counting","name":"경우의 수","formula":"nCr=n!/(r!(n-r)!)","tags":["순열","조합"]},
       {"id":"stat_probability","name":"확률","formula":"P(A∪B)=P(A)+P(B)-P(A∩B)","tags":["확률","조건부확률"]},
       {"id":"stat_distribution","name":"확률분포","formula":"E(X)=ΣxP(X=x)","tags":["확률변수","기댓값","분산"]},
-      {"id":"stat_binomial","name":"이항분포","formula":"P(X=k)=nCk p^k(1-p)^(n-k)","tags":["이항분포"]},
+      {"id":"stat_binomial","name":"이항분포","formula":"P(X=k)=nCk p^k(1-p)^(n-k)","tags":["이항분포"],"execution_status":"실행 가능","rule_ids":["stat_binomial_distribution"]},
       {"id":"stat_normal","name":"정규분포","formula":"Z=(X-μ)/σ","tags":["정규분포","표준정규분포"]}
     ],
     "기하": [
-      {"id":"geo_vector","name":"평면 벡터","formula":"a·b=|a||b|cosθ","tags":["벡터","내적"]},
+      {"id":"geo_vector","name":"평면 벡터","formula":"a·b=|a||b|cosθ","tags":["벡터","내적"],"execution_status":"부분 실행","rule_ids":["geo_vector_dot"]},
       {"id":"geo_line_circle","name":"평면도형의 방정식","formula":"(x-a)²+(y-b)²=r²","tags":["직선","원"]},
       {"id":"geo_conic","name":"이차곡선","formula":"포물선 y²=4px","tags":["포물선","타원","쌍곡선"]},
       {"id":"geo_space","name":"공간도형","formula":"두 직선의 방향벡터 내적으로 각 계산","tags":["공간도형","정사영"]},

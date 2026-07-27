@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import sys
+from fractions import Fraction
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
@@ -12,12 +13,19 @@ sys.path.insert(0, str(ROOT / "engine"))
 from rule_based_nlp import build_solution_trace, classify, select_optimal_rule, solve_rule  # noqa: E402
 
 
+def _json_default(value: object) -> str:
+    """필요 변수: JSON 기본 인코더가 처리하지 못한 값. 작동 원리: 수학 슬롯의 Fraction을 정확한 분수 문자열로 보존한다."""
+    if isinstance(value, Fraction):
+        return str(value)
+    raise TypeError(f"JSON으로 변환할 수 없는 값입니다: {type(value).__name__}")
+
+
 class handler(BaseHTTPRequestHandler):
     """필요 변수: HTTP 요청. 작동 원리: 문제를 전체 규칙 엔진에 전달하고 JSON 결과를 반환한다."""
 
     def _send(self, status: int, payload: dict) -> None:
         """필요 변수: HTTP 상태와 JSON payload. 작동 원리: UTF-8 JSON 응답을 만든다."""
-        body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        body = json.dumps(payload, ensure_ascii=False, default=_json_default).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Access-Control-Allow-Origin", "*")

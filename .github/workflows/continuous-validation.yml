@@ -1,11 +1,8 @@
 name: AIFlow-Core continuous validation
 
+# GitHub-hosted runner 자동 실행은 계정 결제 잠금과 무관하게 호출되지 않도록 끈다.
+# 무료 검증은 scripts/continuous_validation.ps1을 로컬에서 실행한다.
 on:
-  push:
-    branches: [master]
-  pull_request:
-  schedule:
-    - cron: "17 3 * * *"
   workflow_dispatch:
 
 jobs:

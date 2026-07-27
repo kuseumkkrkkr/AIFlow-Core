@@ -40,6 +40,16 @@ python engine/problem_generation_loop.py --difficulty hard --repeats 5 --seed 20
 
 `engine/run_benchmark_matrix.py`는 중3·고1·수1·수2·고2 프로필을 여러 seed로 반복한다. 현재 `11,22,33,44,55` seed와 2회 반복으로 총 200문항을 실행했고 200/200 PASS였다. `docs/benchmark_matrix_report.json`에는 도메인별 통과율도 저장된다.
 
+## 유료 CI 없이 검증하기
+
+GitHub Actions 자동 실행은 수동 실행만 남겨 두었다. 무료 검증은 저장소 루트에서 다음 명령으로 수행한다.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/continuous_validation.ps1
+```
+
+이 스크립트는 핵심 규칙, 생성 루프, 코퍼스, 반복 시장형 코퍼스, 다중 seed 매트릭스를 순서대로 실행한다. Vercel 배포는 GitHub Actions가 아니라 Git push 연동으로 별도 동작한다.
+
 ```powershell
 python engine/run_benchmark_matrix.py --seeds 11,22,33,44,55 --repeats 2
 ```

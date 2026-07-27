@@ -4,12 +4,14 @@
   "functions": {
     "api/solve.py": { "maxDuration": 30 },
     "api/generate.py": { "maxDuration": 30 },
-    "api/corpus.py": { "maxDuration": 30 }
+    "api/corpus.py": { "maxDuration": 30 },
+    "api/algorithm.py": { "maxDuration": 10 }
   },
   "rewrites": [
     { "source": "/api/solve", "destination": "/api/solve.py" },
     { "source": "/api/generate", "destination": "/api/generate.py" },
     { "source": "/api/corpus", "destination": "/api/corpus.py" },
+    { "source": "/api/algorithm", "destination": "/api/algorithm.py" },
     { "source": "/", "destination": "/aiflow-core.html" },
     { "source": "/aiflow-core", "destination": "/aiflow-core.html" }
   ]

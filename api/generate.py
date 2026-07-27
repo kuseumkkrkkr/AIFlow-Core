@@ -56,8 +56,8 @@ class handler(BaseHTTPRequestHandler):
             if order.index(config.min_grade) > order.index(config.max_grade):
                 self._send(400, {"status": "FAIL", "reason": "최소 학년은 최대 학년보다 앞서야 합니다."})
                 return
-            if config.difficulty not in {"basic", "mixed", "hard"}:
-                self._send(400, {"status": "FAIL", "reason": "difficulty는 basic·mixed·hard 중 하나여야 합니다."})
+            if config.difficulty not in {"하", "중", "상", "basic", "mixed", "hard"}:
+                self._send(400, {"status": "FAIL", "reason": "difficulty는 하·중·상 또는 basic·mixed·hard 중 하나여야 합니다."})
                 return
             report = generate_and_validate(config)
             self._send(200, {"status": "PASS" if report["failed"] == 0 else "FAIL", "summary": {key: report[key] for key in ("config", "total", "passed", "failed", "pass_rate")}, "cases": report["cases"]})

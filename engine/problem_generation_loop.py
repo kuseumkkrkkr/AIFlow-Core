@@ -11,6 +11,45 @@ from typing import Any
 from rule_based_nlp import build_solution_trace, classify, select_optimal_rule, solve_rule
 
 
+# 난이도별 공식 지식 예산: (최소 개수, 최대 개수, 동일 공식 최대 중복 횟수).
+DIFFICULTY_POLICY = {
+    "하": (1, 2, 1),
+    "중": (3, 5, 2),
+    "상": (6, 10, 3),
+}
+DIFFICULTY_ALIAS = {"basic": "하", "mixed": "중", "hard": "상", "하": "하", "중": "중", "상": "상"}
+FORMULA_KNOWLEDGE = (
+    "linear_balance", "ratio_scale", "pythagorean_identity", "ar_seq_an_formula",
+    "set_union_identity", "quad_delta_root", "hs1_function_composition",
+    "hs1_exponential_log_basic", "hs1_special_angle_trig", "hs2_polynomial_limit",
+    "hs2_power_derivative", "hs2_tangent_slope", "hs2_power_integral",
+)
+
+
+def _sample_knowledge_plan(rng: random.Random, difficulty: str) -> list[str]:
+    """필요 변수: 난이도와 재현 가능한 난수 생성기. 공식 지식 수와 중복 제한을 만족하는 계획을 만든다."""
+    level = DIFFICULTY_ALIAS[difficulty]
+    minimum, maximum, repeat_limit = DIFFICULTY_POLICY[level]
+    count = rng.randint(minimum, maximum)
+    plan: list[str] = []
+    while len(plan) < count:
+        candidate = rng.choice(FORMULA_KNOWLEDGE)
+        if plan.count(candidate) < repeat_limit:
+            plan.append(candidate)
+    return plan
+
+
+def _knowledge_contract(plan: list[str], difficulty: str) -> dict[str, Any]:
+    """필요 변수: 공식 지식 계획과 난이도. 개수·최대 중복이 정책을 지키는지 검증한다."""
+    level = DIFFICULTY_ALIAS[difficulty]
+    minimum, maximum, repeat_limit = DIFFICULTY_POLICY[level]
+    counts = {item: plan.count(item) for item in set(plan)}
+    valid = minimum <= len(plan) <= maximum and (max(counts.values(), default=0) <= repeat_limit)
+    return {"level": level, "min": minimum, "max": maximum, "max_duplicate": repeat_limit,
+            "knowledge_count": len(plan), "knowledge_max_duplicate": max(counts.values(), default=0),
+            "knowledge_plan": plan, "contract_passed": valid}
+
+
 @dataclass(frozen=True)
 class GenerationConfig:
     """필요 변수: 학년 범위·반복 횟수·seed. 작동 원리: 생성 실험을 재현 가능하게 고정한다."""
@@ -75,8 +114,8 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
         raise ValueError("학년은 중3·고1·수1·수2·고2 중 하나여야 합니다.")
     if grade_order.index(config.min_grade) > grade_order.index(config.max_grade):
         raise ValueError("min_grade는 max_grade보다 앞서야 합니다.")
-    if config.difficulty not in {"basic", "mixed", "hard"}:
-        raise ValueError("difficulty는 basic·mixed·hard 중 하나여야 합니다.")
+    if config.difficulty not in DIFFICULTY_ALIAS:
+        raise ValueError("difficulty는 하·중·상 또는 basic·mixed·hard 중 하나여야 합니다.")
     rng = random.Random(config.seed)
     rows: list[dict[str, Any]] = []
     for repeat in range(max(1, config.repeats)):
@@ -96,13 +135,16 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
             allowed = set().union(*profile_groups.values())
         for case in _cases(rng, config.include_mock):
             case_difficulty = "basic" if case.case_id.startswith(("m3", "h1")) else "hard"
-            if config.difficulty not in {"mixed", case_difficulty}:
+            selected_difficulty = DIFFICULTY_ALIAS[config.difficulty]
+            if selected_difficulty not in {"중", DIFFICULTY_ALIAS[case_difficulty]}:
                 continue
             if case.curriculum not in allowed:
                 continue
             parsed = classify(case.question)
             result = solve_rule(parsed["domain"], parsed["slots"])
             path = select_optimal_rule(parsed)
+            knowledge_plan = _sample_knowledge_plan(rng, selected_difficulty)
+            knowledge_contract = _knowledge_contract(knowledge_plan, selected_difficulty)
             answer_ok = result.get("answer") == case.expected or (
                 isinstance(result.get("answer"), (int, float))
                 and abs(float(result["answer"]) - float(case.expected)) < 1e-9
@@ -112,6 +154,7 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
                 "repeat": repeat + 1,
                 **asdict(case),
                 "difficulty": case_difficulty,
+                **knowledge_contract,
                 "domain": parsed.get("domain"),
                 "rule_path": path.get("path", []),
                 "answer": result.get("answer"),
@@ -120,10 +163,10 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
                 "trace": build_solution_trace(parsed, result) if result.get("status") == "PASS" else [],
                 "verified": result.get("verified", False),
                 "trace_steps": len(build_solution_trace(parsed, result)) if result.get("status") == "PASS" else 0,
-                "status": "PASS" if passed else "FAIL",
+                "status": "PASS" if passed and knowledge_contract["contract_passed"] else "FAIL",
             })
     passed = sum(row["status"] == "PASS" for row in rows)
-    return {"config": asdict(config), "total": len(rows), "passed": passed, "failed": len(rows) - passed, "pass_rate": passed / len(rows) if rows else 0.0, "cases": rows}
+    return {"config": asdict(config), "difficulty_policy": DIFFICULTY_POLICY, "total": len(rows), "passed": passed, "failed": len(rows) - passed, "pass_rate": passed / len(rows) if rows else 0.0, "cases": rows}
 
 
 def main() -> int:
@@ -134,7 +177,7 @@ def main() -> int:
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--no-mock", action="store_true", help="모의고사 스타일 문항 제외")
-    parser.add_argument("--difficulty", choices=["basic", "mixed", "hard"], default="mixed")
+    parser.add_argument("--difficulty", choices=["하", "중", "상", "basic", "mixed", "hard"], default="mixed")
     parser.add_argument("--output", default="docs/generated_validation_report.json")
     args = parser.parse_args()
     report = generate_and_validate(GenerationConfig(args.min_grade, args.max_grade, max(1, args.repeats), args.seed, not args.no_mock, args.difficulty))

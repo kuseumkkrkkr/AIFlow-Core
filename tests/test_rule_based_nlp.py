@@ -37,6 +37,8 @@ def test_core_domains() -> None:
         ("로그방정식 log_2 x=3", "hs1_exponential_equation", 8),
         ("접선의 기울기 f(x)=x^2, x=3", "hs2_tangent", 6),
         ("양수 a와 이차함수 f(x)에 대하여 조각함수 g(x)=sin(3πx/a), 서로 다른 실근의 개수를 h(n)이라 할 때 g(10)의 값", "hs2_piecewise_trig_quadratic", 224),
+        ("복합중 등차수열 첫항 2, 공차 3에서 a5+a8의 값", "hs_composite_sequence", 37),
+        ("복합상 등차수열 첫항 2, 공차 3에서 M=a5+a8, f(x)=2x+1, g(x)=x+M일 때 log_2(2^(f(g(4)))", "hs_composite_sequence_function", 83),
     ]
     for text, domain, expected in cases:
         parsed = classify(text)

@@ -1,0 +1,192 @@
+{
+  "config": {
+    "min_grade": "중3",
+    "max_grade": "고2",
+    "repeats": 3,
+    "seed": 2026,
+    "include_mock": true,
+    "difficulty": "상"
+  },
+  "difficulty_policy": {
+    "하": [
+      1,
+      2,
+      1
+    ],
+    "중": [
+      3,
+      5,
+      2
+    ],
+    "상": [
+      6,
+      10,
+      3
+    ]
+  },
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "cases": [
+    {
+      "repeat": 1,
+      "case_id": "hard-sequence-function",
+      "curriculum": "수2",
+      "mock_style": "수학Ⅱ 복합형",
+      "question": "복합상 등차수열 첫항 7, 공차 5에서 M=a9+a10, f(x)=5x+4, g(x)=x+M일 때 log_2(2^(f(g(1)))",
+      "expected": 504,
+      "difficulty": "상",
+      "knowledge_ids": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition",
+        "function_substitution",
+        "function_substitution",
+        "power_rule",
+        "log_inverse"
+      ],
+      "level": "상",
+      "min": 6,
+      "max": 10,
+      "max_duplicate": 3,
+      "knowledge_count": 7,
+      "knowledge_max_duplicate": 2,
+      "knowledge_plan": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition",
+        "function_substitution",
+        "function_substitution",
+        "power_rule",
+        "log_inverse"
+      ],
+      "contract_passed": true,
+      "domain": "hs_composite_sequence_function",
+      "rule_path": [
+        "hs_composite_sequence_function"
+      ],
+      "answer": 504,
+      "formula": "a_n→M→g(x)=x+M→f(g(x))→log_2(2^y)=y",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs_composite_sequence_function으로 분류한다.",
+        "2. 적용 규칙: hs_composite_sequence_function",
+        "3. 공식: a_n→M→g(x)=x+M→f(g(x))→log_2(2^y)=y",
+        "4. 두 일반항을 계산해 M=a_9+a_10=99이다.",
+        "5. g(1)=1+M을 계산하고 f에 대입한다.",
+        "6. log_2(2^y)=y를 적용해 최종값 504을 얻는다.",
+        "7. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 7,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "hard-sequence-function",
+      "curriculum": "수2",
+      "mock_style": "수학Ⅱ 복합형",
+      "question": "복합상 등차수열 첫항 8, 공차 1에서 M=a8+a10, f(x)=4x+4, g(x)=x+M일 때 log_2(2^(f(g(7)))",
+      "expected": 160,
+      "difficulty": "상",
+      "knowledge_ids": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition",
+        "function_substitution",
+        "function_substitution",
+        "power_rule",
+        "log_inverse"
+      ],
+      "level": "상",
+      "min": 6,
+      "max": 10,
+      "max_duplicate": 3,
+      "knowledge_count": 7,
+      "knowledge_max_duplicate": 2,
+      "knowledge_plan": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition",
+        "function_substitution",
+        "function_substitution",
+        "power_rule",
+        "log_inverse"
+      ],
+      "contract_passed": true,
+      "domain": "hs_composite_sequence_function",
+      "rule_path": [
+        "hs_composite_sequence_function"
+      ],
+      "answer": 160,
+      "formula": "a_n→M→g(x)=x+M→f(g(x))→log_2(2^y)=y",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs_composite_sequence_function으로 분류한다.",
+        "2. 적용 규칙: hs_composite_sequence_function",
+        "3. 공식: a_n→M→g(x)=x+M→f(g(x))→log_2(2^y)=y",
+        "4. 두 일반항을 계산해 M=a_8+a_10=32이다.",
+        "5. g(7)=7+M을 계산하고 f에 대입한다.",
+        "6. log_2(2^y)=y를 적용해 최종값 160을 얻는다.",
+        "7. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 7,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "hard-sequence-function",
+      "curriculum": "수2",
+      "mock_style": "수학Ⅱ 복합형",
+      "question": "복합상 등차수열 첫항 2, 공차 6에서 M=a3+a8, f(x)=4x+5, g(x)=x+M일 때 log_2(2^(f(g(8)))",
+      "expected": 269,
+      "difficulty": "상",
+      "knowledge_ids": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition",
+        "function_substitution",
+        "function_substitution",
+        "power_rule",
+        "log_inverse"
+      ],
+      "level": "상",
+      "min": 6,
+      "max": 10,
+      "max_duplicate": 3,
+      "knowledge_count": 7,
+      "knowledge_max_duplicate": 2,
+      "knowledge_plan": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition",
+        "function_substitution",
+        "function_substitution",
+        "power_rule",
+        "log_inverse"
+      ],
+      "contract_passed": true,
+      "domain": "hs_composite_sequence_function",
+      "rule_path": [
+        "hs_composite_sequence_function"
+      ],
+      "answer": 269,
+      "formula": "a_n→M→g(x)=x+M→f(g(x))→log_2(2^y)=y",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs_composite_sequence_function으로 분류한다.",
+        "2. 적용 규칙: hs_composite_sequence_function",
+        "3. 공식: a_n→M→g(x)=x+M→f(g(x))→log_2(2^y)=y",
+        "4. 두 일반항을 계산해 M=a_3+a_8=58이다.",
+        "5. g(8)=8+M을 계산하고 f에 대입한다.",
+        "6. log_2(2^y)=y를 적용해 최종값 269을 얻는다.",
+        "7. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 7,
+      "status": "PASS"
+    }
+  ]
+}

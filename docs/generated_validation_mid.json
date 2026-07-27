@@ -1,0 +1,165 @@
+{
+  "config": {
+    "min_grade": "중3",
+    "max_grade": "고2",
+    "repeats": 3,
+    "seed": 2026,
+    "include_mock": true,
+    "difficulty": "중"
+  },
+  "difficulty_policy": {
+    "하": [
+      1,
+      2,
+      1
+    ],
+    "중": [
+      3,
+      5,
+      2
+    ],
+    "상": [
+      6,
+      10,
+      3
+    ]
+  },
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "cases": [
+    {
+      "repeat": 1,
+      "case_id": "mid-sequence-sum",
+      "curriculum": "수1",
+      "mock_style": "수학Ⅰ 복합형",
+      "question": "복합중 등차수열 첫항 7, 공차 5에서 a9+a10의 값",
+      "expected": 99,
+      "difficulty": "중",
+      "knowledge_ids": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition"
+      ],
+      "level": "중",
+      "min": 3,
+      "max": 5,
+      "max_duplicate": 2,
+      "knowledge_count": 3,
+      "knowledge_max_duplicate": 2,
+      "knowledge_plan": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition"
+      ],
+      "contract_passed": true,
+      "domain": "hs_composite_sequence",
+      "rule_path": [
+        "hs_composite_sequence"
+      ],
+      "answer": 99,
+      "formula": "a_n=a_1+(n-1)d, M=a_p+a_q",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs_composite_sequence으로 분류한다.",
+        "2. 적용 규칙: hs_composite_sequence",
+        "3. 공식: a_n=a_1+(n-1)d, M=a_p+a_q",
+        "4. a_9=47, a_10=52를 각각 계산한다.",
+        "5. 두 항을 더해 99을 얻는다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 2,
+      "case_id": "mid-sequence-sum",
+      "curriculum": "수1",
+      "mock_style": "수학Ⅰ 복합형",
+      "question": "복합중 등차수열 첫항 8, 공차 1에서 a8+a10의 값",
+      "expected": 32,
+      "difficulty": "중",
+      "knowledge_ids": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition"
+      ],
+      "level": "중",
+      "min": 3,
+      "max": 5,
+      "max_duplicate": 2,
+      "knowledge_count": 3,
+      "knowledge_max_duplicate": 2,
+      "knowledge_plan": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition"
+      ],
+      "contract_passed": true,
+      "domain": "hs_composite_sequence",
+      "rule_path": [
+        "hs_composite_sequence"
+      ],
+      "answer": 32,
+      "formula": "a_n=a_1+(n-1)d, M=a_p+a_q",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs_composite_sequence으로 분류한다.",
+        "2. 적용 규칙: hs_composite_sequence",
+        "3. 공식: a_n=a_1+(n-1)d, M=a_p+a_q",
+        "4. a_8=15, a_10=17를 각각 계산한다.",
+        "5. 두 항을 더해 32을 얻는다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    },
+    {
+      "repeat": 3,
+      "case_id": "mid-sequence-sum",
+      "curriculum": "수1",
+      "mock_style": "수학Ⅰ 복합형",
+      "question": "복합중 등차수열 첫항 2, 공차 6에서 a3+a8의 값",
+      "expected": 58,
+      "difficulty": "중",
+      "knowledge_ids": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition"
+      ],
+      "level": "중",
+      "min": 3,
+      "max": 5,
+      "max_duplicate": 2,
+      "knowledge_count": 3,
+      "knowledge_max_duplicate": 2,
+      "knowledge_plan": [
+        "ar_seq_an_formula",
+        "ar_seq_an_formula",
+        "addition"
+      ],
+      "contract_passed": true,
+      "domain": "hs_composite_sequence",
+      "rule_path": [
+        "hs_composite_sequence"
+      ],
+      "answer": 58,
+      "formula": "a_n=a_1+(n-1)d, M=a_p+a_q",
+      "reason": "",
+      "trace": [
+        "1. 문제 유형을 hs_composite_sequence으로 분류한다.",
+        "2. 적용 규칙: hs_composite_sequence",
+        "3. 공식: a_n=a_1+(n-1)d, M=a_p+a_q",
+        "4. a_3=14, a_8=44를 각각 계산한다.",
+        "5. 두 항을 더해 58을 얻는다.",
+        "6. 원래 조건에 재대입해 검산한다: 통과."
+      ],
+      "verified": true,
+      "trace_steps": 6,
+      "status": "PASS"
+    }
+  ]
+}

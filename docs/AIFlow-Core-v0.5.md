@@ -2,7 +2,9 @@
 
 ## 무엇을 가지고 있는가
 
-`knowledge/`는 UTF-8 JSON 지식 베이스다. `concept_graph.json`은 개념·별칭·선행관계, `rule_library.json`은 적용 조건·필요 변수·공식·검산 정책, `template_pack.json`은 문제 생성 템플릿, `validation_contract.json`은 PASS/FAIL 계약을 담는다. 현재 일차·이차방정식, 비율, 집합, 확률·조합·순열, 기본 도형, 등차수열, 함수값·합성함수·역함수, 인수분해·나머지정리, 조건부확률, 지수·로그와 지수·로그 방정식, 특수각 삼각함수, 다항식 극한, 거듭제곱 미분·접선 기울기, 단항식 정적분을 다룬다. 또한 2026년 6월 고2 30번을 기준으로 조각함수·삼각함수 주기·최솟값·이차함수·실근 개수 조건을 결합하는 전용 규칙을 추가했다.
+`knowledge/`는 UTF-8 JSON 지식 베이스다. `concept_graph.json`은 개념·별칭·선행관계, `rule_library.json`은 적용 조건·필요 변수·공식·검산 정책, `template_pack.json`은 문제 생성 템플릿, `validation_contract.json`은 PASS/FAIL 계약을 담는다. `high_school_curriculum_catalog.json`은 수학Ⅰ·수학Ⅱ·미적분·확률과 통계·기하의 지수·로그·삼각함수·수열, 극한·미분·적분, 수열의 극한·넓이와 부피, 경우의 수·분포, 벡터·이차곡선·공간좌표를 검색·확장용으로 정리한 과목 카탈로그다.
+
+현재 실행 규칙은 일차·이차방정식, 비율, 집합, 확률·조합·순열, 기본 도형, 등차수열, 함수값·합성함수·역함수, 인수분해·나머지정리, 조건부확률, 지수·로그와 지수·로그 방정식, 특수각 삼각함수, 다항식 극한, 거듭제곱 미분·접선 기울기, 단항식 정적분을 다룬다. 카탈로그에 존재한다고 해서 즉시 모든 항목을 자동 풀이한다는 뜻은 아니며, 웹의 엔진 알고리즘 탭에서 이 차이를 공개한다. 또한 2026년 6월 고2 30번을 기준으로 조각함수·삼각함수 주기·최솟값·이차함수·실근 개수 조건을 결합하는 전용 규칙을 추가했다.
 
 ## 처리 파이프라인
 
@@ -34,6 +36,8 @@ python engine/problem_generation_loop.py --difficulty hard --repeats 5 --seed 20
 
 결과는 `docs/generated_validation_report.json`에 UTF-8로 기록된다. 이 보고서는 “생성 성공”만 세지 않고 `status=PASS`, 기대 정답 일치, `verified=true`, 풀이 trace 존재를 모두 만족해야 통과시킨다. 실제 시중 모의고사 원문 전체를 자동 수집·복제한 결과는 아니며, 저작권을 피한 독립 변형 기반의 회귀 기준선이다.
 
+난이도는 단순 라벨이 아니라 실제 trace의 지식 식별자 수를 검사한다. 하(1~2개)는 단일 공식형, 중(3~5개)은 등차수열 일반항을 두 번 적용한 뒤 합산하는 3개 공식형, 상(6~10개)은 수열→함수 대입→지수·로그 역연산으로 이어지는 7개 공식형이다. 수치와 항 번호는 seed로 바뀌지만, 문제 구조에 필요한 공식만 사용하므로 무관한 공식을 임의로 끼워 넣지 않는다.
+
 ## 다중 seed 벤치마크
 
 대규모 실행 기록: seed 1~20을 5회 반복해 총 3,700문항을 생성했고 3,700/3,700 PASS(100%)였다. 고2 프로필은 수1·수2·고2 누적 범위로 집계한다. 상세 결과는 `docs/benchmark_matrix_3100_report.json`에 저장했다. 이 수치는 현재 생성 템플릿과 명시적 규칙 범위의 회귀 안정성을 의미하며 실제 시중 문제집 전체의 일반화 정확도와 동일한 의미는 아니다.
@@ -62,7 +66,7 @@ POST /api/generate
 ```
 
 응답에는 `summary`(총 문항·통과율)와 각 문항의 문제, 기대 정답, 실제 정답, 공식, 풀이 trace, 독립 검산 결과가 포함된다. `repeats`는 운영 보호를 위해 1~20으로 제한한다.
-난이도 파라미터는 `basic`, `mixed`, `hard`를 지원하며 basic은 중3·고1 템플릿, hard는 수1·수2·고2 모의고사형 템플릿을 선택한다.
+난이도 파라미터는 `하`, `중`, `상` 및 호환 별칭 `basic`, `mixed`, `hard`를 지원한다. `mixed`는 전체 회귀 범위이고, `하`·`중`·`상`은 실제 공식 수 계약에 맞는 문항만 선택한다.
 
 ## 문제집 코퍼스 검증
 
@@ -80,4 +84,6 @@ python engine/corpus_runner.py path/to/questions.jsonl --output docs/corpus_vali
 ```
 
 각 레코드는 최소 `question`, `expected`를 가지며 `case_id`, `source_label`, `curriculum`을 선택적으로 기록한다. 저장소의 `benchmarks/market_style_corpus.json`은 원문 문제집을 복제하지 않은 독립 모의고사형 23문항 예제이며 현재 23/23 통과한다. 지수·로그 방정식과 접선 기울기 문항도 포함한다.
+
+`benchmarks/official_exam_regression.json`은 2026년 6월 고2 전국연합학력평가 수학 30번의 **조건 구조만 보존한** 회귀 입력이다. 시험 원문 전체를 저장하지 않으며, `python engine/corpus_runner.py benchmarks/official_exam_regression.json --repeats 20`으로 20회 결정성·정답·검산을 함께 확인한다.
 

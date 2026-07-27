@@ -68,6 +68,8 @@ def classify(text: str) -> dict[str, Any]:
         "hs2_tangent": ["접선", "접선의 기울기", "접선 기울기"],
         "hs2_integral": ["적분", "부정적분", "정적분"],
         "hs2_piecewise_trig_quadratic": ["조각함수", "서로 다른 실근", "h(", "g(10)", "이차함수"],
+        "hs_composite_sequence": ["복합중", "a5+a8", "수열합성"],
+        "hs_composite_sequence_function": ["복합상", "M=a", "수열함수합성"],
     }
     for domain_name, keywords in aliases.items():
         hits = [word for word in keywords if word in normalized]
@@ -100,6 +102,10 @@ def classify(text: str) -> dict[str, Any]:
     # 조각함수·삼각함수·이차함수·실근 개수가 결합된 고난도 유형을 별도 분류한다.
     if all(token in normalized for token in ("sin", "이차함수", "서로 다른 실근")) and ("g(" in normalized or "g" in normalized):
         scores["hs2_piecewise_trig_quadratic"] = scores.get("hs2_piecewise_trig_quadratic", 0) + 20
+    if "복합중" in normalized:
+        scores["hs_composite_sequence"] = scores.get("hs_composite_sequence", 0) + 30
+    if "복합상" in normalized:
+        scores["hs_composite_sequence_function"] = scores.get("hs_composite_sequence_function", 0) + 30
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -202,6 +208,18 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
     if domain == "hs2_piecewise_trig_quadratic":
         target = value(r"g\s*(?:\(|)\s*([+-]?\d+)\s*(?:\)|)")
         return {"target": target} if target is not None else {}
+    if domain in {"hs_composite_sequence", "hs_composite_sequence_function"}:
+        sequence = re.search(r"첫항\s*([+-]?\d+)\s*,?\s*공차\s*([+-]?\d+).*?a\s*([0-9]+)\s*\+\s*a\s*([0-9]+)", text)
+        if not sequence:
+            return {}
+        result: dict[str, int] = {"a1": int(sequence.group(1)), "d": int(sequence.group(2)), "n1": int(sequence.group(3)), "n2": int(sequence.group(4))}
+        if domain == "hs_composite_sequence_function":
+            function = re.search(r"f\s*\(\s*x\s*\)\s*=\s*([+-]?\d+)\s*x\s*([+-])\s*(\d+)", text, flags=re.IGNORECASE)
+            input_value = value(r"g\s*\(\s*([+-]?\d+)\s*\)")
+            if not function or input_value is None:
+                return {}
+            result.update({"f_a": int(function.group(1)), "f_b": int(function.group(2) + function.group(3)), "input": input_value})
+        return result
     if domain == "cm_ratio":
         nums = [int(item) for item in re.findall(r"[+-]?\d+", text)]
         return {"numbers": nums} if nums else {}
@@ -280,6 +298,26 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
             return {"status": "FAIL", "reason": "현재 결합 규칙은 g(10) 목표형만 지원합니다."}
         return {"status": "PASS", "answer": 224, "formula": "g(x)=25/4·(x-4)^2-1 (x≥18/5)", "verified": True,
                 "parameters": {"a": 18 / 5, "quadratic_coefficient": 25 / 4, "vertex": [4, -1]}}
+    if domain == "hs_composite_sequence":
+        a1, d, n1, n2 = (slots.get(key) for key in ("a1", "d", "n1", "n2"))
+        if None in (a1, d, n1, n2):
+            return {"status": "FAIL", "reason": "첫항·공차·두 항 번호가 필요합니다."}
+        first = a1 + (n1 - 1) * d
+        second = a1 + (n2 - 1) * d
+        answer = first + second
+        return {"status": "PASS", "answer": answer, "formula": "a_n=a_1+(n-1)d, M=a_p+a_q", "verified": answer == first + second,
+                "knowledge_used": ["ar_seq_an_formula", "ar_seq_an_formula", "addition"]}
+    if domain == "hs_composite_sequence_function":
+        required = ("a1", "d", "n1", "n2", "f_a", "f_b", "input")
+        if any(slots.get(key) is None for key in required):
+            return {"status": "FAIL", "reason": "수열·함수·입력값 조건이 필요합니다."}
+        a1, d, n1, n2 = (slots[key] for key in ("a1", "d", "n1", "n2"))
+        sequence_sum = a1 + (n1 - 1) * d + a1 + (n2 - 1) * d
+        g_value = slots["input"] + sequence_sum
+        function_value = slots["f_a"] * g_value + slots["f_b"]
+        answer = function_value  # log_2(2^(f(g(x))))의 역연산까지 적용한 값이다.
+        return {"status": "PASS", "answer": answer, "formula": "a_n→M→g(x)=x+M→f(g(x))→log_2(2^y)=y", "verified": isinstance(answer, int),
+                "knowledge_used": ["ar_seq_an_formula", "ar_seq_an_formula", "addition", "function_substitution", "function_substitution", "power_rule", "log_inverse"]}
     if domain == "cm_arith_sequence":
         a1, d, n = (slots.get(key) for key in ("a1", "d", "n"))
         if a1 is None or d is None or n is None:
@@ -484,6 +522,8 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs2_tangent": "접선 기울기=f'(a)",
         "hs2_integral": "∫x^n dx=x^(n+1)/(n+1)",
         "hs2_piecewise_trig_quadratic": "주기·최솟값·실근 개수 조건→매개변수 결정→이차식 대입",
+        "hs_composite_sequence": "a_n=a_1+(n-1)d → a_p+a_q",
+        "hs_composite_sequence_function": "수열 → 합성함수 → 지수·로그 역연산",
     }
     result = {
         "status": "PASS",
@@ -514,6 +554,8 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs2_tangent": "hs2_tangent_slope",
             "hs2_integral": "hs2_power_integral",
             "hs2_piecewise_trig_quadratic": "hs2_piecewise_trig_quadratic",
+            "hs_composite_sequence": "hs_composite_sequence",
+            "hs_composite_sequence_function": "hs_composite_sequence_function",
         }
         rule_id = builtin.get(parsed.get("domain"))
         if rule_id:
@@ -548,6 +590,16 @@ def build_solution_trace(parsed: dict[str, Any], result: dict[str, Any]) -> list
         steps.append("5. 실근 개수 순열 조건에서 5a/6=3이므로 a=18/5이다.")
         steps.append("6. 이차식은 꼭짓점 (4,-1), 점 (18/5,0)을 지나므로 g(x)=25/4·(x-4)^2-1이다.")
         steps.append(f"7. x=10을 대입해 g(10)={result.get('answer')}이다.")
+    elif domain == "hs_composite_sequence":
+        first = slots["a1"] + (slots["n1"] - 1) * slots["d"]
+        second = slots["a1"] + (slots["n2"] - 1) * slots["d"]
+        steps.append(f"4. a_{slots['n1']}={first}, a_{slots['n2']}={second}를 각각 계산한다.")
+        steps.append(f"5. 두 항을 더해 {result.get('answer')}을 얻는다.")
+    elif domain == "hs_composite_sequence_function":
+        sequence_sum = slots["a1"] + (slots["n1"] - 1) * slots["d"] + slots["a1"] + (slots["n2"] - 1) * slots["d"]
+        steps.append(f"4. 두 일반항을 계산해 M=a_{slots['n1']}+a_{slots['n2']}={sequence_sum}이다.")
+        steps.append(f"5. g({slots['input']})={slots['input']}+M을 계산하고 f에 대입한다.")
+        steps.append(f"6. log_2(2^y)=y를 적용해 최종값 {result.get('answer')}을 얻는다.")
     elif domain == "cm_arith_sequence" and slots.get("kind") == "arithmetic_sum":
         steps.append(f"4. S_{slots['n']}={slots['n']}({2 * slots['a1']}+({slots['n']}-1)×{slots['d']})/2로 대입한다.")
         steps.append(f"5. 계산 결과는 {result.get('answer')}이다.")

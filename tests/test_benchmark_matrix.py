@@ -11,7 +11,8 @@ from run_benchmark_matrix import run_matrix  # noqa: E402
 def test_matrix_is_stable() -> None:
     """두 seed와 다섯 교육과정 프로필을 모두 통과하는지 확인한다."""
     report = run_matrix([7, 13], 1)
-    assert report["total"] == 74
+    # 중·상 결합형 두 문항이 수1·수2·고2 누적 프로필에 추가된 총량이다.
+    assert report["total"] == 82
     assert report["failed"] == 0
     assert report["pass_rate"] == 1.0
 

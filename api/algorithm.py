@@ -11,6 +11,12 @@ sys.path.insert(0, str(ROOT / "engine"))
 from problem_generation_loop import DIFFICULTY_POLICY, FORMULA_KNOWLEDGE  # noqa: E402
 
 
+def _load_curriculum_catalog() -> dict:
+    """필요 변수: 지식 카탈로그 UTF-8 경로. 작동 원리: 웹 명세와 엔진이 같은 과목 지식 목록을 사용한다."""
+    catalog_path = ROOT / "knowledge" / "high_school_curriculum_catalog.json"
+    return json.loads(catalog_path.read_text(encoding="utf-8"))
+
+
 ALGORITHM = {
     "version": "AIFlow-Core v0.5",
     "pipeline": [
@@ -26,6 +32,8 @@ ALGORITHM = {
         "tuple_definition": ["최소 공식 수", "최대 공식 수", "동일 공식 최대 중복"],
         "formula_knowledge": list(FORMULA_KNOWLEDGE),
     },
+    # 카탈로그는 검색·확장 우선순위를 위한 지식 목록이며, 모든 항목이 아직 실행 규칙이라는 뜻은 아니다.
+    "curriculum_knowledge": _load_curriculum_catalog(),
     "supported_domains": [
         "중3: 일차·이차방정식, 비율, 집합, 확률, 도형, 등차수열",
         "고1·수1: 함수, 합성·역함수, 인수분해, 지수·로그, 삼각함수",

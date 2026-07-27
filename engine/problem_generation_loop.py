@@ -26,19 +26,6 @@ FORMULA_KNOWLEDGE = (
 )
 
 
-def _sample_knowledge_plan(rng: random.Random, difficulty: str) -> list[str]:
-    """필요 변수: 난이도와 재현 가능한 난수 생성기. 공식 지식 수와 중복 제한을 만족하는 계획을 만든다."""
-    level = DIFFICULTY_ALIAS[difficulty]
-    minimum, maximum, repeat_limit = DIFFICULTY_POLICY[level]
-    count = rng.randint(minimum, maximum)
-    plan: list[str] = []
-    while len(plan) < count:
-        candidate = rng.choice(FORMULA_KNOWLEDGE)
-        if plan.count(candidate) < repeat_limit:
-            plan.append(candidate)
-    return plan
-
-
 def _knowledge_contract(plan: list[str], difficulty: str) -> dict[str, Any]:
     """필요 변수: 공식 지식 계획과 난이도. 개수·최대 중복이 정책을 지키는지 검증한다."""
     level = DIFFICULTY_ALIAS[difficulty]
@@ -71,13 +58,20 @@ class GeneratedCase:
     mock_style: str
     question: str
     expected: Any
-    difficulty: str = "mixed"
+    difficulty: str = "하"
+    knowledge_ids: tuple[str, ...] = ()
 
 
 def _cases(rng: random.Random, include_mock: bool) -> list[GeneratedCase]:
     """필요 변수: 난수 생성기·모의고사 여부. 작동 원리: 독립 계산으로 기대 정답을 만든다."""
     a, d, n = rng.randint(-5, 12), rng.randint(-5, 8), rng.randint(3, 18)
     p, q = rng.randint(2, 8), rng.randint(1, 7)
+    # 중·상은 지식 개수를 사후 표기하지 않고, 실제 계산 경로가 그 공식들을 모두 사용하게 만든다.
+    sequence_a1, sequence_d = rng.randint(1, 8), rng.randint(1, 6)
+    sequence_p, sequence_q = sorted(rng.sample(range(3, 11), 2))
+    sequence_sum = (sequence_a1 + (sequence_p - 1) * sequence_d) + (sequence_a1 + (sequence_q - 1) * sequence_d)
+    function_a, function_b, function_input = rng.randint(2, 5), rng.randint(1, 9), rng.randint(1, 8)
+    hard_answer = function_a * (function_input + sequence_sum) + function_b
     cases = [
         GeneratedCase("m3-linear", "중3", "중3 모의고사", f"{p}x+{q}={p * 6 + q}에서 x의 값", 6),
         GeneratedCase("m3-set", "중3", "중3 모의고사", "|A|=18, |B|=12, |A∩B|=5일 때 |A∪B|", 25),
@@ -101,6 +95,8 @@ def _cases(rng: random.Random, include_mock: bool) -> list[GeneratedCase]:
         GeneratedCase("s2-derivative", "수2", "고2 모의고사", "미분 f(x)=x^4, x=2", 32),
         GeneratedCase("s2-tangent", "수2", "고2 모의고사", "접선의 기울기 f(x)=x^3, x=2", 12),
         GeneratedCase("s2-integral", "수2", "고2 모의고사", "정적분 0부터 3 x^2", 9),
+        GeneratedCase("mid-sequence-sum", "수1", "수학Ⅰ 복합형", f"복합중 등차수열 첫항 {sequence_a1}, 공차 {sequence_d}에서 a{sequence_p}+a{sequence_q}의 값", sequence_sum, "중", ("ar_seq_an_formula", "ar_seq_an_formula", "addition")),
+        GeneratedCase("hard-sequence-function", "수2", "수학Ⅱ 복합형", f"복합상 등차수열 첫항 {sequence_a1}, 공차 {sequence_d}에서 M=a{sequence_p}+a{sequence_q}, f(x)={function_a}x+{function_b}, g(x)=x+M일 때 log_2(2^(f(g({function_input})))", hard_answer, "상", ("ar_seq_an_formula", "ar_seq_an_formula", "addition", "function_substitution", "function_substitution", "power_rule", "log_inverse")),
     ]
     if include_mock:
         cases.append(GeneratedCase("mock-mixed", "고2", "고2 모의고사", "원의 넓이 반지름 3", 28.274333882308138))
@@ -134,17 +130,18 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
         else:
             allowed = set().union(*profile_groups.values())
         for case in _cases(rng, config.include_mock):
-            case_difficulty = "basic" if case.case_id.startswith(("m3", "h1")) else "hard"
             selected_difficulty = DIFFICULTY_ALIAS[config.difficulty]
-            if selected_difficulty not in {"중", DIFFICULTY_ALIAS[case_difficulty]}:
+            # mixed는 회귀용 전체 범위, 하·중·상은 실제 공식 수에 맞는 문항만 선택한다.
+            if config.difficulty != "mixed" and case.difficulty != selected_difficulty:
                 continue
             if case.curriculum not in allowed:
                 continue
             parsed = classify(case.question)
             result = solve_rule(parsed["domain"], parsed["slots"])
             path = select_optimal_rule(parsed)
-            knowledge_plan = _sample_knowledge_plan(rng, selected_difficulty)
-            knowledge_contract = _knowledge_contract(knowledge_plan, selected_difficulty)
+            primary_rule = path.get("rule_id") or parsed.get("domain", "unknown_rule")
+            knowledge_plan = list(case.knowledge_ids) or [primary_rule]
+            knowledge_contract = _knowledge_contract(knowledge_plan, case.difficulty)
             answer_ok = result.get("answer") == case.expected or (
                 isinstance(result.get("answer"), (int, float))
                 and abs(float(result["answer"]) - float(case.expected)) < 1e-9
@@ -153,7 +150,7 @@ def generate_and_validate(config: GenerationConfig) -> dict[str, Any]:
             rows.append({
                 "repeat": repeat + 1,
                 **asdict(case),
-                "difficulty": case_difficulty,
+                "difficulty": case.difficulty,
                 **knowledge_contract,
                 "domain": parsed.get("domain"),
                 "rule_path": path.get("path", []),

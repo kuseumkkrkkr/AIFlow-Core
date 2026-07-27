@@ -1,0 +1,37 @@
+{
+  "source": "benchmarks\\official_exam_regression.json",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "cases": [
+    {
+      "case_id": "2026-06-g2-math-30-structure",
+      "source_label": "2026년 6월 고2 전국연합학력평가 수학 30번 구조 보존 입력",
+      "curriculum": "수학Ⅱ 결합 요소",
+      "question": "양수 a와 이차함수 f(x)에 대하여 조각함수 g(x)=sin(3πx/a), 서로 다른 실근의 개수를 h(n)이라 할 때 g(10)의 값",
+      "expected": 224,
+      "answer": 224,
+      "status": "PASS",
+      "domain": "hs2_piecewise_trig_quadratic",
+      "rule_path": [
+        "hs2_piecewise_trig_quadratic"
+      ],
+      "formula": "g(x)=25/4·(x-4)^2-1 (x≥18/5)",
+      "reason": "",
+      "verified": true,
+      "trace": [
+        "1. 문제 유형을 hs2_piecewise_trig_quadratic으로 분류한다.",
+        "2. 적용 규칙: hs2_piecewise_trig_quadratic",
+        "3. 공식: g(x)=25/4·(x-4)^2-1 (x≥18/5)",
+        "4. 주기와 최솟값 조건을 비교해 a<4, g(4)=-1을 결정한다.",
+        "5. 실근 개수 순열 조건에서 5a/6=3이므로 a=18/5이다.",
+        "6. 이차식은 꼭짓점 (4,-1), 점 (18/5,0)을 지나므로 g(x)=25/4·(x-4)^2-1이다.",
+        "7. x=10을 대입해 g(10)=224이다.",
+        "8. 원래 조건에 재대입해 검산한다: 통과."
+      ]
+    }
+  ],
+  "repeats": 20,
+  "deterministic": true
+}

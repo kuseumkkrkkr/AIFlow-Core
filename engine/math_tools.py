@@ -115,6 +115,24 @@ def evaluate_integer_gcd(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "gcd(a,b)=gcd(b,a mod b)", "verified": left % answer == 0 and right % answer == 0, "tool": "evaluate_integer_gcd"}
 
 
+def solve_absolute_linear_equation(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 일차식 계수 a,b와 절댓값 목표 c. 원리: ax+b=c와 ax+b=-c 두 선형 분기를 풀고 원식에 재대입한다."""
+    a, b, target = (slots.get(key) for key in ("a", "b", "target"))
+    try:
+        a, b, target = float(a), float(b), float(target)
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "|ax+b|=c에 필요한 a, b, c가 없습니다."}
+    if a == 0 or target < 0:
+        return {"status": "FAIL", "reason": "a는 0이 아니어야 하고 절댓값의 우변 c는 0 이상이어야 합니다."}
+    solutions = sorted({(target - b) / a, (-target - b) / a})
+    normalized = [int(round(value)) if abs(value - round(value)) < 1e-10 else value for value in solutions]
+    verified = all(abs(abs(a * float(value) + b) - target) < 1e-9 for value in normalized)
+    return {
+        "status": "PASS", "answer": normalized, "formula": "|ax+b|=c ⇒ ax+b=c 또는 ax+b=-c",
+        "verified": verified, "parameters": {"solutions": normalized}, "tool": "solve_absolute_linear_equation",
+    }
+
+
 def solve_log_product_equation(slots: dict[str, Any]) -> dict[str, Any]:
     """변수: 첫 로그의 밑·진수, 둘째 로그의 밑, 곱의 값. 원리: log_b(x)를 고립해 양의 실수 해를 계산·재대입한다."""
     first_base, first_value, second_base, target = (slots.get(key) for key in ("first_base", "first_value", "second_base", "target"))
@@ -281,6 +299,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "symbolic_matrix_product_2x2": symbolic_matrix_product_2x2,
     "evaluate_polynomial_horner": evaluate_polynomial_horner,
     "evaluate_integer_gcd": evaluate_integer_gcd,
+    "solve_absolute_linear_equation": solve_absolute_linear_equation,
     "solve_log_product_equation": solve_log_product_equation,
     "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
     "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,

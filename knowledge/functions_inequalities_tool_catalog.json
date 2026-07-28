@@ -178,12 +178,12 @@
       "name": "일차식 절댓값 방정식",
       "subject": "함수·부등식",
       "input_slots": ["a", "b", "target"],
-      "tool": {"kind": "planned_math_tool", "id": "solve_absolute_linear_equation"},
+      "tool": {"kind": "math_tool", "id": "solve_absolute_linear_equation"},
       "formula": "|ax+b|=c는 c≥0일 때 ax+b=c 또는 ax+b=-c로 분기한다.",
       "verification_invariant": "모든 반환 해를 원식에 대입해 |ax+b|=c를 만족하고, c<0이면 해집합이 공집합이어야 한다.",
       "supported_example": "|2x-3|=5의 해. → -1, 4",
       "unsupported_boundary": "절댓값 안이 이차 이상이거나 양변에 절댓값이 있는 방정식은 단순 두 분기로 풀지 않는다.",
-      "execution_status": "도구 구현 대기"
+      "execution_status": "실행 가능"
     },
     {
       "concept_id": "fn_ineq_rational_asymptote_hole",

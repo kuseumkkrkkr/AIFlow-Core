@@ -127,6 +127,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs_polynomial_remainder": ["나눈 나머지", "나머지를 R(x)"],
         "hs_rational_interval_extrema": ["최댓값", "최솟값", "a/(x-"],
         "hs_matrix_product": ["두 행렬", "AB=", "행렬 A", "행렬 B"],
+        "hs_absolute_linear_equation": ["절댓값", "|", "절대값"],
     }
     for domain_name, keywords in aliases.items():
         hits = [word for word in keywords if word in normalized]
@@ -190,6 +191,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs_log_interval_extrema"] = scores.get("hs_log_interval_extrema", 0) + 20
     if re.search(r"[+-]?\d*\s*sin\s*x\s*[+-]\s*sqrt\s*\(\s*[13]\s*\)\s*=\s*0", normalized, flags=re.IGNORECASE) and re.search(r"(?:pi|π)", normalized, flags=re.IGNORECASE):
         scores["hs_sine_linear_interval"] = scores.get("hs_sine_linear_interval", 0) + 20
+    if re.search(r"\|\s*[+-]?\d*\s*x\s*(?:[+-]\s*\d+)?\s*\|\s*=\s*[+-]?\d+", normalized):
+        scores["hs_absolute_linear_equation"] = scores.get("hs_absolute_linear_equation", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -365,6 +368,14 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
             return {"integers": [int(matched.group(1)), int(matched.group(2))]}
         numbers = [int(value) for value in re.findall(r"[+-]?\d+", text)]
         return {"integers": numbers[:2]} if len(numbers) >= 2 else {}
+    if domain == "hs_absolute_linear_equation":
+        match = re.search(r"\|\s*([+-]?\d*)\s*x\s*([+-]\s*\d+)?\s*\|\s*=\s*([+-]?\d+)", text)
+        if not match:
+            return {}
+        coefficient = match.group(1).replace(" ", "")
+        a = -1 if coefficient == "-" else int(coefficient or "1")
+        b = int((match.group(2) or "0").replace(" ", ""))
+        return {"a": a, "b": b, "target": int(match.group(3))}
     if domain == "hs_log_product_equation":
         match = re.search(r"log\s*_?\s*(\d+)\s*(\d+)\s*[*×]\s*log\s*_?\s*(\d+)\s*([a-zA-Z])\s*=\s*([+-]?\d+(?:\.\d+)?)", text, flags=re.IGNORECASE)
         if not match:
@@ -581,6 +592,7 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
         "hs_log_product_equation": "solve_log_product_equation",
         "integer_gcd": "evaluate_integer_gcd",
+        "hs_absolute_linear_equation": "solve_absolute_linear_equation",
         "hs_polynomial_value": "evaluate_polynomial_horner",
         "hs_polynomial_remainder": "polynomial_remainder_two_linear",
         "hs_rational_interval_extrema": "rational_interval_extrema",
@@ -890,6 +902,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs2_tangent": "hs2_tangent_slope",
             "hs2_integral": "hs2_power_integral",
             "integer_gcd": "evaluate_integer_gcd",
+            "hs_absolute_linear_equation": "solve_absolute_linear_equation",
             "hs_log_product_equation": "solve_log_product_equation",
             "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
             "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",

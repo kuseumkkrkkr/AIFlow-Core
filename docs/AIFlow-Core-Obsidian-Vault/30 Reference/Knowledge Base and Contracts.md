@@ -1,6 +1,6 @@
 ---
 type: reference
-last_verified: 2026-07-28
+last_verified: 2026-07-29
 sources:
   - ../../../knowledge/concept_graph.json
   - ../../../knowledge/rule_library.json
@@ -34,9 +34,11 @@ sources:
 - 확률과 통계: 조합·순열·조건부확률·이항분포 점확률
 - 기하: 기본 도형, 평면벡터 성분 내적, 좌표 GUI 거리·중점·삼각형 넓이·벡터 내적·두 직선 교점
 
-대표 도구 호출: 두 일차식 나머지 보간, 유리함수 구간 극값, 양의 정수 미지수를 포함한 2×2 행렬 곱, Horner 다항식 값, 최대공약수, 로그 곱 방정식, 지수함수 점근선 거리, 로그함수 역함수의 거듭제곱 좌표다. 도구는 추출된 슬롯만 받고, 등록되지 않은 도구 ID 호출과 임의 코드 실행을 허용하지 않는다.
+대표 도구 호출: 두 일차식 나머지 보간, 유리함수 구간 극값, 양의 정수 미지수를 포함한 2×2 행렬 곱, Horner 다항식 값, 최대공약수, 로그 곱 방정식, 지수함수 점근선 거리, 로그함수 역함수의 거듭제곱 좌표, 일차식 절댓값 방정식의 두 분기 해다. 도구는 추출된 슬롯만 받고, 등록되지 않은 도구 ID 호출과 임의 코드 실행을 허용하지 않는다.
 
 각 과목 도구 카탈로그는 `concept_id`, `required_slots`, `tool`, `formula`, `verification_invariant`, `supported_example`, `unsupported_boundary`를 가진다. 이 형식은 키워드 나열이 아니라 새 파서·도구·검산 규칙을 추가하기 위한 구현 계약이다.
+
+예를 들어 `fn_ineq_absolute_value_equation_linear`은 `a,b,target` 슬롯만 `solve_absolute_linear_equation`에 전달한다. 도구는 `ax+b=target`과 `ax+b=-target`을 각각 풀고, 반환한 모든 해를 원래 절댓값식에 재대입한다. `target<0`, `a=0`, 이차 이상 내부식, 양변 절댓값은 `PASS`하지 않는다. 이 구조는 `|ax+b|=c`를 보통 일차방정식으로 오인해 한 해만 반환하는 허위 PASS도 차단한다.
 
 현재 과목별 카탈로그는 기존 170개에 1차 대학 기초수학(선형대수 33개, 기초해석 32개, 이산수학 28개), 2차 확장(정수론·추상대수 30개, 수치해석·최적화 32개, 고급기하 28개), 3차 확장(확률·통계 27개, 미분방정식 32개, 복소해석 30개), 실제 고2 기출에서 승격한 로그함수 구간 극값·특수각 사인 구간방정식·다항식 동류항 덧셈, 좌표 GUI 기하 5개 계약을 더해 총 450개 항목이다. 새 항목은 `prerequisite_ids`로 선수 지식 그래프를 표현한다. `engine/knowledge_catalog.py`가 과거 `items`·`concepts`, 단수·복수 검산 필드 차이를 공통 스키마로 정규화하고, `tests/test_knowledge_catalog.py`가 항목 수·ID 중복·필수 필드·선수관계 존재·순환·실행 항목의 실제 rule/math-tool 참조를 검증한다.
 

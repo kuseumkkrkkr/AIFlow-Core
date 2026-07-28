@@ -8,6 +8,8 @@ sources:
   - ../../../scripts/build_local_tool_dataset.py
   - ../../../scripts/train_local_tool_embedder.py
   - ../../../scripts/import_official_pdf_corpus.py
+  - ../../../scripts/render_private_pdf_pages.py
+  - ../../../scripts/extract_official_exam_ocr.ps1
   - ../../../engine/rule_based_nlp.py
 ---
 
@@ -53,6 +55,15 @@ python scripts/run_router_experiment.py --corpus private_benchmarks\official\202
 
 ```powershell
 python scripts/import_official_pdf_corpus.py --exam-id kice_2027_06 --question-url https://cdn2.kice.re.kr/suneung27mo06/suneung27mo06_2.pdf --answer-url https://cdn2.kice.re.kr/suneung27mo06/suneung27mo06_2a.pdf --output-dir private_benchmarks\official\kice_2027_06
+```
+
+PDF 수식 폰트가 텍스트 추출에서 사설영역 문자로 깨질 때는 Windows 내장 한국어 OCR을 쓴다. PDF 원문과 렌더 PNG·OCR 결과는 모두 비공개 경로에만 둔다. OCR 수식은 오류가 날 수 있으므로 원본 이미지·정답표와의 대조 전에는 코퍼스 정답 데이터로 승격하지 않는다.
+
+```powershell
+python scripts/render_private_pdf_pages.py --pdf private_benchmarks\official\kice_2027_06\suneung27mo06_2.pdf --output-dir private_benchmarks\official\kice_2027_06\ocr_pages --scale 2
+Get-ChildItem private_benchmarks\official\kice_2027_06\ocr_pages\page-*.png | ForEach-Object {
+  powershell -ExecutionPolicy Bypass -File scripts\extract_official_exam_ocr.ps1 -ImagePath $_.FullName -OutputDirectory private_benchmarks\official\kice_2027_06\ocr_text
+}
 ```
 
 2027학년도 6월 수학 영역의 로컬 점검에서는 원문 해시를 붙인 문항을 `private_benchmarks/official/kice_2027_06/corpus.json`에만 추가한다. 이 코퍼스에서 확인된 `a^(mx+p)=b^(nx+q)` 및 이차다항식 차분몫은 실행 계약으로 승격하고, 지원하지 않는 유리 지수·일반 극한은 성공값을 추정하지 않고 `FAIL`로 남긴다. 보고서의 허위 `PASS`율은 이 미지원 문항까지 포함해 계산한다.

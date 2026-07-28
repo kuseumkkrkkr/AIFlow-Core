@@ -132,6 +132,28 @@ def solve_log_product_equation(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "log_b2(x)=target/log_b1(v)", "verified": verified, "tool": "solve_log_product_equation"}
 
 
+def solve_exponential_asymptote_distance_sum(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 지수 밑·수직 이동·점근선 거리. 원리: 점의 y값 후보에서 양수인  b를 고르고 a=log_base(b)를 역산한다."""
+    base, shift, distance = (slots.get(key) for key in ("base", "shift", "distance"))
+    try:
+        base, shift, distance = float(base), float(shift), float(distance)
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "지수의 밑·수평 점근선 이동값·거리가 필요합니다."}
+    if base <= 0 or base == 1 or distance <= 0:
+        return {"status": "FAIL", "reason": "지수함수의 밑과 점근선 거리 조건이 올바르지 않습니다."}
+    candidates = [shift + distance, shift - distance]
+    positive = [value for value in candidates if value > 0]
+    if len(positive) != 1:
+        return {"status": "FAIL", "reason": "점근선 거리만으로 양의 지수함수 점의 y값을 유일하게 정할 수 없습니다."}
+    b = positive[0]
+    a = log(b, base)
+    a = int(round(a)) if abs(a - round(a)) < 1e-10 else a
+    answer = a + b
+    answer = int(round(answer)) if abs(answer - round(answer)) < 1e-10 else answer
+    verified = abs(abs(b - shift) - distance) < 1e-9 and abs(base ** float(a) - b) < 1e-8
+    return {"status": "PASS", "answer": answer, "formula": "|b-shift|=distance, a=log_base(b)", "verified": verified, "parameters": {"a": a, "b": b}, "tool": "solve_exponential_asymptote_distance_sum"}
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
@@ -139,6 +161,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "evaluate_polynomial_horner": evaluate_polynomial_horner,
     "evaluate_integer_gcd": evaluate_integer_gcd,
     "solve_log_product_equation": solve_log_product_equation,
+    "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
 }
 
 

@@ -57,6 +57,17 @@ def test_integer_gcd_tool_is_selected_and_verified_by_all_routers() -> None:
         assert response["result"]["verified"] is True
 
 
+def test_exponential_asymptote_distance_tool_is_shared() -> None:
+    """지수함수의 수평 점근선 거리 문제를 세 라우터가 같은 범용 도구로 검산하는지 확인한다."""
+    question = "곡선 y=2^x 위의 점 (a,b)와 곡선 y=2^x-3의 점근선 사이의 거리가 7일 때, a+b의 값"
+    for mode in ("rule", "neural", "embedding"):
+        response = solve_with_router(question, mode)
+        assert response["status"] == "PASS"
+        assert response["router"]["selected_domain"] == "hs_exponential_asymptote_distance"
+        assert response["result"]["answer"] == 6
+        assert response["result"]["verified"] is True
+
+
 def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     """실험 보고서가 정답 정확도·허위 PASS·미지원 거부를 독립 지표로 집계하는지 확인한다."""
     records = [
@@ -91,6 +102,7 @@ if __name__ == "__main__":
     test_unsupported_latex_is_rejected()
     test_horner_tool_is_selected_and_verified_by_all_routers()
     test_integer_gcd_tool_is_selected_and_verified_by_all_routers()
+    test_exponential_asymptote_distance_tool_is_shared()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()
     print("PASS: latex and routing")

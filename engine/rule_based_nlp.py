@@ -106,6 +106,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs_polynomial_value": ["P(x)=", "다항식의 값", "다항식 함숫값"],
         "integer_gcd": ["최대공약수", "gcd("],
         "hs_log_product_equation": ["log_", "로그의 곱", "×log"],
+        "hs_exponential_asymptote_distance": ["점근선", "사이의 거리", "a+b"],
         "hs1_exponential_log": ["지수", "로그", "log", "log_"],
         "hs1_exponential_equation": ["지수방정식", "로그방정식", "2^x", "log_2 x"],
         "hs1_trigonometry": ["삼각함수", "sin", "cos", "tan", "사인", "코사인", "탄젠트"],
@@ -175,6 +176,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["integer_gcd"] = scores.get("integer_gcd", 0) + 20
     if len(re.findall(r"log\s*_?\s*\d+", normalized, flags=re.IGNORECASE)) >= 2 and "=" in normalized:
         scores["hs_log_product_equation"] = scores.get("hs_log_product_equation", 0) + 20
+    if "점근선" in normalized and "거리" in normalized and re.search(r"y\s*=\s*\d+\s*\^\s*x", normalized, flags=re.IGNORECASE):
+        scores["hs_exponential_asymptote_distance"] = scores.get("hs_exponential_asymptote_distance", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -335,6 +338,14 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         if not match:
             return {}
         return {"first_base": int(match.group(1)), "first_value": int(match.group(2)), "second_base": int(match.group(3)), "variable": match.group(4), "target": float(match.group(5))}
+    if domain == "hs_exponential_asymptote_distance":
+        base_match = re.search(r"y\s*=\s*(\d+)\s*\^\s*x", text, flags=re.IGNORECASE)
+        shifted_match = re.search(r"y\s*=\s*\d+\s*\^\s*x\s*([+-])\s*(\d+)", text, flags=re.IGNORECASE)
+        distance_match = re.search(r"거리(?:가|는|은)?\s*(\d+)", text)
+        if not base_match or not shifted_match or not distance_match:
+            return {}
+        shift = int(shifted_match.group(2)) * (-1 if shifted_match.group(1) == "-" else 1)
+        return {"base": int(base_match.group(1)), "shift": shift, "distance": int(distance_match.group(1))}
     if domain == "hs1_exponential_log":
         power = re.search(r"([0-9]+)\s*\^\s*([0-9]+)", text)
         logarithm = re.search(r"log\s*_?\s*([0-9]+)\s*([0-9]+)", text, flags=re.IGNORECASE)
@@ -493,6 +504,7 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
 def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     """필요 변수: 분류 도메인과 슬롯. 중3 기본 규칙을 계산하고 검산 결과를 함께 반환한다."""
     tool_by_domain = {
+        "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
         "hs_log_product_equation": "solve_log_product_equation",
         "integer_gcd": "evaluate_integer_gcd",
         "hs_polynomial_value": "evaluate_polynomial_horner",
@@ -805,6 +817,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs2_integral": "hs2_power_integral",
             "integer_gcd": "evaluate_integer_gcd",
             "hs_log_product_equation": "solve_log_product_equation",
+            "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
             "hs_polynomial_value": "evaluate_polynomial_horner",
             "hs_polynomial_remainder": "polynomial_remainder_two_linear",
             "hs_rational_interval_extrema": "rational_interval_extrema",

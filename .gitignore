@@ -8,3 +8,5 @@ engine/aiflow_alpha_knowledge/
 private_benchmarks/
 # 로컬 학습 코퍼스·체크포인트는 원문 문제와 모델 가중치를 포함하므로 배포·Git에서 제외한다.
 private_models/
+# 로컬 SQLite 원문 데이터는 학습·검증에만 쓰며 저장소와 배포에서 제외한다.
+private_data/

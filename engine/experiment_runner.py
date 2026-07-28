@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from solver_router import ROUTER_VERSIONS, solve_with_router
+from local_embedder_router import local_embedder_available, local_embedder_model_version
 
 
 PRIVATE_CORPUS_REQUIRED_FIELDS = (
@@ -93,7 +94,12 @@ def evaluate_router(records: list[dict[str, Any]], mode: str, repeats: int = 2) 
             "reason": response.get("reason", response.get("result", {}).get("reason", "")),
         })
     by_curriculum = {unit: _metric_summary([case for case in cases if case["curriculum"] == unit]) for unit in sorted({str(case["curriculum"]) for case in cases})}
-    return {"router": {"mode": mode, "version": ROUTER_VERSIONS[mode]}, "repeats": repeats, "total": len(cases), "cases": cases, "by_curriculum": by_curriculum, **_metric_summary(cases)}
+    router = {"mode": mode, "version": ROUTER_VERSIONS[mode]}
+    if mode == "embedding":
+        # 동일한 report 형식에서 실제 E5 실험과 배포용 기준선을 혼동하지 않게 한다.
+        router["local_model_available"] = local_embedder_available()
+        router["local_model_version"] = local_embedder_model_version()
+    return {"router": router, "repeats": repeats, "total": len(cases), "cases": cases, "by_curriculum": by_curriculum, **_metric_summary(cases)}
 
 
 def run_experiment(path: str | Path, repeats: int = 2) -> dict[str, Any]:

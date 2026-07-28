@@ -11,7 +11,7 @@ from tool_routing import has_minimum_evidence, rank_tools
 ROUTER_VERSIONS = {
     "rule": "rule-router-v1",
     "neural": "mini-neural-profile-v1",
-    "embedding": "local-char-ngram-embedding-v1",
+    "embedding": "local-e5-prototype-router-v1 (fallback: char-ngram-v1)",
 }
 
 

@@ -13,6 +13,7 @@ from mini_neural_router import MODEL_VERSION  # noqa: E402
 from math_tools import MATH_TOOL_REGISTRY  # noqa: E402
 from problem_generation_loop import DIFFICULTY_POLICY, FORMULA_KNOWLEDGE  # noqa: E402
 from solver_router import ROUTER_VERSIONS  # noqa: E402
+from local_embedder_router import local_embedder_available, local_embedder_model_version  # noqa: E402
 
 
 def _load_curriculum_catalog() -> dict:
@@ -46,7 +47,12 @@ ALGORITHM = {
     "routing_experiments": {
         "modes": ROUTER_VERSIONS,
         "neural_model": MODEL_VERSION,
-        "embedding": "local-char-ngram-embedding-v1",
+        "embedding": {
+            "version": ROUTER_VERSIONS["embedding"],
+            "local_model_version": local_embedder_model_version(),
+            "available_in_this_runtime": local_embedder_available(),
+            "fallback": "Vercel 기본 경로에서는 가중치·transformers 의존성을 포함하지 않아 결정론적 char n-gram 기준선을 사용한다.",
+        },
         "comparison_contract": "후보 집합·슬롯 추출·계산·검산·시간 제한을 공유하고 도구 순서만 비교한다.",
         "private_report_contract": {
             "corpus_storage": "private_benchmarks/ (Git·Vercel 제외)",

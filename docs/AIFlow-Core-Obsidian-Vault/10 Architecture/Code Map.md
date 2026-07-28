@@ -1,6 +1,6 @@
 ---
 type: reference
-last_verified: 2026-07-28
+last_verified: 2026-07-29
 ---
 
 # 코드 구성표
@@ -17,6 +17,7 @@ last_verified: 2026-07-28
 | `engine/latex_normalizer.py` | `normalize_latex_input` | 고교 핵심 LaTeX를 안전한 평문 수식으로 정규화 |
 | `engine/solver_router.py` | `solve_with_router` | LaTeX 정규화→후보 도구→공통 계산·검산을 조정 |
 | `engine/tool_routing.py` | `rank_tools` | rule·neural·embedding의 같은 도구 후보 순위화 |
+| `engine/local_embedder_router.py` | `local_embedding_scores` | 비공개 E5 체크포인트의 도구 중심 벡터 검색; 미설치 배포에서는 기준선으로 구분 |
 | `engine/mini_neural_router.py` | `neural_probabilities` | 저장소 가중치의 의존성 없는 소형 MLP 추론 |
 | `engine/experiment_runner.py` | `run_experiment` | 실제 전문 로컬 코퍼스의 세 라우터 비교 보고서 |
 | `engine/math_tools.py` | `call_math_tool`, `MATH_TOOL_REGISTRY` | 다항식·정수론·로그·지수의 범용 계산 도구 허용 목록·호출 |
@@ -34,7 +35,7 @@ last_verified: 2026-07-28
 
 `UI → API → Engine → Knowledge`가 단방향 의존이다. 좌표 GUI는 `UI → /api/geometry → geometry_gui`로 자연어 라우터를 우회하며, 그 대신 점·연산 JSON을 엄격히 검증한다. `Knowledge`는 엔진을 import하지 않으며, `tests`와 `docs`는 제품 요청 처리 경로에 포함되지 않는다. 따라서 웹 요청마다 DB 연결이나 전체 코퍼스 스캔이 발생하지 않는다. 미니 신경망 가중치는 요청마다 재학습하지 않고 모듈 캐시로 한 번만 로드한다.
 
-로컬 임베더 학습은 Vercel 요청 경로와 분리한다. `quests.db`에서는 `quest_data`, `solve_step`만 SQLite read-only로 읽으며, 사용자·대화·제출 테이블은 학습에 사용하지 않는다. 원문 문제·체크포인트는 `private_benchmarks/`, `private_models/`에만 생성되어 Git과 배포에서 제외된다.
+로컬 임베더 학습은 Vercel 요청 경로와 분리한다. `quests.db`에서는 `quest_data`, `solve_step`만 SQLite read-only로 읽으며, 사용자·대화·제출 테이블은 학습에 사용하지 않는다. 원문 문제·체크포인트는 `private_benchmarks/`, `private_data/`, `private_models/`에만 생성되어 Git과 배포에서 제외된다. 로컬 체크포인트가 있으면 embedding 라우터는 E5 문항 벡터와 도구 중심 벡터의 코사인 유사도를 쓰고, Vercel처럼 가중치가 없는 환경에서는 char n-gram 기준선을 쓴다는 사실을 응답 모델 버전으로 구분한다.
 
 ## 확장 규칙
 

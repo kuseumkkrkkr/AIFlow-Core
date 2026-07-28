@@ -93,7 +93,7 @@ def _rule_score(text: str, spec: RouteSpec) -> float:
 
 
 def _embedding_score(text: str, spec: RouteSpec) -> float:
-    """변수: 문제와 후보 설명. 원리: 외부 모델 없이 문자 n-gram Jaccard 벡터 코사인으로 의미 유사도를 근사한다."""
+    """변수: 문제와 후보 설명. 원리: 로컬 모델이 없을 때 재현 가능한 문자 n-gram 기준선으로만 의미 유사도를 근사한다."""
     left, right = _ngrams(text), _ngrams(spec.description + " " + " ".join(spec.keywords))
     semantic = len(left & right) / sqrt(len(left) * len(right)) if left and right else 0.0
     # 숫자뿐인 수식은 문자 n-gram만으로 도구 설명과 만날 수 없으므로, 수식 구조
@@ -114,7 +114,27 @@ def rank_tools(text: str, mode: str = "rule", limit: int = 5) -> list[dict[str, 
     scorers = {"rule": _rule_score, "neural": _neural_score, "embedding": _embedding_score}
     if mode not in scorers:
         raise ValueError("routing mode는 rule, neural, embedding 중 하나여야 합니다.")
-    scored = [{"domain": spec.domain, "score": round(scorers[mode](text, spec), 6), "description": spec.description} for spec in ROUTE_SPECS]
+    # 실험 3은 로컬 체크포인트가 있는 개발 환경에서는 실제 E5 중심 벡터를 쓰고,
+    # 배포 기본 경로에서는 의존성 없는 기준선을 유지한다.
+    local_scores: dict[str, float] | None = None
+    if mode == "embedding":
+        from local_embedder_router import local_embedding_scores
+        local_scores = local_embedding_scores(text)
+    def score(spec: RouteSpec) -> float:
+        """변수: 후보 도구 계약. 원리: 학습된 도메인은 E5 유사도를 우선하고, 미학습 도구는 구조 기준선으로 후보 집합에서 탈락하지 않게 한다."""
+        # 실제 임베딩 경로의 보조 신호는 semantic n-gram이 아니라 규칙 구조 점수다.
+        # 그래야 학습 데이터에 없는 도구도 명시 수식 구조로 후보에 남는다.
+        baseline = _rule_score(text, spec) if local_scores is not None else scorers[mode](text, spec)
+        if local_scores is None:
+            return baseline
+        learned = local_scores.get(spec.domain)
+        if learned is not None:
+            # 임베딩 유사도가 주 신호이고, 수식 구조는 동점·가까운 후보만 보정한다.
+            return learned + min(0.35, baseline / 100.0)
+        # 현재 OMJ 검증 레이블이 없는 실행 도구도 동일한 후보 집합에 남긴다.
+        return min(0.70, baseline / 45.0)
+
+    scored = [{"domain": spec.domain, "score": round(score(spec), 6), "description": spec.description} for spec in ROUTE_SPECS]
     return sorted(scored, key=lambda item: (-item["score"], item["domain"]))[:max(1, limit)]
 
 
@@ -123,6 +143,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
     lowered = text.lower()
     strict_markers = {
         "cm_probability": ("확률", "조합", "순열", "경우의 수", "%"),
+        "cm_geometry": ("피타고라스", "직각삼각형", "삼각형", "원의", "직사각형", "반지름"),
         "hs1_function_composition": ("합성함수", "f(g(", "g(f("),
         "hs1_inverse_function": ("역함수", "f⁻¹", "f^-1"),
         "hs_composite_sequence": ("복합중",),

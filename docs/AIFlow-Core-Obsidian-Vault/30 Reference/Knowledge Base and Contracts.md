@@ -17,6 +17,7 @@ sources:
 | `concept_graph.json` | 개념 노드, 토픽, 선수 관계 | `classify` |
 | `rule_library.json` | 규칙 ID, 적용 조건, 필수 슬롯, 위험도 | `classify`, `select_optimal_rule` |
 | `high_school_curriculum_catalog.json` | 수학Ⅰ·수학Ⅱ·미적분·확통·기하 확장 목록 | `/api/algorithm` |
+| `*_tool_catalog.json` | 과목별 개념, 입력 슬롯, 도구, 공식, 검산 불변식 | `/api/algorithm`, 지식 확장 설계 |
 | `validation_contract.json` | PASS/FAIL 관련 기준 | 연구·문서 기준 |
 
 ## 실행 가능 범위
@@ -33,6 +34,10 @@ sources:
 - 기하: 기본 도형, 평면벡터 성분 내적
 
 대표 도구 호출: 두 일차식 나머지 보간, 유리함수 구간 극값, 양의 정수 미지수를 포함한 2×2 행렬 곱이다. 도구는 추출된 슬롯만 받고, 등록되지 않은 도구 ID 호출과 임의 코드 실행을 허용하지 않는다.
+
+각 과목 도구 카탈로그는 `concept_id`, `required_slots`, `tool`, `formula`, `verification_invariant`, `supported_example`, `unsupported_boundary`를 가진다. 이 형식은 키워드 나열이 아니라 새 파서·도구·검산 규칙을 추가하기 위한 구현 계약이다.
+
+현재 과목별 카탈로그는 수학Ⅰ·대수/함수/수열 13개, 수학Ⅱ·미적분 14개, 확률과 통계·기하 12개로 총 39개 항목이다. `engine/knowledge_catalog.py`가 과거 `items`·`concepts`, 단수·복수 검산 필드 차이를 공통 스키마로 정규화하고, `tests/test_knowledge_catalog.py`가 항목 수·ID 중복·필수 필드를 검증한다.
 
 ## PASS 조건
 

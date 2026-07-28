@@ -14,6 +14,7 @@ last_verified: 2026-07-28
 | `api/algorithm.py` | `ALGORITHM` | 웹에 알고리즘·지식 카탈로그 공개 |
 | `engine/rule_based_nlp.py` | `classify`, `solve_rule`, `verify_result` | 엔진의 핵심 해석·계산·검산 |
 | `engine/math_tools.py` | `call_math_tool`, `MATH_TOOL_REGISTRY` | 범용 수학 계산 도구의 허용 목록·호출 |
+| `engine/knowledge_catalog.py` | `load_tool_knowledge_catalogs` | 과목별 카탈로그를 공통 지식 계약으로 정규화 |
 | `engine/problem_generation_loop.py` | `generate_and_validate` | 난이도 계약을 포함한 생성 실험 |
 | `engine/corpus_runner.py` | `evaluate_records`, `run_corpus` | 코퍼스 회귀 평가 |
 | `engine/run_benchmark_matrix.py` | `run_matrix` | 학년·seed 매트릭스 반복 평가 |

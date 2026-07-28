@@ -1,0 +1,198 @@
+{
+  "version": "2026.07.28",
+  "encoding": "UTF-8",
+  "scope": ["확률과 통계", "기하"],
+  "purpose": "자연어 파서가 추출해야 할 입력 슬롯, 허용 계산 도구, 공식 및 독립 검산 불변식을 분리해 기록하는 확장용 지식 카탈로그다.",
+  "execution_note": "이 파일의 항목은 지식·도구 계약이다. execution_status가 '실행 가능'인 항목만 현재 엔진 규칙에 연결되어 있으며, 나머지는 파서·도구·회귀 테스트가 추가되기 전까지 자동 정답을 반환하면 안 된다.",
+  "concepts": [
+    {
+      "concept_id": "stat_permutation_npr",
+      "subject": "확률과 통계",
+      "name": "순열",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "n", "type": "integer", "constraint": "n≥0"},
+        {"name": "r", "type": "integer", "constraint": "0≤r≤n"}
+      ],
+      "tool": "permutation_npr",
+      "formula": "nPr=n!/(n-r)!",
+      "verification_invariant": "계산값은 n!을 (n-r)!로 나눈 정수이며, r=0이면 1이고 r=n이면 n!이다.",
+      "supported_example": "서로 다른 5명 중 3명을 일렬로 세우는 방법의 수: 5P3=60.",
+      "unsupported_boundary": "같은 원소가 반복되는 순열, 원순열, 특정 원소가 이웃하지 않는 조건은 별도 조합 제약 도구가 필요하다."
+    },
+    {
+      "concept_id": "stat_combination_ncr",
+      "subject": "확률과 통계",
+      "name": "조합",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "n", "type": "integer", "constraint": "n≥0"},
+        {"name": "r", "type": "integer", "constraint": "0≤r≤n"}
+      ],
+      "tool": "combination_ncr",
+      "formula": "nCr=n!/{r!(n-r)!}",
+      "verification_invariant": "nCr=nC(n-r)이고, 결과는 음이 아닌 정수이며 0C0=1이다.",
+      "supported_example": "서로 다른 7명 중 2명을 고르는 방법의 수: 7C2=21.",
+      "unsupported_boundary": "중복조합, 같은 종류의 공이 있는 선택, 포함·배제 조건은 별도 슬롯과 도구가 필요하다."
+    },
+    {
+      "concept_id": "stat_union_probability",
+      "subject": "확률과 통계",
+      "name": "두 사건의 합사건 확률",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "p_a", "type": "rational", "constraint": "0≤P(A)≤1"},
+        {"name": "p_b", "type": "rational", "constraint": "0≤P(B)≤1"},
+        {"name": "p_intersection", "type": "rational", "constraint": "max(0,p_a+p_b-1)≤P(A∩B)≤min(p_a,p_b)"}
+      ],
+      "tool": "union_probability",
+      "formula": "P(A∪B)=P(A)+P(B)-P(A∩B)",
+      "verification_invariant": "결과는 0 이상 1 이하이고 P(A∪B)≥max(P(A),P(B))이다.",
+      "supported_example": "P(A)=1/2, P(B)=1/3, P(A∩B)=1/6이면 P(A∪B)=2/3.",
+      "unsupported_boundary": "세 사건 이상의 합사건, 독립 가정의 자동 추론, 조건부확률과 혼합된 문장은 사건 그래프가 필요하다."
+    },
+    {
+      "concept_id": "stat_expected_value_discrete",
+      "subject": "확률과 통계",
+      "name": "이산확률변수의 기댓값",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "values", "type": "number[]", "constraint": "확률 배열과 길이가 같다"},
+        {"name": "probabilities", "type": "rational[]", "constraint": "모든 값이 0 이상이고 합이 1"}
+      ],
+      "tool": "discrete_expected_value",
+      "formula": "E(X)=Σ x_iP(X=x_i)",
+      "verification_invariant": "확률의 합은 1이고, E(X)는 최솟값과 최댓값 사이에 있어야 한다.",
+      "supported_example": "X가 0, 1, 2를 각각 1/4, 1/2, 1/4의 확률로 가지면 E(X)=1.",
+      "unsupported_boundary": "연속확률분포의 적분형 기댓값, 조건부기댓값, 미지수 확률분포는 별도 해석 규칙이 필요하다."
+    },
+    {
+      "concept_id": "stat_variance_discrete",
+      "subject": "확률과 통계",
+      "name": "이산확률변수의 분산",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "values", "type": "number[]", "constraint": "확률 배열과 길이가 같다"},
+        {"name": "probabilities", "type": "rational[]", "constraint": "모든 값이 0 이상이고 합이 1"}
+      ],
+      "tool": "discrete_variance",
+      "formula": "V(X)=E(X²)-{E(X)}²",
+      "verification_invariant": "분산은 0 이상이며 모든 값이 같을 때에만 0이다.",
+      "supported_example": "X가 0, 2를 각각 1/2의 확률로 가지면 E(X)=1, V(X)=1.",
+      "unsupported_boundary": "표본분산과 모분산의 구분, 확률변수의 합·공분산, 연속분포는 다른 도구 계약이 필요하다."
+    },
+    {
+      "concept_id": "stat_binomial_point_probability",
+      "subject": "확률과 통계",
+      "name": "이항분포의 점확률",
+      "execution_status": "실행 가능",
+      "input_slots": [
+        {"name": "n", "type": "integer", "constraint": "n≥0"},
+        {"name": "p", "type": "rational", "constraint": "0≤p≤1"},
+        {"name": "k", "type": "integer", "constraint": "0≤k≤n"}
+      ],
+      "tool": "evaluate_binomial_probability",
+      "formula": "P(X=k)=nCk p^k(1-p)^(n-k)",
+      "verification_invariant": "0≤P(X=k)≤1이며 k=0부터 n까지의 점확률 합은 1이다.",
+      "supported_example": "성공확률 1/2인 시행을 3번 할 때 정확히 2번 성공할 확률: 3C2(1/2)^3=3/8.",
+      "unsupported_boundary": "서로 독립이 아닌 반복 시행, 성공확률이 시행마다 변하는 포아송 이항분포는 이 공식으로 처리하지 않는다."
+    },
+    {
+      "concept_id": "geo_vector_dot_product",
+      "subject": "기하",
+      "name": "평면벡터 성분 내적",
+      "execution_status": "실행 가능",
+      "input_slots": [
+        {"name": "x1", "type": "number", "constraint": "첫 번째 벡터의 x성분"},
+        {"name": "y1", "type": "number", "constraint": "첫 번째 벡터의 y성분"},
+        {"name": "x2", "type": "number", "constraint": "두 번째 벡터의 x성분"},
+        {"name": "y2", "type": "number", "constraint": "두 번째 벡터의 y성분"}
+      ],
+      "tool": "sum_component_products",
+      "formula": "a·b=a_xb_x+a_yb_y",
+      "verification_invariant": "a·b=b·a이고, a·a=|a|²≥0이다.",
+      "supported_example": "a=(2,-1), b=(3,4)이면 a·b=2.",
+      "unsupported_boundary": "좌표축이 직교하지 않는 기저, 복소벡터의 에르미트 내적, 3차원 외적은 다른 도구가 필요하다."
+    },
+    {
+      "concept_id": "geo_vector_magnitude",
+      "subject": "기하",
+      "name": "평면벡터의 크기",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "x", "type": "number", "constraint": "벡터의 x성분"},
+        {"name": "y", "type": "number", "constraint": "벡터의 y성분"}
+      ],
+      "tool": "vector_magnitude_2d",
+      "formula": "|a|=√(a_x²+a_y²)",
+      "verification_invariant": "결과는 0 이상이고, 제곱하면 a_x²+a_y²와 같으며 영벡터일 때만 0이다.",
+      "supported_example": "a=(3,4)이면 |a|=5.",
+      "unsupported_boundary": "기저가 직교정규가 아닌 좌표계, 문자 성분의 부등식 비교는 기호 연산 지원이 필요하다."
+    },
+    {
+      "concept_id": "geo_vector_angle",
+      "subject": "기하",
+      "name": "두 평면벡터가 이루는 각",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "vector_a", "type": "number[2]", "constraint": "영벡터가 아니다"},
+        {"name": "vector_b", "type": "number[2]", "constraint": "영벡터가 아니다"}
+      ],
+      "tool": "vector_angle_from_dot",
+      "formula": "cosθ=(a·b)/(|a||b|)",
+      "verification_invariant": "계산된 cosθ는 -1 이상 1 이하이며, a·b=0이면 θ=90°이다.",
+      "supported_example": "(1,0)과 (1,1)이 이루는 예각은 45°이다.",
+      "unsupported_boundary": "방향각의 부호, 둔각·예각 조건을 포함한 기하 증명, 영벡터가 포함된 문항은 자동 처리하지 않는다."
+    },
+    {
+      "concept_id": "geo_line_equation_two_points",
+      "subject": "기하",
+      "name": "두 점을 지나는 직선의 방정식",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "x1", "type": "number", "constraint": "첫 번째 점의 x좌표"},
+        {"name": "y1", "type": "number", "constraint": "첫 번째 점의 y좌표"},
+        {"name": "x2", "type": "number", "constraint": "두 번째 점의 x좌표"},
+        {"name": "y2", "type": "number", "constraint": "두 점은 서로 다르다"}
+      ],
+      "tool": "line_from_two_points",
+      "formula": "(y-y1)(x2-x1)=(y2-y1)(x-x1)",
+      "verification_invariant": "반환한 일반형 Ax+By+C=0에 두 점을 각각 대입하면 0이며, (A,B)는 동시에 0이 아니다.",
+      "supported_example": "(1,2), (3,6)을 지나는 직선: y=2x.",
+      "unsupported_boundary": "두 점이 같은 경우, 최소제곱 직선, 매개변수·절편에 대한 추가 조건은 별도 해석이 필요하다."
+    },
+    {
+      "concept_id": "geo_circle_standard_form",
+      "subject": "기하",
+      "name": "원의 표준형과 점의 포함 판정",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "center_x", "type": "number", "constraint": "원의 중심 x좌표"},
+        {"name": "center_y", "type": "number", "constraint": "원의 중심 y좌표"},
+        {"name": "radius", "type": "number", "constraint": "radius>0"},
+        {"name": "point_x", "type": "number", "constraint": "판정할 점의 x좌표"},
+        {"name": "point_y", "type": "number", "constraint": "판정할 점의 y좌표"}
+      ],
+      "tool": "circle_point_relation",
+      "formula": "(x-a)²+(y-b)²=r²",
+      "verification_invariant": "점에서 중심까지의 거리제곱이 r²와 같으면 원 위, 작으면 내부, 크면 외부다.",
+      "supported_example": "중심 (1,-2), 반지름 3인 원에서 (4,-2)는 원 위의 점이다.",
+      "unsupported_boundary": "일반형 원의 계수로부터 중심·반지름 복원, 직선·원 접선의 문자 매개변수 조건은 기호 완전제곱 도구가 필요하다."
+    },
+    {
+      "concept_id": "geo_distance_3d",
+      "subject": "기하",
+      "name": "공간좌표 두 점 사이의 거리",
+      "execution_status": "계획됨",
+      "input_slots": [
+        {"name": "p1", "type": "number[3]", "constraint": "첫 번째 점의 (x,y,z)"},
+        {"name": "p2", "type": "number[3]", "constraint": "두 번째 점의 (x,y,z)"}
+      ],
+      "tool": "distance_3d",
+      "formula": "|P1P2|=√((Δx)²+(Δy)²+(Δz)²)",
+      "verification_invariant": "거리는 0 이상이고 대칭적이며, 같은 점일 때만 0이다.",
+      "supported_example": "(1,2,3)과 (1,2,6) 사이의 거리는 3이다.",
+      "unsupported_boundary": "점에서 평면까지의 거리, 꼬인 두 직선 사이 거리, 벡터 외적을 쓰는 공간도형 조건은 별도 도구가 필요하다."
+    }
+  ]
+}

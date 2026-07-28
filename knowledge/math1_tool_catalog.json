@@ -1,0 +1,152 @@
+{
+  "catalog_id": "aiflow-core-math1-algebra-function-sequence",
+  "version": "2026.07.28",
+  "encoding": "UTF-8",
+  "scope": "수학Ⅰ 및 2022 개정 교육과정 대수와 겹치는 함수·수열 실행 지식",
+  "purpose_kr": "자연어 문제를 구조화한 뒤 어떤 입력 슬롯과 수학 도구가 필요한지 명시한다. 이 파일은 지식 계약 카탈로그이며, execution_status가 '실행 가능'인 항목만 현재 엔진의 규칙 또는 도구와 연결된다.",
+  "items": [
+    {
+      "concept_id": "math1_linear_function_value",
+      "name_kr": "일차함수의 함숫값",
+      "execution_status": "실행 가능",
+      "input_slots": ["a", "b", "input"],
+      "tool": {"kind": "rule_solver", "id": "hs1_function_value"},
+      "formula": "f(x)=ax+b 이면 f(t)=at+b",
+      "verification_invariant": "계산한 y에 대해 y=a·input+b를 다시 만족하고 a,b,input이 모두 실수여야 한다.",
+      "supported_example": "f(x)=3x-2일 때 f(4)를 구하여라. → 10",
+      "unsupported_boundary": "절댓값·조각함수·유리함수 또는 정의역이 문장 조건으로 복잡하게 주어진 경우는 이 항목만으로 해석하지 않는다."
+    },
+    {
+      "concept_id": "math1_function_composition_linear",
+      "name_kr": "일차함수 합성",
+      "execution_status": "실행 가능",
+      "input_slots": ["a", "b", "c", "d", "input"],
+      "tool": {"kind": "rule_solver", "id": "hs1_function_composition"},
+      "formula": "f(x)=ax+b, g(x)=cx+d 이면 f(g(t))=a(ct+d)+b",
+      "verification_invariant": "안쪽 값 u=c·input+d와 바깥 값 y=a·u+b를 분리해 재계산하면 같은 y여야 한다.",
+      "supported_example": "f(x)=2x+1, g(x)=3x-4일 때 f(g(2)). → 5",
+      "unsupported_boundary": "합성되는 함수가 일차식이 아니거나 역함수·정의역 제한을 동시에 요구하면 별도 구조 파싱이 필요하다."
+    },
+    {
+      "concept_id": "math1_linear_inverse_function",
+      "name_kr": "일차함수의 역함수",
+      "execution_status": "실행 가능",
+      "input_slots": ["a", "b", "input"],
+      "tool": {"kind": "rule_solver", "id": "hs1_inverse_function"},
+      "formula": "f(x)=ax+b (a≠0) 이면 f⁻¹(t)=(t-b)/a",
+      "verification_invariant": "a≠0이고 f(f⁻¹(t))=t 및 f⁻¹(f(t))=t가 성립해야 한다.",
+      "supported_example": "f(x)=2x-3일 때 f⁻¹(5). → 4",
+      "unsupported_boundary": "일대일이 아닌 이차함수, 치역 제한이 명시된 함수, 여러 구간 조각함수의 역함수는 지원하지 않는다."
+    },
+    {
+      "concept_id": "math1_polynomial_factor_theorem",
+      "name_kr": "다항식 인수정리",
+      "execution_status": "실행 가능",
+      "input_slots": ["polynomial", "candidate"],
+      "tool": {"kind": "rule_solver", "id": "hs1_factor_remainder"},
+      "formula": "P(a)=0 이면 (x-a)는 P(x)의 인수",
+      "verification_invariant": "후보 a를 P(x)에 직접 대입한 나머지가 0이어야 한다.",
+      "supported_example": "P(x)=x²-5x+6일 때 x-2가 인수인지 확인. → P(2)=0",
+      "unsupported_boundary": "문자 계수가 여러 개이거나 고차 다항식의 완전 인수분해를 요구하는 경우는 계수 비교·추가 도구가 필요하다."
+    },
+    {
+      "concept_id": "math1_two_linear_remainder_interpolation",
+      "name_kr": "두 일차식 나머지의 보간",
+      "execution_status": "실행 가능",
+      "input_slots": ["root1", "remainder1", "root2", "remainder2", "point"],
+      "tool": {"kind": "math_tool", "id": "polynomial_remainder_two_linear"},
+      "formula": "R(t)=R(r₁)+(R(r₂)-R(r₁))(t-r₁)/(r₂-r₁)",
+      "verification_invariant": "r₁≠r₂이고 계산한 일차 나머지 R이 R(r₁), R(r₂)를 각각 만족해야 한다.",
+      "supported_example": "x-1로 나눈 나머지 2, x-3으로 나눈 나머지 6일 때 x-2로 나눈 나머지. → 4",
+      "unsupported_boundary": "나누는 식이 이차 이상이거나 나머지의 차수가 2 이상이면 두 점 보간으로 결정할 수 없다."
+    },
+    {
+      "concept_id": "math1_exponential_power_evaluation",
+      "name_kr": "정수 지수의 계산",
+      "execution_status": "실행 가능",
+      "input_slots": ["base", "exponent"],
+      "tool": {"kind": "rule_solver", "id": "hs1_exponential_log_basic"},
+      "formula": "a^m·a^n=a^(m+n), (a^m)^n=a^(mn)",
+      "verification_invariant": "밑이 0인 음수 지수는 거부하며, 변형 전후를 거듭제곱으로 재계산해 같은 값인지 확인한다.",
+      "supported_example": "2³·2⁴. → 128",
+      "unsupported_boundary": "무리수 지수의 실수 범위 정의, 복소수 거듭제곱, 로그 밑 변환을 결합한 식은 별도 파서가 필요하다."
+    },
+    {
+      "concept_id": "math1_logarithm_basic_evaluation",
+      "name_kr": "로그의 기본 계산",
+      "execution_status": "실행 가능",
+      "input_slots": ["base", "argument"],
+      "tool": {"kind": "rule_solver", "id": "hs1_exponential_log_basic"},
+      "formula": "log_a(a^t)=t, log_a(MN)=log_aM+log_aN",
+      "verification_invariant": "a>0, a≠1, argument>0이고 a^answer=argument가 성립해야 한다.",
+      "supported_example": "log₂32. → 5",
+      "unsupported_boundary": "상용로그 근삿값, 밑이 문자로 주어진 부등식, 진수의 부호를 여러 조건으로 판정하는 문제는 지원하지 않는다."
+    },
+    {
+      "concept_id": "math1_exponential_log_equation",
+      "name_kr": "기본 지수·로그 방정식",
+      "execution_status": "실행 가능",
+      "input_slots": ["kind", "base", "target"],
+      "tool": {"kind": "rule_solver", "id": "hs1_exponential_equation_basic"},
+      "formula": "a^x=b 이면 x=log_a b, log_a x=c 이면 x=a^c",
+      "verification_invariant": "밑 조건 a>0, a≠1 및 진수 조건을 만족하며 구한 x를 원식에 대입해 성립해야 한다.",
+      "supported_example": "3^x=81. → 4",
+      "unsupported_boundary": "서로 다른 밑의 합·차가 있는 지수방정식, 치환 후 이차방정식이 되는 로그방정식은 현재 범위 밖이다."
+    },
+    {
+      "concept_id": "math1_special_angle_trigonometry",
+      "name_kr": "특수각 삼각함수값",
+      "execution_status": "실행 가능",
+      "input_slots": ["kind", "angle"],
+      "tool": {"kind": "rule_solver", "id": "hs1_special_angle_trig"},
+      "formula": "sin 30°=1/2, cos 60°=1/2, tan 45°=1",
+      "verification_invariant": "지원 각도 표에 있어야 하며 sin²θ+cos²θ=1을 만족하는 값이어야 한다.",
+      "supported_example": "cos 60°. → 1/2",
+      "unsupported_boundary": "일반각의 삼각방정식, 호도법 주기 조건, 사인·코사인 법칙은 별도 지식 항목으로 다뤄야 한다."
+    },
+    {
+      "concept_id": "math1_arithmetic_sequence_term",
+      "name_kr": "등차수열 일반항",
+      "execution_status": "실행 가능",
+      "input_slots": ["a1", "d", "n"],
+      "tool": {"kind": "rule_solver", "id": "ar_seq_an_formula"},
+      "formula": "a_n=a₁+(n-1)d",
+      "verification_invariant": "n은 양의 정수이고 a_n-a_(n-1)=d가 성립해야 한다.",
+      "supported_example": "첫째항 2, 공차 3인 등차수열의 a₅. → 14",
+      "unsupported_boundary": "등차수열의 합, 항의 부호 변화 개수, 점화식으로 정의된 수열은 이 일반항 도구만으로 해결하지 않는다."
+    },
+    {
+      "concept_id": "math1_geometric_sequence_term_sum",
+      "name_kr": "등비수열 일반항과 합",
+      "execution_status": "실행 가능",
+      "input_slots": ["a1", "ratio", "n", "mode"],
+      "tool": {"kind": "rule_solver", "id": "hs1_geometric_sequence"},
+      "formula": "a_n=a₁r^(n-1), S_n=a₁(r^n-1)/(r-1) (r≠1)",
+      "verification_invariant": "n은 양의 정수이며 r=1이면 S_n=na₁로 분기하고, S_n-S_(n-1)=a_n을 만족해야 한다.",
+      "supported_example": "첫째항 3, 공비 2인 등비수열의 S₄. → 45",
+      "unsupported_boundary": "무한등비급수의 수렴 판정, 부호가 교대하는 일반 급수, 점화식 수열은 별도 지식이 필요하다."
+    },
+    {
+      "concept_id": "math1_arithmetic_sequence_sum",
+      "name_kr": "등차수열의 합",
+      "execution_status": "카탈로그만 등록",
+      "input_slots": ["a1", "d", "n"],
+      "tool": {"kind": "planned_math_tool", "id": "arithmetic_sequence_sum"},
+      "formula": "S_n=n(2a₁+(n-1)d)/2=n(a₁+a_n)/2",
+      "verification_invariant": "S_n-S_(n-1)=a_n 및 n=1일 때 S₁=a₁이 성립해야 한다.",
+      "supported_example": "첫째항 2, 공차 3인 등차수열의 S₅. → 40",
+      "unsupported_boundary": "현재 등록된 실행 도구가 없어 API 풀이 대상으로 선택하면 안 된다. 일반항과 혼동해 답을 생성하지 않는다."
+    },
+    {
+      "concept_id": "math1_sequence_recurrence_first_order",
+      "name_kr": "일차 점화식 수열",
+      "execution_status": "카탈로그만 등록",
+      "input_slots": ["initial_value", "recurrence_expression", "n"],
+      "tool": {"kind": "planned_math_tool", "id": "first_order_recurrence_solver"},
+      "formula": "a_(n+1)=p·a_n+q는 평형점 이동 또는 반복 대입으로 일반항을 구한다.",
+      "verification_invariant": "구한 일반항이 초기값과 n=1부터의 점화식을 모두 만족해야 한다.",
+      "supported_example": "a₁=1, a_(n+1)=2a_n+3일 때 a₃. → 13",
+      "unsupported_boundary": "비선형 점화식, 두 수열의 연립 점화식, 자연어로만 제시된 귀납 조건은 구조화 파서 없이 처리하지 않는다."
+    }
+  ]
+}

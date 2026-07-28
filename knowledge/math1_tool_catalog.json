@@ -151,13 +151,13 @@
     {
       "concept_id": "math1_arithmetic_sequence_sum",
       "name_kr": "등차수열의 합",
-      "execution_status": "카탈로그만 등록",
+      "execution_status": "실행 가능",
       "input_slots": ["a1", "d", "n"],
-      "tool": {"kind": "planned_math_tool", "id": "arithmetic_sequence_sum"},
+      "tool": {"kind": "rule_solver", "id": "ar_seq_an_formula"},
       "formula": "S_n=n(2a₁+(n-1)d)/2=n(a₁+a_n)/2",
       "verification_invariant": "S_n-S_(n-1)=a_n 및 n=1일 때 S₁=a₁이 성립해야 한다.",
       "supported_example": "첫째항 2, 공차 3인 등차수열의 S₅. → 40",
-      "unsupported_boundary": "현재 등록된 실행 도구가 없어 API 풀이 대상으로 선택하면 안 된다. 일반항과 혼동해 답을 생성하지 않는다."
+      "unsupported_boundary": "현재는 첫째항·공차·양의 정수 항 수가 명시된 유한 합만 지원한다. 점화식 수열·항의 부호 변화 개수·무한급수는 별도 도구가 필요하다."
     },
     {
       "concept_id": "math1_sequence_recurrence_first_order",

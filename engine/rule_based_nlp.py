@@ -491,6 +491,8 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
 def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bool:
     """필요 변수: 도메인·추출 슬롯·정답. 규칙의 최소 불변식을 재계산해 결과를 검산한다."""
     if domain == "cm_arith_sequence":
+        if slots.get("kind") == "arithmetic_sum":
+            return answer == slots.get("n") * (2 * slots.get("a1") + (slots.get("n") - 1) * slots.get("d")) / 2
         return answer == slots.get("a1") + (slots.get("n") - 1) * slots.get("d")
     if domain == "hs1_geometric_sequence":
         a1, ratio, n = (slots.get(key) for key in ("a1", "ratio", "n"))

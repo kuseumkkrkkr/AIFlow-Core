@@ -109,6 +109,21 @@ def test_sine_linear_interval_tool_is_shared_for_text_and_latex() -> None:
             assert response["result"]["verified"] is True
 
 
+def test_arithmetic_sequence_sum_contract_is_shared_for_text_and_latex() -> None:
+    """승격한 등차수열 합 계약은 평문·LaTeX가 동일한 슬롯·정답·검산으로 끝나야 한다."""
+    cases = [
+        "등차수열 첫항 2, 공차 3의 첫 5항의 합",
+        r"등차수열에서 $a_1=2,d=3$일 때 첫 5항의 합",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "cm_arith_sequence"
+            assert response["result"]["answer"] == 40
+            assert response["result"]["verified"] is True
+
+
 def test_nonunique_sine_interval_is_rejected_without_unrelated_pass() -> None:
     """특수각 해가 둘 이상인 구간은 다른 숫자 파서의 우연한 PASS 없이 세 라우터가 거부해야 한다."""
     question = "0<=x<=2pi에서 2sin x+sqrt(3)=0을 만족시키는 x의 값"
@@ -156,6 +171,7 @@ if __name__ == "__main__":
     test_inverse_log_power_coordinate_tool_is_shared()
     test_log_interval_extrema_tool_is_shared_for_text_and_latex()
     test_sine_linear_interval_tool_is_shared_for_text_and_latex()
+    test_arithmetic_sequence_sum_contract_is_shared_for_text_and_latex()
     test_nonunique_sine_interval_is_rejected_without_unrelated_pass()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()

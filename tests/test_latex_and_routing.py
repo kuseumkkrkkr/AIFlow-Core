@@ -144,6 +144,8 @@ def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     assert report["answer_accuracy"] == 1.0
     assert report["false_pass_rate"] == 0.0
     assert report["unsupported_rejection_accuracy"] == 1.0
+    assert report["deterministic_pass_rate"] == 1.0
+    assert report["by_curriculum"]["미분류"]["answer_accuracy"] == 1.0
 
 
 def test_private_corpus_contract_requires_full_metadata() -> None:

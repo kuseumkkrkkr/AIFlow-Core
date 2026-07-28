@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT / "api"))
 sys.path.insert(0, str(ROOT / "engine"))
 
 from rule_based_nlp import classify, solve_rule  # noqa: E402
+from algorithm import ALGORITHM  # noqa: E402
 from solve import _json_default  # noqa: E402
 
 
@@ -22,6 +23,14 @@ def test_binomial_fraction_slot_is_json_safe() -> None:
     assert result["answer"] == 0.3125
 
 
+def test_algorithm_exposes_private_experiment_report_contract() -> None:
+    """실전 원문을 공개하지 않아도 API가 세 라우터의 지표·반복 계약을 식별 가능하게 제공하는지 확인한다."""
+    report_contract = ALGORITHM["routing_experiments"]["private_report_contract"]
+    assert report_contract["repeats"] == 2
+    assert "deterministic_pass_rate" in report_contract["metrics"]
+
+
 if __name__ == "__main__":
     test_binomial_fraction_slot_is_json_safe()
+    test_algorithm_exposes_private_experiment_report_contract()
     print("PASS: API serialization")

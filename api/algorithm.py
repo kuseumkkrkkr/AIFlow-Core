@@ -42,6 +42,12 @@ ALGORITHM = {
         "neural_model": MODEL_VERSION,
         "embedding": "local-char-ngram-embedding-v1",
         "comparison_contract": "후보 집합·슬롯 추출·계산·검산·시간 제한을 공유하고 도구 순서만 비교한다.",
+        "private_report_contract": {
+            "corpus_storage": "private_benchmarks/ (Git·Vercel 제외)",
+            "repeats": 2,
+            "metrics": ["tool_selection_accuracy", "answer_accuracy", "verification_pass_rate", "false_pass_rate", "unsupported_rejection_accuracy", "deterministic_pass_rate", "mean_elapsed_ms"],
+            "grouping": "curriculum",
+        },
     },
     # 카탈로그는 검색·확장 우선순위를 위한 지식 목록이며, 모든 항목이 아직 실행 규칙이라는 뜻은 아니다.
     "curriculum_knowledge": _load_curriculum_catalog(),

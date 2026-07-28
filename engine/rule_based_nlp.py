@@ -109,6 +109,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs_exponential_asymptote_distance": ["점근선", "사이의 거리", "a+b"],
         "hs_inverse_log_power_coordinate": ["역함수", "log_", "^k"],
         "hs_log_interval_extrema": ["최댓값", "최솟값", "log_", "구간"],
+        "hs_sine_linear_interval": ["sin", "sqrt", "≤", "방정식"],
         "hs1_exponential_log": ["지수", "로그", "log", "log_"],
         "hs1_exponential_equation": ["지수방정식", "로그방정식", "2^x", "log_2 x"],
         "hs1_trigonometry": ["삼각함수", "sin", "cos", "tan", "사인", "코사인", "탄젠트"],
@@ -184,6 +185,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs_inverse_log_power_coordinate"] = scores.get("hs_inverse_log_power_coordinate", 0) + 20
     if "최댓값" in normalized and "최솟값" in normalized and re.search(r"log\s*_?\s*\d+\s*\(\s*x\s*[+-]", normalized, flags=re.IGNORECASE):
         scores["hs_log_interval_extrema"] = scores.get("hs_log_interval_extrema", 0) + 20
+    if re.search(r"[+-]?\d*\s*sin\s*x\s*[+-]\s*sqrt\s*\(\s*[13]\s*\)\s*=\s*0", normalized, flags=re.IGNORECASE) and re.search(r"(?:pi|π)", normalized, flags=re.IGNORECASE):
+        scores["hs_sine_linear_interval"] = scores.get("hs_sine_linear_interval", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -367,6 +370,25 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         horizontal_shift = int(function.group(3)) * (-1 if function.group(2) == "-" else 1)
         vertical_shift = int(function.group(5)) * (-1 if function.group(4) == "-" else 1)
         return {"base": int(function.group(1)), "horizontal_shift": horizontal_shift, "vertical_shift": vertical_shift, "left": int(interval.group(1)), "right": int(interval.group(2))}
+    if domain == "hs_sine_linear_interval":
+        equation = re.search(r"([+-]?\d*)\s*sin\s*x\s*([+-])\s*sqrt\s*\(\s*([13])\s*\)\s*=\s*0", text, flags=re.IGNORECASE)
+        interval = re.search(r"((?:[+-]?\d*\s*(?:pi|π)(?:\s*/\s*\d+)?))\s*(?:≤|<=)\s*x\s*(?:≤|<=)\s*((?:[+-]?\d*\s*(?:pi|π)(?:\s*/\s*\d+)?))", text, flags=re.IGNORECASE)
+        if not equation or not interval:
+            return {}
+        def pi_ratio(raw: str) -> tuple[int, int] | None:
+            compact = raw.replace(" ", "").replace("π", "pi")
+            match = re.fullmatch(r"([+-]?)(\d*)pi(?:/(\d+))?", compact, flags=re.IGNORECASE)
+            if not match:
+                return None
+            sign = -1 if match.group(1) == "-" else 1
+            numerator, denominator = sign * int(match.group(2) or "1"), int(match.group(3) or "1")
+            return numerator, denominator
+        left, right = pi_ratio(interval.group(1)), pi_ratio(interval.group(2))
+        if left is None or right is None:
+            return {}
+        coefficient_raw = equation.group(1)
+        coefficient = -1 if coefficient_raw == "-" else int(coefficient_raw or "1")
+        return {"coefficient": coefficient, "constant_sign": -1 if equation.group(2) == "-" else 1, "radical": int(equation.group(3)), "left_numerator": left[0], "left_denominator": left[1], "right_numerator": right[0], "right_denominator": right[1]}
     if domain == "hs1_exponential_log":
         power = re.search(r"([0-9]+)\s*\^\s*([0-9]+)", text)
         logarithm = re.search(r"log\s*_?\s*([0-9]+)\s*([0-9]+)", text, flags=re.IGNORECASE)
@@ -525,6 +547,7 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
 def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     """필요 변수: 분류 도메인과 슬롯. 중3 기본 규칙을 계산하고 검산 결과를 함께 반환한다."""
     tool_by_domain = {
+        "hs_sine_linear_interval": "solve_sine_linear_special_interval",
         "hs_log_interval_extrema": "solve_log_interval_extrema_sum",
         "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",
         "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
@@ -843,6 +866,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
             "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",
             "hs_log_interval_extrema": "solve_log_interval_extrema_sum",
+            "hs_sine_linear_interval": "solve_sine_linear_special_interval",
             "hs_polynomial_value": "evaluate_polynomial_horner",
             "hs_polynomial_remainder": "polynomial_remainder_two_linear",
             "hs_rational_interval_extrema": "rational_interval_extrema",

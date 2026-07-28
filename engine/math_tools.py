@@ -6,7 +6,8 @@
 from __future__ import annotations
 
 from typing import Any, Callable
-from math import gcd, log
+from fractions import Fraction
+from math import gcd, log, pi, sin, sqrt
 
 
 def polynomial_remainder_two_linear(slots: dict[str, Any]) -> dict[str, Any]:
@@ -188,6 +189,40 @@ def solve_log_interval_extrema_sum(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "f(x)=log_b(x+h)+v의 닫힌 구간 극값은 단조성에 따라 양 끝점에서 결정", "verified": verified, "parameters": {"left_value": left_value, "right_value": right_value}, "tool": "solve_log_interval_extrema_sum"}
 
 
+def solve_sine_linear_special_interval(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: sin 계수·제곱근 상수·π 단위 구간. 원리: 특수각 해를 주기적으로 열거해 유일한 구간해를 원식에 재대입한다."""
+    coefficient, radical, constant_sign = (slots.get(key) for key in ("coefficient", "radical", "constant_sign"))
+    try:
+        coefficient, radical, constant_sign = int(coefficient), int(radical), int(constant_sign)
+        left = Fraction(int(slots["left_numerator"]), int(slots["left_denominator"]))
+        right = Fraction(int(slots["right_numerator"]), int(slots["right_denominator"]))
+    except (KeyError, TypeError, ValueError, ZeroDivisionError):
+        return {"status": "FAIL", "reason": "sin 계수·제곱근 상수와 π 단위의 닫힌 구간이 필요합니다."}
+    if coefficient == 0 or radical not in {1, 3} or left > right:
+        return {"status": "FAIL", "reason": "현재는 특수각 sin 방정식의 유효한 계수·구간만 지원합니다."}
+    target_sign = -constant_sign * (1 if coefficient > 0 else -1)
+    magnitude = Fraction(1, abs(coefficient))
+    base_solutions: dict[tuple[int, Fraction], tuple[Fraction, ...]] = {
+        (1, Fraction(1, 1)): (Fraction(1, 2),), (-1, Fraction(1, 1)): (Fraction(3, 2),),
+        (1, Fraction(1, 2)): (Fraction(1, 6), Fraction(5, 6)), (-1, Fraction(1, 2)): (Fraction(7, 6), Fraction(11, 6)),
+        (1, Fraction(3, 2)): (Fraction(1, 3), Fraction(2, 3)), (-1, Fraction(3, 2)): (Fraction(4, 3), Fraction(5, 3)),
+    }
+    # sqrt(3)/2는 수치 제곱값이 아니라 특수각 표의 기호 계수 3/2로 보관한다.
+    key_magnitude = magnitude if radical == 1 else Fraction(3, 2)
+    if radical == 3 and abs(coefficient) != 2:
+        return {"status": "FAIL", "reason": "sqrt(3) 항은 현재 계수 2인 특수각 형태만 지원합니다."}
+    candidates = [angle + 2 * period for angle in base_solutions.get((target_sign, key_magnitude), ()) for period in range(-8, 9)]
+    matches = [angle for angle in candidates if left <= angle <= right]
+    if len(matches) != 1:
+        return {"status": "FAIL", "reason": "주어진 구간에서 특수각 해가 유일하게 결정되지 않습니다."}
+    angle = matches[0]
+    numerator, denominator = angle.numerator, angle.denominator
+    answer = "π" if angle == 1 else f"{numerator}π" if denominator == 1 else f"{numerator}π/{denominator}"
+    target = -constant_sign * sqrt(radical) / coefficient
+    verified = left <= angle <= right and abs(sin(float(angle) * pi) - target) < 1e-10
+    return {"status": "PASS", "answer": answer, "formula": "a·sin x±sqrt(n)=0을 sin x의 특수각 값으로 바꾼다", "verified": verified, "parameters": {"angle_pi_ratio": f"{numerator}/{denominator}", "target": target}, "tool": "solve_sine_linear_special_interval"}
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
@@ -198,6 +233,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
     "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,
     "solve_log_interval_extrema_sum": solve_log_interval_extrema_sum,
+    "solve_sine_linear_special_interval": solve_sine_linear_special_interval,
 }
 
 

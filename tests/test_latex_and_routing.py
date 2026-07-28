@@ -94,6 +94,21 @@ def test_log_interval_extrema_tool_is_shared_for_text_and_latex() -> None:
             assert response["result"]["verified"] is True
 
 
+def test_sine_linear_interval_tool_is_shared_for_text_and_latex() -> None:
+    """특수각 사인 방정식은 평문·LaTeX에서 같은 유일 구간해와 검산 결과에 도달해야 한다."""
+    cases = [
+        "pi/2<=x<=3pi/2일 때 방정식 2sin x+sqrt(3)=0을 만족시키는 x의 값",
+        r"$\frac{\pi}{2}\le x\le\frac{3\pi}{2},\;2\sin x+\sqrt{3}=0$",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "hs_sine_linear_interval"
+            assert response["result"]["answer"] == "4π/3"
+            assert response["result"]["verified"] is True
+
+
 def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     """실험 보고서가 정답 정확도·허위 PASS·미지원 거부를 독립 지표로 집계하는지 확인한다."""
     records = [
@@ -131,6 +146,7 @@ if __name__ == "__main__":
     test_exponential_asymptote_distance_tool_is_shared()
     test_inverse_log_power_coordinate_tool_is_shared()
     test_log_interval_extrema_tool_is_shared_for_text_and_latex()
+    test_sine_linear_interval_tool_is_shared_for_text_and_latex()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()
     print("PASS: latex and routing")

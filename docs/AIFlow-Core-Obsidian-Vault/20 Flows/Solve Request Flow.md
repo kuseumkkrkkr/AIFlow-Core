@@ -48,3 +48,7 @@ flowchart TD
 ## 예시: LaTeX 로그 역함수 좌표
 
 `$y=\log_5 x+2$의 역함수가 $(4,5^k)$를 지난다`는 정규화 뒤 `hs_inverse_log_power_coordinate` 후보로 간다. 슬롯 `base=5`, `shift=2`, `input=4`, `coordinate_base=5`를 추출하고 공용 도구가 `f⁻¹(4)=5^(4-2)=5^k`를 풀어 `k=2`를 반환한다. 같은 거듭제곱을 다시 계산해 검산한다.
+
+## 예시: LaTeX 사인 방정식 구간해
+
+`$\frac{\pi}{2}\le x\le\frac{3\pi}{2},\;2\sin x+\sqrt{3}=0$`는 분수·삼각·근호 정규화 뒤 `hs_sine_linear_interval`으로 간다. 특수각 해 중 구간에 있는 `4π/3`을 선택하고, `2sin(4π/3)+sqrt(3)=0` 및 구간 포함을 독립 검산한다.

@@ -116,6 +116,17 @@
       "unsupported_boundary": "일반각의 삼각방정식, 호도법 주기 조건, 사인·코사인 법칙은 별도 지식 항목으로 다뤄야 한다."
     },
     {
+      "concept_id": "math1_sine_linear_special_interval",
+      "name_kr": "특수각 사인 일차방정식의 라디안 구간해",
+      "execution_status": "제한 실행",
+      "input_slots": ["coefficient", "constant_sign", "radical", "left_numerator", "left_denominator", "right_numerator", "right_denominator"],
+      "tool": {"kind": "math_tool", "id": "solve_sine_linear_special_interval"},
+      "formula": "a·sin x±sqrt(n)=0을 sin x의 특수각 값으로 바꾸고, 2π 주기의 해 중 닫힌 구간 해를 선택한다.",
+      "verification_invariant": "반환 각도는 지정 구간에 있고 a·sin(x)±sqrt(n)=0을 수치 오차 1e-10 이내로 만족해야 한다.",
+      "supported_example": "π/2≤x≤3π/2에서 2sin x+sqrt(3)=0. → 4π/3",
+      "unsupported_boundary": "현재는 sqrt(1), sqrt(3)으로 만드는 특수각과 유일 구간해만 지원한다. 일반 계수·다른 삼각함수·다중 해 출력은 별도 도구가 필요하다."
+    },
+    {
       "concept_id": "math1_arithmetic_sequence_term",
       "name_kr": "등차수열 일반항",
       "execution_status": "실행 가능",

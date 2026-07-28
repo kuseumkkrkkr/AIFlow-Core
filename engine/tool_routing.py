@@ -37,6 +37,7 @@ ROUTE_SPECS = (
     RouteSpec("hs_exponential_asymptote_distance", "지수함수 수평 점근선과 점 사이 거리", ("점근선", "거리", "a+b", "2^x")),
     RouteSpec("hs_inverse_log_power_coordinate", "로그함수 역함수 위 거듭제곱 좌표", ("역함수", "log_", "^k", "점")),
     RouteSpec("hs_log_interval_extrema", "로그함수 닫힌 구간 최댓값 최솟값의 합", ("최댓값", "최솟값", "log_", "x-", "x+")),
+    RouteSpec("hs_sine_linear_interval", "특수각 사인 일차방정식의 라디안 구간해", ("sin", "sqrt", "방정식", "pi/", "π/")),
     RouteSpec("hs_polynomial_remainder", "두 일차식 나머지 조건 보간", ("나눈 나머지", "r(x)", "나머지를")),
     RouteSpec("hs1_exponential_log", "지수와 로그 값 계산", ("지수", "로그", "log_", "log ", "^")),
     RouteSpec("hs1_exponential_equation", "지수방정식과 로그방정식", ("지수방정식", "로그방정식", "^x=", "log_")),
@@ -132,6 +133,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
         "hs_exponential_asymptote_distance": ("점근선", "거리"),
         "hs_inverse_log_power_coordinate": ("역함수", "log_", "^k"),
         "hs_log_interval_extrema": ("최댓값", "최솟값", "log_"),
+        "hs_sine_linear_interval": ("sin", "sqrt"),
         "hs_rational_interval_extrema": ("최댓값", "최솟값"),
     }
     markers = strict_markers.get(domain)

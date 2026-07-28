@@ -72,7 +72,9 @@ def normalize_latex_input(text: str) -> dict[str, Any]:
     for command, replacement in _COMMAND_REPLACEMENTS.items():
         normalized = normalized.replace(command, replacement)
     normalized = _unwrap_braces(normalized)
-    normalized = normalized.replace("\\,", " ").replace("\\!", "").replace("\\ ", " ")
+    # \frac{\pi}{2}처럼 괄호가 남는 π 단위 분수를 라디안 슬롯 파서 표기로 접는다.
+    normalized = re.sub(r"\(\s*([+-]?\d*(?:pi|π))\s*\)\s*/\s*\(\s*(\d+)\s*\)", r"\1/\2", normalized)
+    normalized = normalized.replace("\\,", " ").replace("\\;", " ").replace("\\!", "").replace("\\ ", " ")
     unsupported = sorted(set(re.findall(r"\\[a-zA-Z]+", normalized)))
     normalized = re.sub(r"\s+", " ", normalized).strip()
     return {"original": original, "normalized": normalized, "unsupported": unsupported, "supported": not unsupported}

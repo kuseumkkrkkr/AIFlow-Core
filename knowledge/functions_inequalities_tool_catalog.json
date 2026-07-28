@@ -214,12 +214,12 @@
       "name": "일차부등식의 해집합",
       "subject": "부등식",
       "input_slots": ["a", "b", "relation", "c"],
-      "tool": {"kind": "planned_math_tool", "id": "solve_linear_inequality"},
+      "tool": {"kind": "math_tool", "id": "solve_linear_inequality"},
       "formula": "ax+b ⋚ c에서 a의 부호에 따라 x ⋚ (c-b)/a 또는 부등호 방향을 반전한다.",
       "verification_invariant": "경계값과 양쪽 표본을 원부등식에 대입해 반환한 구간의 참·거짓이 일치해야 한다.",
       "supported_example": "-2x+3≤7의 해. → x≥-2",
-      "unsupported_boundary": "현재 일차 규칙은 등식의 정수해만 처리하며 부등호 방향·구간 표현을 계산하지 않는다.",
-      "execution_status": "도구 구현 대기"
+      "unsupported_boundary": "현재 도구는 한 변수·일차식·상수 우변만 지원하며 연립부등식과 문자계수 분기는 별도 계약을 사용한다.",
+      "execution_status": "실행 가능"
     },
     {
       "concept_id": "fn_ineq_quadratic_inequality_sign_chart",

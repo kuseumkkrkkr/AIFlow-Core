@@ -35,6 +35,7 @@ ROUTE_SPECS = (
     RouteSpec("hs_polynomial_addition", "두 다항식의 동류항 계수 덧셈", ("두 다항식", "a+b", "a=", "b=")),
     RouteSpec("integer_gcd", "정수 최대공약수 유클리드 호제법", ("최대공약수", "gcd(")),
     RouteSpec("hs_absolute_linear_equation", "일차식 절댓값 방정식의 두 분기 해", ("절댓값", "절대값", "|", "=", "x")),
+    RouteSpec("fn_linear_inequality", "일차부등식의 해집합과 부등호 방향", ("부등식", "≤", "≥", "<=", ">=", "<", ">", "x")),
     RouteSpec("hs_log_product_equation", "두 로그의 곱 방정식", ("log_", "로그", "×", "*")),
     RouteSpec("hs_exponential_asymptote_distance", "지수함수 수평 점근선과 점 사이 거리", ("점근선", "거리", "a+b", "2^x")),
     RouteSpec("hs_inverse_log_power_coordinate", "로그함수 역함수 위 거듭제곱 좌표", ("역함수", "log_", "^k", "점")),
@@ -90,6 +91,8 @@ def _rule_score(text: str, spec: RouteSpec) -> float:
         structure_bonus = 14.0
     elif spec.domain == "hs2_integral" and "정적분" in lowered:
         structure_bonus = 12.0
+    elif spec.domain == "fn_linear_inequality" and re.search(r"[+-]?\d*\s*x\s*(?:[+-]\s*\d+)?\s*(?:<=|>=|<|>|≤|≥)\s*[+-]?\d+", lowered):
+        structure_bonus = 16.0
     return hits * 10.0 + token_overlap + structure_bonus
 
 
@@ -143,7 +146,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
     """변수: 정규화 문제·후보 도메인. 원리: 숫자 우연 일치만으로 다른 규칙이 PASS가 되는 허위 성공을 차단한다."""
     lowered = text.lower()
     # |ax+b|=c는 일반 일차방정식으로 괄호를 무시해 풀면 두 해 중 하나를 허위 PASS할 수 있다.
-    if domain == "cm_linear" and "|" in lowered:
+    if domain == "cm_linear" and ("|" in lowered or any(marker in lowered for marker in ("<=", ">=", "≤", "≥", "<", ">"))):
         return False
     strict_markers = {
         "cm_probability": ("확률", "조합", "순열", "경우의 수", "%"),
@@ -157,6 +160,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
         "hs_polynomial_addition": ("a+b", "두 다항식"),
         "integer_gcd": ("최대공약수", "gcd("),
         "hs_absolute_linear_equation": ("절댓값", "절대값", "|"),
+        "fn_linear_inequality": ("부등식", "≤", "≥", "<=", ">=", "<", ">"),
         "hs_log_product_equation": ("log_",),
         "hs_exponential_asymptote_distance": ("점근선", "거리"),
         "hs_inverse_log_power_coordinate": ("역함수", "log_", "^k"),

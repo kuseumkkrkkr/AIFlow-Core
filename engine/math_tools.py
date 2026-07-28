@@ -133,6 +133,36 @@ def solve_absolute_linear_equation(slots: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def solve_linear_inequality(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: a,b,관계기호,c. 원리: ax+b⋚c를 경계값으로 나누고 a가 음수일 때만 부등호를 뒤집어 표본으로 검산한다."""
+    a, b, relation, c = (slots.get(key) for key in ("a", "b", "relation", "c"))
+    try:
+        a, b, c = float(a), float(b), float(c)
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "일차부등식의 a, b, c가 필요합니다."}
+    normalized_relation = {"≤": "<=", "≥": ">="}.get(str(relation), str(relation))
+    if a == 0 or normalized_relation not in {"<", "<=", ">", ">="}:
+        return {"status": "FAIL", "reason": "a는 0이 아니어야 하며 비교 기호가 필요합니다."}
+    boundary = (c - b) / a
+    if a < 0:
+        normalized_relation = {"<": ">", "<=": ">=", ">": "<", ">=": "<="}[normalized_relation]
+    display_relation = {"<": "<", "<=": "≤", ">": ">", ">=": "≥"}[normalized_relation]
+    boundary_value: int | float = int(round(boundary)) if abs(boundary - round(boundary)) < 1e-10 else boundary
+    def satisfies(value: float) -> bool:
+        left = a * value + b
+        return {"<": left < c, "<=": left <= c, ">": left > c, ">=": left >= c}[{ "≤": "<=", "≥": ">="}.get(str(relation), str(relation))]
+    delta = 1.0
+    chosen = boundary - delta if normalized_relation in {"<", "<="} else boundary + delta
+    excluded = boundary + delta if normalized_relation in {"<", "<="} else boundary - delta
+    boundary_ok = satisfies(boundary) == (normalized_relation in {"<=", ">="})
+    verified = satisfies(chosen) and not satisfies(excluded) and boundary_ok
+    return {
+        "status": "PASS", "answer": f"x{display_relation}{boundary_value}",
+        "formula": "ax+b⋚c에서 a의 부호에 따라 부등호 방향을 유지 또는 반전한다.",
+        "verified": verified, "parameters": {"boundary": boundary_value, "relation": display_relation}, "tool": "solve_linear_inequality",
+    }
+
+
 def solve_log_product_equation(slots: dict[str, Any]) -> dict[str, Any]:
     """변수: 첫 로그의 밑·진수, 둘째 로그의 밑, 곱의 값. 원리: log_b(x)를 고립해 양의 실수 해를 계산·재대입한다."""
     first_base, first_value, second_base, target = (slots.get(key) for key in ("first_base", "first_value", "second_base", "target"))
@@ -300,6 +330,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "evaluate_polynomial_horner": evaluate_polynomial_horner,
     "evaluate_integer_gcd": evaluate_integer_gcd,
     "solve_absolute_linear_equation": solve_absolute_linear_equation,
+    "solve_linear_inequality": solve_linear_inequality,
     "solve_log_product_equation": solve_log_product_equation,
     "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
     "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,

@@ -88,6 +88,28 @@ def test_absolute_linear_equation_is_shared_and_blocks_linear_false_pass() -> No
         assert all(not (attempt["domain"] == "cm_linear" and attempt["status"] == "PASS") for attempt in response["attempts"])
 
 
+def test_linear_inequality_is_shared_and_reverses_negative_coefficient() -> None:
+    """일차부등식은 평문·LaTeX에서 같은 경계값에 도달하고 음수 계수일 때만 방향을 뒤집어야 한다."""
+    cases = [
+        ("부등식 -2x+3<=7의 해집합", "≥", -2),
+        (r"부등식 $3x-1>5$의 해집합", ">", 2),
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question, relation, boundary in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "fn_linear_inequality"
+            assert response["result"]["parameters"] == {"boundary": boundary, "relation": relation}
+            assert response["result"]["verified"] is True
+            assert all(not (attempt["domain"] == "cm_linear" and attempt["status"] == "PASS") for attempt in response["attempts"])
+    # 여러 비교 조건을 가진 함수 문장은 단일 부등식 도구가 임의로 분리해 풀면 안 된다.
+    composite = "함수 g(x)=x^2 (0<=x<3)이고 모든 x>=0에서 조건을 만족한다."
+    for mode in ("rule", "neural", "embedding"):
+        response = solve_with_router(composite, mode)
+        assert response["status"] == "FAIL"
+        assert all(not (attempt["domain"] == "fn_linear_inequality" and attempt["status"] == "PASS") for attempt in response["attempts"])
+
+
 def test_exponential_asymptote_distance_tool_is_shared() -> None:
     """지수함수의 수평 점근선 거리 문제를 세 라우터가 같은 범용 도구로 검산하는지 확인한다."""
     question = "곡선 y=2^x 위의 점 (a,b)와 곡선 y=2^x-3의 점근선 사이의 거리가 7일 때, a+b의 값"
@@ -202,6 +224,7 @@ if __name__ == "__main__":
     test_polynomial_addition_tool_is_shared_for_text_and_latex()
     test_integer_gcd_tool_is_selected_and_verified_by_all_routers()
     test_absolute_linear_equation_is_shared_and_blocks_linear_false_pass()
+    test_linear_inequality_is_shared_and_reverses_negative_coefficient()
     test_exponential_asymptote_distance_tool_is_shared()
     test_inverse_log_power_coordinate_tool_is_shared()
     test_log_interval_extrema_tool_is_shared_for_text_and_latex()

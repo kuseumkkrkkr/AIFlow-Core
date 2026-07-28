@@ -49,6 +49,16 @@ python scripts/run_router_experiment.py --corpus private_benchmarks\official\202
 
 `private_benchmarks/`는 Git에서 제외된다. 공개 기출·문제집 전문·PDF·이미지는 이 경로에만 보관하고, 저장소에는 출처·문항번호·원문 SHA-256·집계 결과만 남긴다. `engine/experiment_runner.py`는 실행 전에 문항 전문·LaTeX·정답·출처 문서 해시·문항 번호·교육과정·그림 의존·지원 여부를 검증하고, 같은 전문으로 `rule`, `neural`, `embedding`을 비교해 도구 선택 정확도, 정답 정확도, 검산 통과율, 허위 PASS율, 미지원 거부 정확도, 평균 처리 시간, 반복 실행 결정성 및 단원별 지표를 각각 기록한다. embedding 보고서에는 실제 로컬 E5·도메인 투영 모델 사용 여부와 버전도 기록한다.
 
+## 공개 수학 모델 평가셋
+
+GSM8K의 MIT 라이선스 `main/test` 1,319문항은 실제 생성형 수학 모델의 별도 평가셋으로만 로컬에 보관한다. 학습 분할은 이 명령으로 내려받지 않으며, 문제·풀이 전문과 정답은 `private_benchmarks/public/gsm8k_main_test`에만 쓴다.
+
+```powershell
+python scripts/import_hf_gsm8k_benchmark.py --output-dir private_benchmarks\public\gsm8k_main_test
+```
+
+생성형 모델 평가는 현재 규칙·라우터 실험과 섞지 않는다. 모델명·커밋·프롬프트·추론 설정·정규화된 최종 답·정답 정확도·실패 유형을 별도 private 보고서로 기록한다. 한국어 평가용 Ko-GSM8K는 배포 페이지에서 약관·연락처 공유 동의가 필요하므로, 사용자가 해당 접근을 수락하기 전에는 자동 수집하지 않는다.
+
 ## 공식 PDF 수집
 
 평가원 등 원문 공개처의 문제지와 정답표는 아래처럼 **로컬 전용**으로 수집한다. 수집기는 원문을 Git·Vercel에 쓰지 않고, 재현을 위해 URL과 SHA-256만 `manifest.json`에 남긴다.

@@ -16,7 +16,8 @@ sources:
 | --- | --- | --- |
 | `concept_graph.json` | 개념 노드, 토픽, 선수 관계 | `classify` |
 | `rule_library.json` | 규칙 ID, 적용 조건, 필수 슬롯, 위험도 | `classify`, `select_optimal_rule` |
-| `high_school_curriculum_catalog.json` | 수학Ⅰ·수학Ⅱ·미적분·확통·기하 확장 목록 | `/api/algorithm` |
+| `high_school_curriculum_catalog.json` | 수학 상·하 호환 관계와 수학Ⅰ·수학Ⅱ·미적분·확통·기하 확장 목록 | `/api/algorithm` |
+| `geometry_gui_tool_catalog.json` | 좌표 GUI의 거리·중점·넓이·벡터 내적·직선 교점 계약 | `/api/algorithm`, `geometry_gui` |
 | `*_tool_catalog.json` | 과목별 개념, 입력 슬롯, 도구, 공식, 검산 불변식 | `/api/algorithm`, 지식 확장 설계 |
 | `validation_contract.json` | PASS/FAIL 관련 기준 | 연구·문서 기준 |
 
@@ -31,13 +32,13 @@ sources:
 - 수학Ⅱ: 다항식 극한, 거듭제곱 미분·접선·정적분
 - 미적분: `sin`, `cos` 미분값
 - 확률과 통계: 조합·순열·조건부확률·이항분포 점확률
-- 기하: 기본 도형, 평면벡터 성분 내적
+- 기하: 기본 도형, 평면벡터 성분 내적, 좌표 GUI 거리·중점·삼각형 넓이·벡터 내적·두 직선 교점
 
 대표 도구 호출: 두 일차식 나머지 보간, 유리함수 구간 극값, 양의 정수 미지수를 포함한 2×2 행렬 곱, Horner 다항식 값, 최대공약수, 로그 곱 방정식, 지수함수 점근선 거리, 로그함수 역함수의 거듭제곱 좌표다. 도구는 추출된 슬롯만 받고, 등록되지 않은 도구 ID 호출과 임의 코드 실행을 허용하지 않는다.
 
 각 과목 도구 카탈로그는 `concept_id`, `required_slots`, `tool`, `formula`, `verification_invariant`, `supported_example`, `unsupported_boundary`를 가진다. 이 형식은 키워드 나열이 아니라 새 파서·도구·검산 규칙을 추가하기 위한 구현 계약이다.
 
-현재 과목별 카탈로그는 기존 170개에 1차 대학 기초수학(선형대수 33개, 기초해석 32개, 이산수학 28개), 2차 확장(정수론·추상대수 30개, 수치해석·최적화 32개, 고급기하 28개), 3차 확장(확률·통계 27개, 미분방정식 32개, 복소해석 30개), 실제 고2 기출에서 승격한 로그함수 구간 극값·특수각 사인 구간방정식·다항식 동류항 덧셈 계약을 더해 총 445개 항목이다. 새 항목은 `prerequisite_ids`로 선수 지식 그래프를 표현한다. `engine/knowledge_catalog.py`가 과거 `items`·`concepts`, 단수·복수 검산 필드 차이를 공통 스키마로 정규화하고, `tests/test_knowledge_catalog.py`가 항목 수·ID 중복·필수 필드·선수관계 존재·순환·실행 항목의 실제 rule/math-tool 참조를 검증한다.
+현재 과목별 카탈로그는 기존 170개에 1차 대학 기초수학(선형대수 33개, 기초해석 32개, 이산수학 28개), 2차 확장(정수론·추상대수 30개, 수치해석·최적화 32개, 고급기하 28개), 3차 확장(확률·통계 27개, 미분방정식 32개, 복소해석 30개), 실제 고2 기출에서 승격한 로그함수 구간 극값·특수각 사인 구간방정식·다항식 동류항 덧셈, 좌표 GUI 기하 5개 계약을 더해 총 450개 항목이다. 새 항목은 `prerequisite_ids`로 선수 지식 그래프를 표현한다. `engine/knowledge_catalog.py`가 과거 `items`·`concepts`, 단수·복수 검산 필드 차이를 공통 스키마로 정규화하고, `tests/test_knowledge_catalog.py`가 항목 수·ID 중복·필수 필드·선수관계 존재·순환·실행 항목의 실제 rule/math-tool 참조를 검증한다.
 
 ## PASS 조건
 

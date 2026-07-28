@@ -18,6 +18,7 @@ AIFlow-Core는 자연어 수학 문제를 **명시적 규칙과 지식 베이스
 - [[10 Architecture/System Map|시스템 구성도]] — 웹·API·엔진·지식·검증 레이어
 - [[10 Architecture/Code Map|코드 구성표]] — 파일별 책임과 진입점
 - [[20 Flows/Solve Request Flow|문제 풀이 플로우]] — 한 문항이 PASS/FAIL에 도달하는 과정
+- [[20 Flows/Geometry GUI Flow|기하 GUI 입력 플로우]] — 구조화된 좌표 도형의 풀이·검산
 - [[20 Flows/Generation and Corpus Flow|생성·코퍼스 검증 플로우]] — 난이도 계약과 실제 문항 검증
 - [[30 Reference/Knowledge Base and Contracts|지식 베이스·계약]] — JSON 지식 구조와 난이도 정책
 - [[30 Reference/Verification and Operations|검증·운영]] — 로컬 검증과 Vercel API

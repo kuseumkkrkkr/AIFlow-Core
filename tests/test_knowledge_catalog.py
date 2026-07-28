@@ -20,6 +20,7 @@ def test_tool_knowledge_catalogs_are_complete() -> None:
         "linear_algebra_tool_catalog", "foundations_analysis_tool_catalog", "discrete_math_tool_catalog",
         "abstract_algebra_tool_catalog", "numerical_optimization_tool_catalog", "advanced_geometry_tool_catalog",
         "probability_statistics_advanced_tool_catalog", "differential_equations_tool_catalog", "complex_analysis_tool_catalog",
+        "geometry_gui_tool_catalog",
     } <= set(catalogs)
     entries = [item for catalog in catalogs.values() for item in catalog["items"]]
     assert len(entries) >= 440

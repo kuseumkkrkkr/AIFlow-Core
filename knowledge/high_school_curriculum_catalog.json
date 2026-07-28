@@ -1,6 +1,10 @@
 {
   "version": "2026.07",
   "source_basis": "2022 개정 교육과정 과목 체계와 기존 수능형 과목 호환 카탈로그",
+  "legacy_subject_mapping": {
+    "수학 상": "2022 개정 전 과목명이며, 다항식·방정식·부등식·도형의 방정식은 functions_inequalities_tool_catalog 및 advanced_algebra_tool_catalog에 호환 지식으로 분산 등록한다.",
+    "수학 하": "2022 개정 전 과목명이며, 집합·함수·경우의 수·좌표기하는 functions_inequalities_tool_catalog 및 stats_geometry_tool_catalog에 호환 지식으로 분산 등록한다."
+  },
   "subjects": {
     "수학Ⅰ": [
       {"id":"s1_exponential","name":"지수함수","formula":"a^(x+y)=a^x·a^y","tags":["지수","지수함수"]},

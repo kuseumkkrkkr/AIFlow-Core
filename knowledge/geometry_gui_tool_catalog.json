@@ -1,0 +1,74 @@
+{
+  "catalog_id": "aiflow-core-geometry-gui",
+  "version": "2026.07.28",
+  "encoding": "UTF-8",
+  "scope": "대한민국 고등학교 기하의 좌표·벡터 단원을 위한 구조화 GUI 입력 계약",
+  "purpose_kr": "자연어 키워드 추정과 분리하여 좌표 평면에서 만든 점과 선택 순서를 직접 계산 도구에 전달한다.",
+  "items": [
+    {
+      "concept_id": "geometry_gui_coordinate_distance",
+      "name": "두 점 사이 거리 GUI",
+      "subject": "기하",
+      "prerequisite_ids": [],
+      "execution_status": "실행 가능",
+      "input_slots": ["points", "point_ids"],
+      "tool": {"kind": "math_tool", "id": "geometry_distance_gui"},
+      "formula": "AB²=(xB-xA)²+(yB-yA)²",
+      "verification_invariant": "계산한 거리의 제곱이 두 좌표 차의 제곱합과 같아야 한다.",
+      "supported_example": "평면에서 A(0,0), B(3,4)를 선택하면 거리 5를 반환한다.",
+      "unsupported_boundary": "현재 GUI는 2차원 좌표 평면만 지원하며 3차원 공간좌표는 별도 입력 도구가 필요하다."
+    },
+    {
+      "concept_id": "geometry_gui_coordinate_midpoint",
+      "name": "선분 중점 GUI",
+      "subject": "기하",
+      "prerequisite_ids": ["geometry_gui_coordinate_distance"],
+      "execution_status": "실행 가능",
+      "input_slots": ["points", "point_ids"],
+      "tool": {"kind": "math_tool", "id": "geometry_midpoint_gui"},
+      "formula": "M=((xA+xB)/2,(yA+yB)/2)",
+      "verification_invariant": "2M=A+B가 x, y 성분별로 모두 성립해야 한다.",
+      "supported_example": "A(0,0), B(4,3)의 중점은 (2,3/2)이다.",
+      "unsupported_boundary": "중선·내분점의 비가 별도로 주어지는 문제는 현재 중점 GUI 연산의 범위 밖이다."
+    },
+    {
+      "concept_id": "geometry_gui_triangle_area",
+      "name": "좌표 삼각형 넓이 GUI",
+      "subject": "기하",
+      "prerequisite_ids": ["geometry_gui_coordinate_distance"],
+      "execution_status": "실행 가능",
+      "input_slots": ["points", "point_ids"],
+      "tool": {"kind": "math_tool", "id": "geometry_triangle_area_gui"},
+      "formula": "넓이=|x1(y2-y3)+x2(y3-y1)+x3(y1-y2)|/2",
+      "verification_invariant": "부호 있는 두 배 넓이의 절댓값이 반환 넓이의 두 배와 같아야 한다.",
+      "supported_example": "A(0,0), B(4,0), C(0,3)의 넓이는 6이다.",
+      "unsupported_boundary": "세 점이 일직선인 퇴화 입력은 삼각형이 아니므로 FAIL을 반환한다."
+    },
+    {
+      "concept_id": "geometry_gui_vector_dot_product",
+      "name": "평면벡터 내적 GUI",
+      "subject": "기하",
+      "prerequisite_ids": ["geometry_gui_coordinate_distance"],
+      "execution_status": "실행 가능",
+      "input_slots": ["points", "point_ids"],
+      "tool": {"kind": "math_tool", "id": "geometry_vector_dot_gui"},
+      "formula": "AB·CD=(xB-xA)(xD-xC)+(yB-yA)(yD-yC)",
+      "verification_invariant": "반환 내적이 두 벡터 성분곱의 합과 일치해야 한다.",
+      "supported_example": "A(0,0), B(4,0), C(0,0), D(0,3)의 내적은 0이다.",
+      "unsupported_boundary": "현재는 평면 성분 내적만 다루며 공간벡터 및 각·길이 역산은 별도 확장이 필요하다."
+    },
+    {
+      "concept_id": "geometry_gui_line_intersection",
+      "name": "두 직선 교점 GUI",
+      "subject": "기하",
+      "prerequisite_ids": ["geometry_gui_coordinate_midpoint"],
+      "execution_status": "실행 가능",
+      "input_slots": ["points", "point_ids"],
+      "tool": {"kind": "math_tool", "id": "geometry_line_intersection_gui"},
+      "formula": "두 직선의 행렬식 교점 공식",
+      "verification_invariant": "반환 교점은 AB와 CD의 외적형 직선식에 각각 재대입해 0이어야 한다.",
+      "supported_example": "A(0,0), B(4,3), C(4,0), D(0,3)의 교점은 (2,3/2)이다.",
+      "unsupported_boundary": "평행·일치 직선은 유일한 교점이 없으므로 FAIL을 반환한다."
+    }
+  ]
+}

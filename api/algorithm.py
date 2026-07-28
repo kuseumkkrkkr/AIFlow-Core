@@ -37,6 +37,12 @@ ALGORITHM = {
         "formula_knowledge": list(FORMULA_KNOWLEDGE),
     },
     "math_tools": sorted(MATH_TOOL_REGISTRY),
+    "geometry_gui": {
+        "input_mode": "structured-coordinate-gui",
+        "principle": "WolframAlpha식 자연어 도형 질의 대신, 사용자가 좌표 평면에서 만든 점·선택 순서를 JSON으로 보낸다.",
+        "operations": ["distance", "midpoint", "triangle_area", "vector_dot", "line_intersection"],
+        "verification": "거리 제곱식·중점 복원식·신발끈 넓이·내적 성분식·두 직선 재대입을 각각 독립 검산한다.",
+    },
     "routing_experiments": {
         "modes": ROUTER_VERSIONS,
         "neural_model": MODEL_VERSION,

@@ -244,6 +244,37 @@ def add_polynomial_coefficients(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "(A+B)의 x^k 계수=A의 x^k 계수+B의 x^k 계수", "verified": verified, "parameters": {"coefficients": combined}, "tool": "add_polynomial_coefficients"}
 
 
+def _geometry_gui_bridge(operation: str, slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 기하 연산명과 GUI 좌표 슬롯. 원리: 등록된 수학 도구에서도 동일한 구조화 기하 엔진을 호출하도록 연결한다."""
+    from geometry_gui import solve_geometry_payload
+    return solve_geometry_payload({"operation": operation, "points": slots.get("points"), "point_ids": slots.get("point_ids")})
+
+
+def geometry_distance_gui(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 두 GUI 점. 원리: 거리 제곱식을 적용하는 구조화 기하 도구를 호출한다."""
+    return _geometry_gui_bridge("distance", slots)
+
+
+def geometry_midpoint_gui(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 두 GUI 점. 원리: 중점 복원식을 검산하는 구조화 기하 도구를 호출한다."""
+    return _geometry_gui_bridge("midpoint", slots)
+
+
+def geometry_triangle_area_gui(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 세 GUI 점. 원리: 신발끈 공식과 넓이 불변식을 적용한다."""
+    return _geometry_gui_bridge("triangle_area", slots)
+
+
+def geometry_vector_dot_gui(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 벡터 AB·CD를 만드는 네 GUI 점. 원리: 성분 내적을 계산·재계산한다."""
+    return _geometry_gui_bridge("vector_dot", slots)
+
+
+def geometry_line_intersection_gui(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 직선 AB·CD를 만드는 네 GUI 점. 원리: 행렬식 교점을 두 직선에 재대입한다."""
+    return _geometry_gui_bridge("line_intersection", slots)
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
@@ -256,6 +287,11 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "solve_log_interval_extrema_sum": solve_log_interval_extrema_sum,
     "solve_sine_linear_special_interval": solve_sine_linear_special_interval,
     "add_polynomial_coefficients": add_polynomial_coefficients,
+    "geometry_distance_gui": geometry_distance_gui,
+    "geometry_midpoint_gui": geometry_midpoint_gui,
+    "geometry_triangle_area_gui": geometry_triangle_area_gui,
+    "geometry_vector_dot_gui": geometry_vector_dot_gui,
+    "geometry_line_intersection_gui": geometry_line_intersection_gui,
 }
 
 

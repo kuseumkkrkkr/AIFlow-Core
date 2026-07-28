@@ -53,7 +53,7 @@ def rational_interval_extrema(slots: dict[str, Any]) -> dict[str, Any]:
 def symbolic_matrix_product_2x2(slots: dict[str, Any]) -> dict[str, Any]:
     """변수: k를 포함한 2×2 행렬과 곱 조건. 원리: 양의 정수 k 후보를 대입해 수치 조건을 만족하는 곱을 선택한다."""
     left, right, targets, requested = (slots.get(key) for key in ("left", "right", "targets", "requested"))
-    if not isinstance(left, list) or not isinstance(right, list) or not isinstance(targets, dict) or not requested:
+    if not isinstance(left, list) or not isinstance(right, list) or not isinstance(targets, list) or not requested:
         return {"status": "FAIL", "reason": "2×2 행렬, 곱의 수치 조건, 구할 성분이 필요합니다."}
 
     def evaluate(entry: int | str, k: int) -> int:
@@ -65,17 +65,17 @@ def symbolic_matrix_product_2x2(slots: dict[str, Any]) -> dict[str, Any]:
     matches = []
     for k in range(1, 101):
         product = multiply(k)
-        if all(product[row][column] == expected for (row, column), expected in targets.items()):
+        if all(product[item["row"]][item["column"]] == item["expected"] for item in targets):
             matches.append((k, product))
     if len(matches) != 1:
         return {"status": "FAIL", "reason": "행렬 곱 조건을 만족하는 양의 정수 k가 유일하지 않습니다."}
     k, product = matches[0]
-    answer = sum(product[row][column] for row, column in requested)
+    answer = sum(product[item[0]][item[1]] for item in requested)
     return {
         "status": "PASS",
         "answer": answer,
         "formula": "(AB)_ij=Σ A_itB_tj",
-        "verified": all(product[row][column] == expected for (row, column), expected in targets.items()),
+        "verified": all(product[item["row"]][item["column"]] == item["expected"] for item in targets),
         "parameters": {"k": k, "product": product},
         "tool": "symbolic_matrix_product_2x2",
     }

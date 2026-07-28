@@ -222,14 +222,14 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         right_values = [parse_entry(item) for item in right_match.groups()]
         if any(item is None for item in left_values + right_values):
             return {}
-        targets: dict[tuple[int, int], int] = {}
-        requested: list[tuple[int, int]] = []
+        targets: list[dict[str, int]] = []
+        requested: list[list[int]] = []
         for index, item in enumerate(entry.strip() for entry in product_match.groups()):
             row, column = divmod(index, 2)
             if re.fullmatch(r"[+-]?\d+", item):
-                targets[(row, column)] = int(item)
+                targets.append({"row": row, "column": column, "expected": int(item)})
             elif re.fullmatch(r"[a-z]", item):
-                requested.append((row, column))
+                requested.append([row, column])
         return {"left": [left_values[:2], left_values[2:]], "right": [right_values[:2], right_values[2:]], "targets": targets, "requested": requested}
     if domain == "cm_set":
         return {k: v for k, v in {"a": value(r"\|A\|\s*=\s*([+-]?\d+)"), "b": value(r"\|B\|\s*=\s*([+-]?\d+)"), "c": value(r"\|A∩B\|\s*=\s*([+-]?\d+)")}.items() if v is not None}

@@ -223,6 +223,27 @@ def solve_sine_linear_special_interval(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "a·sin x±sqrt(n)=0을 sin x의 특수각 값으로 바꾼다", "verified": verified, "parameters": {"angle_pi_ratio": f"{numerator}/{denominator}", "target": target}, "tool": "solve_sine_linear_special_interval"}
 
 
+def add_polynomial_coefficients(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 두 다항식의 차수별 정수 계수. 원리: 같은 차수 계수를 합쳐 표준형을 만들고 각 차수 항등식으로 검산한다."""
+    left, right = slots.get("left"), slots.get("right")
+    if not isinstance(left, dict) or not isinstance(right, dict):
+        return {"status": "FAIL", "reason": "두 다항식의 차수별 계수가 필요합니다."}
+    try:
+        combined = {int(power): int(left.get(power, left.get(str(power), 0))) + int(right.get(power, right.get(str(power), 0))) for power in set(left) | set(right)}
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "현재 다항식 덧셈 도구는 정수 계수만 지원합니다."}
+    combined = {power: coefficient for power, coefficient in combined.items() if coefficient}
+    def term(coefficient: int, power: int, first: bool) -> str:
+        sign = "-" if coefficient < 0 else "" if first else "+"
+        magnitude = abs(coefficient)
+        variable = "" if power == 0 else "x" if power == 1 else f"x^{power}"
+        number = "" if variable and magnitude == 1 else str(magnitude)
+        return f"{sign}{number}{variable}"
+    answer = "0" if not combined else "".join(term(coefficient, power, index == 0) for index, (power, coefficient) in enumerate(sorted(combined.items(), reverse=True)))
+    verified = all(combined.get(power, 0) == int(left.get(power, left.get(str(power), 0))) + int(right.get(power, right.get(str(power), 0))) for power in set(left) | set(right))
+    return {"status": "PASS", "answer": answer, "formula": "(A+B)의 x^k 계수=A의 x^k 계수+B의 x^k 계수", "verified": verified, "parameters": {"coefficients": combined}, "tool": "add_polynomial_coefficients"}
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
@@ -234,6 +255,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,
     "solve_log_interval_extrema_sum": solve_log_interval_extrema_sum,
     "solve_sine_linear_special_interval": solve_sine_linear_special_interval,
+    "add_polynomial_coefficients": add_polynomial_coefficients,
 }
 
 

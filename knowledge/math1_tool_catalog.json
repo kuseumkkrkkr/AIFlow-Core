@@ -50,6 +50,17 @@
       "unsupported_boundary": "문자 계수가 여러 개이거나 고차 다항식의 완전 인수분해를 요구하는 경우는 계수 비교·추가 도구가 필요하다."
     },
     {
+      "concept_id": "math1_polynomial_addition_coefficients",
+      "name_kr": "두 다항식의 덧셈과 동류항 정리",
+      "execution_status": "제한 실행",
+      "input_slots": ["left", "right"],
+      "tool": {"kind": "math_tool", "id": "add_polynomial_coefficients"},
+      "formula": "(A+B)의 x^k 계수는 A의 x^k 계수와 B의 x^k 계수의 합이다.",
+      "verification_invariant": "모든 등장 차수 k에서 반환 다항식 계수=A_k+B_k가 성립해야 한다.",
+      "supported_example": "A=2x^2+3x-1, B=-x^2-2x+3일 때 A+B. → x^2+x+2",
+      "unsupported_boundary": "현재는 한 문자 x의 정수 계수 다항식 두 개와 명시적 A+B 질의만 지원한다. 곱셈·나눗셈·여러 문자·문자 계수는 별도 도구가 필요하다."
+    },
+    {
       "concept_id": "math1_two_linear_remainder_interpolation",
       "name_kr": "두 일차식 나머지의 보간",
       "execution_status": "실행 가능",

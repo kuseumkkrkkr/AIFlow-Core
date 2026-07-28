@@ -47,6 +47,21 @@ def test_horner_tool_is_selected_and_verified_by_all_routers() -> None:
         assert response["result"]["verified"] is True
 
 
+def test_polynomial_addition_tool_is_shared_for_text_and_latex() -> None:
+    """다항식 덧셈은 평문·LaTeX에서 차수별 동일 계수와 표준형 정답으로 끝나는지 확인한다."""
+    cases = [
+        "두 다항식 A=2x^2+3x-1, B=-x^2-2x+3에 대하여 A+B를 간단히 하여라.",
+        r"$A=2x^2+3x-1,\;B=-x^2-2x+3$에 대하여 $A+B$를 간단히 하여라.",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "hs_polynomial_addition"
+            assert response["result"]["answer"] == "x^2+x+2"
+            assert response["result"]["verified"] is True
+
+
 def test_integer_gcd_tool_is_selected_and_verified_by_all_routers() -> None:
     """정수론 지식 계약과 유클리드 호제법 도구가 세 라우터에서 함께 실행되는지 확인한다."""
     for mode in ("rule", "neural", "embedding"):
@@ -168,6 +183,7 @@ if __name__ == "__main__":
     test_all_router_modes_solve_same_latex_cases()
     test_unsupported_latex_is_rejected()
     test_horner_tool_is_selected_and_verified_by_all_routers()
+    test_polynomial_addition_tool_is_shared_for_text_and_latex()
     test_integer_gcd_tool_is_selected_and_verified_by_all_routers()
     test_exponential_asymptote_distance_tool_is_shared()
     test_inverse_log_power_coordinate_tool_is_shared()

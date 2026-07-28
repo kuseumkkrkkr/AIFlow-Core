@@ -104,6 +104,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs1_conditional_probability": ["조건부확률", "P(A|B)", "P(A∩B)"],
         "hs1_polynomial_factor": ["다항식", "인수분해", "인수정리", "나머지정리"],
         "hs_polynomial_value": ["P(x)=", "다항식의 값", "다항식 함숫값"],
+        "hs_polynomial_addition": ["두 다항식", "A+B", "A =", "B ="],
         "integer_gcd": ["최대공약수", "gcd("],
         "hs_log_product_equation": ["log_", "로그의 곱", "×log"],
         "hs_exponential_asymptote_distance": ["점근선", "사이의 거리", "a+b"],
@@ -175,6 +176,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs_matrix_product"] = scores.get("hs_matrix_product", 0) + 20
     if re.search(r"P\s*\(\s*x\s*\)\s*=", normalized, flags=re.IGNORECASE) and re.search(r"P\s*\(\s*[+-]?\d+\s*\)", normalized, flags=re.IGNORECASE):
         scores["hs_polynomial_value"] = scores.get("hs_polynomial_value", 0) + 20
+    if re.search(r"A\s*=.*?B\s*=", normalized, flags=re.IGNORECASE) and re.search(r"A\s*\+\s*B", normalized, flags=re.IGNORECASE):
+        scores["hs_polynomial_addition"] = scores.get("hs_polynomial_addition", 0) + 20
     if "최대공약수" in normalized or re.search(r"gcd\s*\(", normalized, flags=re.IGNORECASE):
         scores["integer_gcd"] = scores.get("integer_gcd", 0) + 20
     if len(re.findall(r"log\s*_?\s*\d+", normalized, flags=re.IGNORECASE)) >= 2 and "=" in normalized:
@@ -336,6 +339,26 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
             return {}
         highest = max(parsed_terms)
         return {"coefficients": [parsed_terms.get(power, 0) for power in range(highest, -1, -1)], "point": int(point_match.group(1))}
+    if domain == "hs_polynomial_addition":
+        expressions = re.search(r"A\s*=\s*([^,;]+?)\s*,?\s*B\s*=\s*([^,;]+?)(?=\s*(?:에 대하여|일 때|A\s*\+\s*B|$))", text, flags=re.IGNORECASE)
+        if not expressions:
+            return {}
+        def parse_polynomial(raw: str) -> dict[int, int] | None:
+            terms = [item for item in raw.replace(" ", "").replace("−", "-").replace("-", "+-").split("+") if item]
+            coefficients: dict[int, int] = {}
+            for item in terms:
+                match = re.fullmatch(r"([+-]?)(\d*)x(?:\^(\d+))?", item, flags=re.IGNORECASE)
+                if match:
+                    sign = -1 if match.group(1) == "-" else 1
+                    power, coefficient = int(match.group(3) or "1"), sign * int(match.group(2) or "1")
+                elif re.fullmatch(r"[+-]?\d+", item):
+                    power, coefficient = 0, int(item)
+                else:
+                    return None
+                coefficients[power] = coefficients.get(power, 0) + coefficient
+            return coefficients
+        left, right = parse_polynomial(expressions.group(1)), parse_polynomial(expressions.group(2))
+        return {"left": left, "right": right} if left is not None and right is not None else {}
     if domain == "integer_gcd":
         matched = re.search(r"gcd\s*\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)", text, flags=re.IGNORECASE)
         if matched:
@@ -551,6 +574,7 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
 def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     """필요 변수: 분류 도메인과 슬롯. 중3 기본 규칙을 계산하고 검산 결과를 함께 반환한다."""
     tool_by_domain = {
+        "hs_polynomial_addition": "add_polynomial_coefficients",
         "hs_sine_linear_interval": "solve_sine_linear_special_interval",
         "hs_log_interval_extrema": "solve_log_interval_extrema_sum",
         "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",
@@ -871,6 +895,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",
             "hs_log_interval_extrema": "solve_log_interval_extrema_sum",
             "hs_sine_linear_interval": "solve_sine_linear_special_interval",
+            "hs_polynomial_addition": "add_polynomial_coefficients",
             "hs_polynomial_value": "evaluate_polynomial_horner",
             "hs_polynomial_remainder": "polynomial_remainder_two_linear",
             "hs_rational_interval_extrema": "rational_interval_extrema",

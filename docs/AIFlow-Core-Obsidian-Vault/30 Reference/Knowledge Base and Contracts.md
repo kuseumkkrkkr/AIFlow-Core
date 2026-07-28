@@ -37,7 +37,7 @@ sources:
 
 각 과목 도구 카탈로그는 `concept_id`, `required_slots`, `tool`, `formula`, `verification_invariant`, `supported_example`, `unsupported_boundary`를 가진다. 이 형식은 키워드 나열이 아니라 새 파서·도구·검산 규칙을 추가하기 위한 구현 계약이다.
 
-현재 과목별 카탈로그는 기존 170개에 1차 대학 기초수학(선형대수 33개, 기초해석 32개, 이산수학 28개), 2차 확장(정수론·추상대수 30개, 수치해석·최적화 32개, 고급기하 28개), 3차 확장(확률·통계 27개, 미분방정식 32개, 복소해석 30개), 실제 고2 기출에서 승격한 로그함수 구간 극값·특수각 사인 구간방정식 계약을 더해 총 444개 항목이다. 새 항목은 `prerequisite_ids`로 선수 지식 그래프를 표현한다. `engine/knowledge_catalog.py`가 과거 `items`·`concepts`, 단수·복수 검산 필드 차이를 공통 스키마로 정규화하고, `tests/test_knowledge_catalog.py`가 항목 수·ID 중복·필수 필드·선수관계 존재·순환·실행 항목의 실제 rule/math-tool 참조를 검증한다.
+현재 과목별 카탈로그는 기존 170개에 1차 대학 기초수학(선형대수 33개, 기초해석 32개, 이산수학 28개), 2차 확장(정수론·추상대수 30개, 수치해석·최적화 32개, 고급기하 28개), 3차 확장(확률·통계 27개, 미분방정식 32개, 복소해석 30개), 실제 고2 기출에서 승격한 로그함수 구간 극값·특수각 사인 구간방정식·다항식 동류항 덧셈 계약을 더해 총 445개 항목이다. 새 항목은 `prerequisite_ids`로 선수 지식 그래프를 표현한다. `engine/knowledge_catalog.py`가 과거 `items`·`concepts`, 단수·복수 검산 필드 차이를 공통 스키마로 정규화하고, `tests/test_knowledge_catalog.py`가 항목 수·ID 중복·필수 필드·선수관계 존재·순환·실행 항목의 실제 rule/math-tool 참조를 검증한다.
 
 ## PASS 조건
 

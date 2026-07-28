@@ -11,6 +11,21 @@ REQUIRED_ITEM_FIELDS = (
     "concept_id", "name", "input_slots", "tool", "formula",
     "verification_invariant", "supported_example", "unsupported_boundary", "execution_status",
 )
+CATALOG_SUBJECT_DEFAULTS = {
+    "math1_tool_catalog": "수학Ⅰ",
+    "calculus_tool_catalog": "수학Ⅱ·미적분",
+    "stats_geometry_tool_catalog": "확률과 통계·기하",
+    "advanced_algebra_tool_catalog": "고2 대수·다항식·행렬",
+    "advanced_calculus_tool_catalog": "고2 수열·극한·미적분",
+    "advanced_stats_geometry_tool_catalog": "고2 확률분포·좌표기하·벡터",
+}
+STATUS_ALIASES = {
+    "실행 가능": "실행 가능",
+    "제한 실행": "제한 실행",
+    "계획됨": "도구 구현 대기",
+    "도구 구현 대기": "도구 구현 대기",
+    "카탈로그만 등록": "도구 구현 대기",
+}
 
 
 def _raw_items(document: dict[str, Any]) -> list[dict[str, Any]]:
@@ -22,12 +37,12 @@ def _raw_items(document: dict[str, Any]) -> list[dict[str, Any]]:
 def _normalize_item(item: dict[str, Any], catalog_name: str) -> dict[str, Any]:
     """변수: 원본 지식 항목과 카탈로그명. 원리: 이름·검산 필드의 표기 차이를 공통 스키마로 변환한다."""
     invariant = item.get("verification_invariant", item.get("verification_invariants"))
-    status = item.get("execution_status", "도구 구현 대기")
+    status = STATUS_ALIASES.get(str(item.get("execution_status", "도구 구현 대기")), "도구 구현 대기")
     return {
         "catalog": catalog_name,
         "concept_id": item.get("concept_id"),
         "name": item.get("name", item.get("name_kr")),
-        "subject": item.get("subject", catalog_name),
+        "subject": item.get("subject", CATALOG_SUBJECT_DEFAULTS.get(catalog_name, catalog_name)),
         "input_slots": item.get("input_slots", []),
         "tool": item.get("tool"),
         "formula": item.get("formula"),

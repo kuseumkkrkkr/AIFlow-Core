@@ -37,7 +37,7 @@ sources:
 
 각 과목 도구 카탈로그는 `concept_id`, `required_slots`, `tool`, `formula`, `verification_invariant`, `supported_example`, `unsupported_boundary`를 가진다. 이 형식은 키워드 나열이 아니라 새 파서·도구·검산 규칙을 추가하기 위한 구현 계약이다.
 
-현재 과목별 카탈로그는 수학Ⅰ·대수/함수/수열 13개, 수학Ⅱ·미적분 14개, 확률과 통계·기하 12개로 총 39개 항목이다. `engine/knowledge_catalog.py`가 과거 `items`·`concepts`, 단수·복수 검산 필드 차이를 공통 스키마로 정규화하고, `tests/test_knowledge_catalog.py`가 항목 수·ID 중복·필수 필드를 검증한다.
+현재 과목별 카탈로그는 1차 묶음 39개와 고2 실전 확장 묶음(대수·다항식·행렬 17개, 수열·극한·미분·적분 19개, 확률분포·좌표기하·벡터 20개)을 합쳐 총 95개 항목이다. `engine/knowledge_catalog.py`가 과거 `items`·`concepts`, 단수·복수 검산 필드 차이를 공통 스키마로 정규화하고, `tests/test_knowledge_catalog.py`가 항목 수·ID 중복·필수 필드를 검증한다.
 
 ## PASS 조건
 

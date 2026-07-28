@@ -17,7 +17,7 @@ flowchart TD
     B -- 예 --> C[UTF-8 JSON decode]
     C --> D[LaTeX·문자 정규화<br/>미지원 명령은 FAIL]
     D --> E[router 선택<br/>rule · mini neural · embedding]
-    E --> F[후보 도구 순위화]
+    E --> F[상위 12개 후보 도구 순위화]
     F --> G[parse_for_domain<br/>후보별 계수·항·조건 슬롯 추출]
     G --> H[solve_rule / call_math_tool]
     H --> I{규칙의 입력 조건 충족?}

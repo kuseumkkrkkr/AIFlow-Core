@@ -83,6 +83,17 @@
       "unsupported_boundary": "상용로그 근삿값, 밑이 문자로 주어진 부등식, 진수의 부호를 여러 조건으로 판정하는 문제는 지원하지 않는다."
     },
     {
+      "concept_id": "math1_log_function_closed_interval_extrema",
+      "name_kr": "로그함수 닫힌 구간의 최댓값과 최솟값의 합",
+      "execution_status": "제한 실행",
+      "input_slots": ["base", "horizontal_shift", "vertical_shift", "left", "right"],
+      "tool": {"kind": "math_tool", "id": "solve_log_interval_extrema_sum"},
+      "formula": "f(x)=log_b(x+h)+v는 b>1에서 증가, 0<b<1에서 감소하므로 닫힌 구간 극값은 양 끝점에서 결정된다.",
+      "verification_invariant": "b>0, b≠1 및 left+h,right+h>0을 확인하고 양 끝점 함수값의 합이 반환 정답과 일치해야 한다.",
+      "supported_example": "4≤x≤11에서 f(x)=log_2(x-3)+5의 최댓값과 최솟값의 합. → 13",
+      "unsupported_boundary": "진수가 x의 일차식이 아니거나, 구간 내부의 정의역 경계·다른 극값 조건·밑이 문자로 주어지는 경우는 이 제한 도구로 처리하지 않는다."
+    },
+    {
       "concept_id": "math1_exponential_log_equation",
       "name_kr": "기본 지수·로그 방정식",
       "execution_status": "실행 가능",

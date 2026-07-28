@@ -170,6 +170,24 @@ def solve_inverse_log_power_coordinate(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": exponent, "formula": "f⁻¹(t)=b^(t-c)=q^k", "verified": verified, "parameters": {"inverse_value": inverse_value}, "tool": "solve_inverse_log_power_coordinate"}
 
 
+def solve_log_interval_extrema_sum(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 로그 밑·진수의 x 이동·수직 이동·닫힌 구간. 원리: 로그 단조성으로 양 끝점의 함수값을 비교·검산한다."""
+    base, horizontal_shift, vertical_shift, left, right = (slots.get(key) for key in ("base", "horizontal_shift", "vertical_shift", "left", "right"))
+    try:
+        base, horizontal_shift, vertical_shift, left, right = (float(base), float(horizontal_shift), float(vertical_shift), float(left), float(right))
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "로그의 밑·두 이동값·닫힌 구간의 양 끝점이 필요합니다."}
+    if base <= 0 or base == 1 or left > right or left + horizontal_shift <= 0 or right + horizontal_shift <= 0:
+        return {"status": "FAIL", "reason": "로그의 밑과 진수, 구간 조건이 유효하지 않습니다."}
+    left_value = log(left + horizontal_shift, base) + vertical_shift
+    right_value = log(right + horizontal_shift, base) + vertical_shift
+    maximum, minimum = max(left_value, right_value), min(left_value, right_value)
+    answer = maximum + minimum
+    answer = int(round(answer)) if abs(answer - round(answer)) < 1e-10 else answer
+    verified = abs((maximum + minimum) - float(answer)) < 1e-8 and ((base > 1 and left_value <= right_value) or (base < 1 and left_value >= right_value))
+    return {"status": "PASS", "answer": answer, "formula": "f(x)=log_b(x+h)+v의 닫힌 구간 극값은 단조성에 따라 양 끝점에서 결정", "verified": verified, "parameters": {"left_value": left_value, "right_value": right_value}, "tool": "solve_log_interval_extrema_sum"}
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
@@ -179,6 +197,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "solve_log_product_equation": solve_log_product_equation,
     "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
     "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,
+    "solve_log_interval_extrema_sum": solve_log_interval_extrema_sum,
 }
 
 

@@ -15,7 +15,7 @@ ROUTER_VERSIONS = {
 }
 
 
-def solve_with_router(question: str, mode: str = "rule", candidate_limit: int = 5) -> dict[str, Any]:
+def solve_with_router(question: str, mode: str = "rule", candidate_limit: int = 12) -> dict[str, Any]:
     """변수: 문제 원문·라우터 방식·후보 수. 원리: 같은 슬롯 파서·solver·검산기로 후보를 순서대로 실행한다.
 
     첫 PASS도 반드시 도구의 verified 불변식을 만족해야 반환한다. 따라서 라우터가

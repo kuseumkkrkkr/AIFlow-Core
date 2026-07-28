@@ -79,6 +79,21 @@ def test_inverse_log_power_coordinate_tool_is_shared() -> None:
         assert response["result"]["verified"] is True
 
 
+def test_log_interval_extrema_tool_is_shared_for_text_and_latex() -> None:
+    """로그함수의 구간 극값 문제는 평문·LaTeX가 세 라우터에서 같은 슬롯과 정답으로 끝나는지 확인한다."""
+    cases = [
+        "4<=x<=11에서 함수 f(x)=log_2(x-3)+5의 최댓값과 최솟값의 합",
+        r"$4\le x\le11,\;f(x)=\log_2(x-3)+5$의 최댓값과 최솟값의 합",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "hs_log_interval_extrema"
+            assert response["result"]["answer"] == 13
+            assert response["result"]["verified"] is True
+
+
 def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     """실험 보고서가 정답 정확도·허위 PASS·미지원 거부를 독립 지표로 집계하는지 확인한다."""
     records = [
@@ -115,6 +130,7 @@ if __name__ == "__main__":
     test_integer_gcd_tool_is_selected_and_verified_by_all_routers()
     test_exponential_asymptote_distance_tool_is_shared()
     test_inverse_log_power_coordinate_tool_is_shared()
+    test_log_interval_extrema_tool_is_shared_for_text_and_latex()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()
     print("PASS: latex and routing")

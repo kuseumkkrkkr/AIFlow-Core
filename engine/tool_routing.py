@@ -133,11 +133,24 @@ def _neural_score(text: str, spec: RouteSpec) -> float:
     return neural_probabilities(text).get(spec.domain, 0.0) + min(0.2, _rule_score(text, spec) / 120.0)
 
 
+def neural_should_abstain(text: str) -> bool:
+    """변수: 정규화 문제. 원리: 미니 MLP의 reject 프로파일이 가장 강하면 실행 후보를 만들지 않는다."""
+    from mini_neural_router import neural_should_abstain as model_should_abstain
+    return model_should_abstain(text)
+
+
 def rank_tools(text: str, mode: str = "rule", limit: int = 5) -> list[dict[str, Any]]:
     """변수: 정규화 문제·라우터 방식. 원리: 동일 후보 집합을 세 점수 함수 중 하나로 정렬해 실행 순서를 반환한다."""
     scorers = {"rule": _rule_score, "neural": _neural_score, "embedding": _embedding_score}
     if mode not in scorers:
         raise ValueError("routing mode는 rule, neural, embedding 중 하나여야 합니다.")
+    neural_scores: dict[str, float] | None = None
+    if mode == "neural":
+        if neural_should_abstain(text):
+            return []
+        # 후보마다 동일 MLP를 다시 순전파하지 않는다. 45개 도구 후보에서도 한 문항당 1회만 계산한다.
+        from mini_neural_router import neural_probabilities
+        neural_scores = neural_probabilities(text)
     # 실험 3은 로컬 체크포인트가 있는 개발 환경에서는 실제 E5 중심 벡터를 쓰고,
     # 배포 기본 경로에서는 의존성 없는 기준선을 유지한다.
     local_scores: dict[str, float] | None = None
@@ -148,6 +161,8 @@ def rank_tools(text: str, mode: str = "rule", limit: int = 5) -> list[dict[str, 
         """변수: 후보 도구 계약. 원리: 학습된 도메인은 E5 유사도를 우선하고, 미학습 도구는 구조 기준선으로 후보 집합에서 탈락하지 않게 한다."""
         # 실제 임베딩 경로의 보조 신호는 semantic n-gram이 아니라 규칙 구조 점수다.
         # 그래야 학습 데이터에 없는 도구도 명시 수식 구조로 후보에 남는다.
+        if neural_scores is not None:
+            return neural_scores.get(spec.domain, 0.0) + min(0.2, _rule_score(text, spec) / 120.0)
         baseline = _rule_score(text, spec) if local_scores is not None else scorers[mode](text, spec)
         if local_scores is None:
             return baseline
@@ -171,7 +186,8 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
     if domain == "cm_linear" and ("|" in lowered or any(marker in lowered for marker in ("<=", ">=", "≤", "≥", "<", ">"))):
         return False
     strict_markers = {
-        "cm_probability": ("확률", "조합", "순열", "경우의 수", "%"),
+        # 백분율 할인·증가율은 일반 산수이며 확률 도구가 아니다. %만으로는 실행하지 않는다.
+        "cm_probability": ("확률", "조합", "순열", "경우의 수", "주사위", "동전"),
         "cm_geometry": ("피타고라스", "직각삼각형", "삼각형", "원의", "직사각형", "반지름"),
         "hs1_function_composition": ("합성함수", "f(g(", "g(f("),
         "hs1_inverse_function": ("역함수", "f⁻¹", "f^-1"),

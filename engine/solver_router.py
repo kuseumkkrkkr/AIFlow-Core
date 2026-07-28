@@ -10,7 +10,7 @@ from tool_routing import has_minimum_evidence, rank_tools
 
 ROUTER_VERSIONS = {
     "rule": "rule-router-v1",
-    "neural": "mini-neural-profile-v1",
+    "neural": "mini-neural-profile-v2-reject-profile",
     "embedding": "local-e5-prototype-router-v1 (fallback: char-ngram-v1)",
 }
 

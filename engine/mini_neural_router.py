@@ -13,7 +13,8 @@ from typing import Any
 
 
 MODEL_PATH = Path(__file__).resolve().parents[1] / "knowledge" / "mini_neural_router_v1.json"
-MODEL_VERSION = "mini-neural-router-v1"
+MODEL_VERSION = "mini-neural-router-v2-reject-profile"
+REJECT_DOMAIN = "__reject__"
 FEATURE_SIZE = 96
 HIDDEN_SIZE = 24
 
@@ -47,15 +48,33 @@ def _forward(model: dict[str, Any], features: list[float]) -> tuple[list[float],
 
 
 def train_profile_model() -> dict[str, Any]:
-    """변수: route spec. 원리: 계약 예시만으로 작은 MLP를 결정론 학습해 기출 누수를 막는다."""
+    """변수: 도구 계약·합성 미지원 문장. 원리: 양성 도구 예시와 hard-negative를 함께 학습해 거부 확률을 만든다."""
     from tool_routing import ROUTE_SPECS
 
-    domains = [spec.domain for spec in ROUTE_SPECS]
+    domains = [spec.domain for spec in ROUTE_SPECS] + [REJECT_DOMAIN]
     samples: list[tuple[list[float], int]] = []
     for label, spec in enumerate(ROUTE_SPECS):
         keywords = " ".join(spec.keywords)
         for text in (spec.description, keywords, f"{spec.description} {keywords}"):
             samples.append((_features(text), label))
+    # 실제 기출·GSM8K 원문은 학습하지 않는다. 아래 문장은 도구 계약과 충돌하는
+    # 일반 서술형 산수의 합성 hard-negative로, 미지원 문제의 거부 경계를 만든다.
+    reject_examples = (
+        "A store discounts a jacket by 20 percent and then adds tax. What is the final price?",
+        "Mina buys 3 notebooks for 1200 won each and gives one to her friend.",
+        "A train travels 180 kilometers in 3 hours. How far does it travel in 5 hours?",
+        "There are 12 red marbles and 8 blue marbles in a box, then 4 are removed.",
+        "A worker earns 15 dollars per hour for 6 hours and spends 25 dollars.",
+        "A recipe uses 2 cups of flour for 8 cookies. How much flour for 20 cookies?",
+        "가게에서 20% 할인한 뒤 부가세를 더한 가격을 구하여라.",
+        "학생 30명 중 12명이 버스를 타고 나머지는 걸어서 갔다.",
+        "사과 5개를 3000원에 사고 2개를 더 샀을 때의 총비용을 구하여라.",
+        "자동차가 시속 60킬로미터로 2시간 이동한 뒤 30킬로미터를 더 이동했다.",
+        "한 달에 4만원씩 저축하여 9개월 후 모은 돈을 구하여라.",
+        "상자에 공 18개가 있고 그중 3개를 꺼낸 뒤 5개를 넣었다.",
+    )
+    reject_label = domains.index(REJECT_DOMAIN)
+    samples.extend((_features(text), reject_label) for text in reject_examples)
     # 고정 시드 LCG로 초기화해 빌드마다 같은 가중치가 나온다.
     state = 20260728
     def random_weight() -> float:
@@ -101,6 +120,23 @@ def neural_probabilities(text: str) -> dict[str, float]:
     model = load_model()
     _, probabilities = _forward(model, _features(text))
     return dict(zip(model["domains"], probabilities, strict=True))
+
+
+def neural_should_abstain(text: str) -> bool:
+    """변수: 정규화 문제. 원리: reject 우세와 서술형 산수 신호가 함께 있을 때만 도구 실행 전 거부한다."""
+    import re
+    probabilities = neural_probabilities(text)
+    reject = probabilities.get(REJECT_DOMAIN, 0.0)
+    best_tool = max((score for domain, score in probabilities.items() if domain != REJECT_DOMAIN), default=0.0)
+    lowered = str(text).lower()
+    # 수식·고교 개념 표지가 있으면 MLP의 합성 거부 프로파일만으로 차단하지 않는다.
+    math_markers = ("x", "log", "sin", "cos", "tan", "lim", "정적분", "미분", "수열", "함수", "속도", "벡터", "행렬", "확률", "조합", "순열")
+    if any(marker in lowered for marker in math_markers):
+        return False
+    english_words = re.findall(r"[a-z]{2,}", lowered)
+    korean_story_markers = ("가격", "할인", "비용", "구매", "원씩", "명 중", "개를", "개월", "저축", "사과", "가게")
+    narrative_arithmetic = len(english_words) >= 5 or any(marker in lowered for marker in korean_story_markers)
+    return narrative_arithmetic and reject >= best_tool
 
 
 if __name__ == "__main__":

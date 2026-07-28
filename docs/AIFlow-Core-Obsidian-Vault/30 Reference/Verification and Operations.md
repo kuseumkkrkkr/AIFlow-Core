@@ -11,6 +11,8 @@ sources:
   - ../../../scripts/render_private_pdf_pages.py
   - ../../../scripts/extract_official_exam_ocr.ps1
   - ../../../engine/rule_based_nlp.py
+  - ../../../engine/mini_neural_router.py
+  - ../../../engine/tool_routing.py
 ---
 
 # 검증·운영
@@ -73,6 +75,21 @@ GSM8K로 현재 도구 라우터 자체를 점검할 때는 초등 서술형 산
 python scripts/adapt_gsm8k_for_router_experiment.py
 python scripts/run_router_experiment.py --corpus private_benchmarks\public\gsm8k_main_test\gsm8k_router_rejection_corpus.json --output private_benchmarks\reports\gsm8k_router_rejection_report.json
 ```
+
+### 내부 신경망 거부 튜닝
+
+`mini-neural-router-v2-reject-profile`은 기존 도구 계약의 양성 문장만 학습하던 MLP에, 저장소에서 합성한 일반 서술형 산수 hard-negative를 `__reject__` 클래스로 추가한다. GSM8K·공식 기출 전문은 이 MLP의 학습 입력으로 사용하지 않는다. 거부 클래스가 우세하면서 긴 영어 서술형 또는 명시적 한국어 생활 산수 신호가 있을 때만 후보 생성을 중단한다. 수식·고교 개념 표지가 있으면 reject 확률만으로 차단하지 않아 기존 LaTeX 회귀를 보존한다.
+
+확률 도구는 `%` 단독으로 실행하지 않는다. 할인율·증가율 같은 일반 산수를 확률로 오인하지 않기 위해 `확률`, `조합`, `순열`, `경우의 수`, `주사위`, `동전` 가운데 하나가 필요하다. 이 정책은 라우터에 공통 적용된다.
+
+2026-07-29 로컬 결과는 다음과 같다.
+
+| 코퍼스 | 라우터 | 허위 PASS | 미지원 거부 | 결정성 | 평균 처리 시간 |
+| --- | --- | ---: | ---: | ---: | ---: |
+| GSM8K main/test 1,319문항 | neural v2 | 0.0% | 100.0% | 100.0% | 1.72 ms |
+| 2027학년도 6월 공식 코퍼스 10문항 | neural v2 | 0.0% | 100.0% | 100.0% | 공식 지원 문항 정답·검산 100.0% |
+
+같은 문항에서 미니 MLP를 후보마다 다시 계산하지 않고 문항당 한 번만 순전파하도록 최적화했다. 이 변경은 후보 순서를 바꾸지 않으며, GSM8K 전수의 평균 처리 시간을 약 90ms 수준에서 1.72ms로 낮췄다.
 
 ## 공식 PDF 수집
 

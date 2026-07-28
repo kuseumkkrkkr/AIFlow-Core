@@ -59,6 +59,14 @@ python scripts/import_hf_gsm8k_benchmark.py --output-dir private_benchmarks\publ
 
 생성형 모델 평가는 현재 규칙·라우터 실험과 섞지 않는다. 모델명·커밋·프롬프트·추론 설정·정규화된 최종 답·정답 정확도·실패 유형을 별도 private 보고서로 기록한다. 한국어 평가용 Ko-GSM8K는 배포 페이지에서 약관·연락처 공유 동의가 필요하므로, 사용자가 해당 접근을 수락하기 전에는 자동 수집하지 않는다.
 
+LM Studio 또는 llama.cpp server처럼 OpenAI Chat Completions 호환의 **로컬** 서버를 실행한 뒤에는 아래 명령으로 평가한다. 모델 가중치와 문항 원문·응답은 모두 private 경로에 남고, 이 보고서는 도구 라우팅 지표에 합산하지 않는다.
+
+```powershell
+python scripts/evaluate_local_math_model.py --model <로컬-서버의-모델-ID> --limit 20
+```
+
+기본 서버 주소는 `http://127.0.0.1:1234/v1`이며, 다른 주소는 `--api-base`로 명시한다. 스크립트는 각 문항 뒤 중간 보고서를 저장하므로 실행이 끊겨도 마지막 완료 문항까지의 결과를 보존한다.
+
 ## 공식 PDF 수집
 
 평가원 등 원문 공개처의 문제지와 정답표는 아래처럼 **로컬 전용**으로 수집한다. 수집기는 원문을 Git·Vercel에 쓰지 않고, 재현을 위해 URL과 SHA-256만 `manifest.json`에 남긴다.

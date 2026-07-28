@@ -119,6 +119,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs2_derivative": ["미분", "도함수", "미분계수"],
         "hs2_tangent": ["접선", "접선의 기울기", "접선 기울기"],
         "hs2_integral": ["적분", "부정적분", "정적분"],
+        "hs2_motion_meeting": ["속도", "위치", "원점", "출발"],
         "hs_composite_sequence": ["복합중", "a5+a8", "수열합성"],
         "hs_composite_sequence_function": ["복합상", "M=a", "수열함수합성"],
         "hs1_geometric_sequence": ["등비수열", "공비"],
@@ -167,6 +168,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs2_tangent"] = scores.get("hs2_tangent", 0) + 7
     if "적분" in normalized:
         scores["hs2_integral"] = scores.get("hs2_integral", 0) + 6
+    if "속도" in normalized and "위치" in normalized and "출발" in normalized:
+        scores["hs2_motion_meeting"] = scores.get("hs2_motion_meeting", 0) + 12
     if "복합중" in normalized:
         scores["hs_composite_sequence"] = scores.get("hs_composite_sequence", 0) + 30
     if "복합상" in normalized:
@@ -610,6 +613,34 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         if len(numbers) >= 2:
             return {"lower": numbers[0], "upper": numbers[1], "power": int(match.group(2) or 1) if match else 1}
         return {}
+    if domain == "hs2_motion_meeting":
+        first = re.search(r"v_?1\s*\(\s*t\s*\)\s*=\s*([^,，]+)", text, flags=re.IGNORECASE)
+        second = re.search(r"v_?2\s*\(\s*t\s*\)\s*=\s*([+-]?(?:\d+)?\*?t)(?=[,.，\s가-힣])", text, flags=re.IGNORECASE)
+        if not first or not second or not all(marker in text for marker in ("위치", "출발")):
+            return {}
+
+        def coefficient(raw: str) -> int | None:
+            """변수: t항 앞 계수 문자열. 원리: 생략된 ±1 계수를 정수로 표준화한다."""
+            compact = raw.replace(" ", "").replace("*", "")
+            if compact in ("", "+"):
+                return 1
+            if compact == "-":
+                return -1
+            return int(compact) if re.fullmatch(r"[+-]?\d+", compact) else None
+
+        first_compact = first.group(1).replace("²", "^2").replace(" ", "")
+        second_compact = second.group(1).replace("²", "^2").replace(" ", "")
+        first_match = re.fullmatch(r"([+-]?(?:\d+)?\*?t\^2)([+-](?:\d+)?\*?t)?", first_compact, flags=re.IGNORECASE)
+        second_match = re.fullmatch(r"([+-]?(?:\d+)?\*?t)", second_compact, flags=re.IGNORECASE)
+        if not first_match or not second_match:
+            return {}
+        quadratic_raw = re.sub(r"\*?t\^2$", "", first_match.group(1), flags=re.IGNORECASE)
+        linear_raw = re.sub(r"\*?t$", "", first_match.group(2) or "", flags=re.IGNORECASE)
+        second_raw = re.sub(r"\*?t$", "", second_match.group(1), flags=re.IGNORECASE)
+        values = (coefficient(quadratic_raw), coefficient(linear_raw) if first_match.group(2) else 0, coefficient(second_raw))
+        if any(value is None for value in values):
+            return {}
+        return {"first_quadratic": values[0], "first_linear": values[1], "second_linear": values[2]}
     if domain in {"hs_composite_sequence", "hs_composite_sequence_function"}:
         sequence = re.search(r"첫항\s*([+-]?\d+)\s*,?\s*공차\s*([+-]?\d+).*?a\s*([0-9]+)\s*\+\s*a\s*([0-9]+)", text)
         if not sequence:
@@ -759,6 +790,7 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs_polynomial_addition": "add_polynomial_coefficients",
         "hs_sine_linear_interval": "solve_sine_linear_special_interval",
         "hs_cosine_law_side": "solve_cosine_law_adjacent_side",
+        "hs2_motion_meeting": "solve_motion_meeting_from_velocities",
         "hs_log_interval_extrema": "solve_log_interval_extrema_sum",
         "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",
         "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",

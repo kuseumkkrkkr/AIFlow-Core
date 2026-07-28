@@ -52,6 +52,7 @@ ROUTE_SPECS = (
     RouteSpec("hs2_derivative", "다항식 함수 미분", ("미분", "도함수", "f'(x)", "f'(")),
     RouteSpec("hs2_tangent", "접선 기울기", ("접선", "접선의 기울기")),
     RouteSpec("hs2_integral", "거듭제곱 정적분", ("정적분", "적분", "부터")),
+    RouteSpec("hs2_motion_meeting", "속도함수 적분으로 같은 위치 시각", ("속도", "위치", "원점", "출발", "v1(t)=", "v2(t)=")),
     RouteSpec("hs_rational_interval_extrema", "유리함수 구간 최댓값 최솟값", ("최댓값", "최솟값", "a/(x-", "a/(x -")),
     RouteSpec("hs_matrix_product", "양의 정수 미지수 2x2 행렬 곱", ("두 행렬", "행렬 a", "행렬 b", "ab=")),
     RouteSpec("hs1_conditional_probability", "조건부확률", ("조건부확률", "p(a|b)", "p(a∩b)")),
@@ -98,6 +99,8 @@ def _rule_score(text: str, spec: RouteSpec) -> float:
         structure_bonus = 16.0
     elif spec.domain == "hs2_integral" and "정적분" in lowered:
         structure_bonus = 12.0
+    elif spec.domain == "hs2_motion_meeting" and re.search(r"v_?1\s*\(t\)\s*=.*?t\s*\^\s*2.*?v_?2\s*\(t\)\s*=", lowered):
+        structure_bonus = 18.0
     elif spec.domain == "fn_linear_inequality" and re.search(r"[+-]?\d*\s*x\s*(?:[+-]\s*\d+)?\s*(?:<=|>=|<|>|≤|≥)\s*[+-]?\d+", lowered):
         structure_bonus = 16.0
     elif spec.domain == "csg_vector_dot_3d" and re.search(r"\([^()]+,[^()]+,[^()]+\)\s*[·.*]\s*\([^()]+,[^()]+,[^()]+\)", lowered):
@@ -181,6 +184,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
         "hs_log_interval_extrema": ("최댓값", "최솟값", "log_"),
         "hs_sine_linear_interval": ("sin", "sqrt"),
         "hs2_integral": ("정적분", "부정적분", "적분"),
+        "hs2_motion_meeting": ("속도", "위치", "원점", "출발"),
         "hs_rational_interval_extrema": ("최댓값", "최솟값"),
     }
     markers = strict_markers.get(domain)

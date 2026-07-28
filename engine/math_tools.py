@@ -77,6 +77,35 @@ def solve_cosine_law_adjacent_side(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "a²=b²+c²-2bc cos(A)", "verified": True, "tool": "solve_cosine_law_adjacent_side"}
 
 
+def solve_motion_meeting_from_velocities(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 첫 속도의 t²·t 계수와 둘째 속도의 t 계수.
+    원리: 같은 원점에서 출발한 두 점의 속도 차를 0부터 적분하고, 출발 뒤의 유일한 양의 위치 일치 시각만 반환한다.
+    """
+    first_quadratic, first_linear, second_linear = (slots.get(key) for key in ("first_quadratic", "first_linear", "second_linear"))
+    try:
+        first_quadratic, first_linear, second_linear = (float(first_quadratic), float(first_linear), float(second_linear))
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "두 속도함수의 t²·t 계수가 필요합니다."}
+    if abs(first_quadratic) < 1e-12:
+        return {"status": "FAIL", "reason": "현재 도구는 첫 속도에 0이 아닌 t²항이 있는 경우만 지원합니다."}
+    # 위치 차 Δs(t)=a t³/3+(b-c)t²/2=t²( a t/3+(b-c)/2 )이다.
+    answer = 3 * (second_linear - first_linear) / (2 * first_quadratic)
+    if answer <= 1e-12:
+        return {"status": "FAIL", "reason": "출발 뒤 위치가 다시 같아지는 양의 시각이 유일하지 않습니다."}
+    position_difference = first_quadratic * answer ** 3 / 3 + (first_linear - second_linear) * answer ** 2 / 2
+    derivative_difference = first_quadratic * answer ** 2 + (first_linear - second_linear) * answer
+    if abs(position_difference) > 1e-8 or abs(derivative_difference) < 1e-10:
+        return {"status": "FAIL", "reason": "위치 일치 조건을 독립 검산하지 못했습니다."}
+    normalized = int(round(answer)) if abs(answer - round(answer)) < 1e-10 else answer
+    return {
+        "status": "PASS", "answer": normalized,
+        "formula": "∫₀ᵗ(v₁-v₂)du=t²(a t/3+(b-c)/2)=0",
+        "verified": True,
+        "parameters": {"first_quadratic": first_quadratic, "first_linear": first_linear, "second_linear": second_linear},
+        "tool": "solve_motion_meeting_from_velocities",
+    }
+
+
 def symbolic_matrix_product_2x2(slots: dict[str, Any]) -> dict[str, Any]:
     """변수: k를 포함한 2×2 행렬과 곱 조건. 원리: 양의 정수 k 후보를 대입해 수치 조건을 만족하는 곱을 선택한다."""
     left, right, targets, requested = (slots.get(key) for key in ("left", "right", "targets", "requested"))
@@ -388,6 +417,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
     "solve_cosine_law_adjacent_side": solve_cosine_law_adjacent_side,
+    "solve_motion_meeting_from_velocities": solve_motion_meeting_from_velocities,
     "symbolic_matrix_product_2x2": symbolic_matrix_product_2x2,
     "evaluate_polynomial_horner": evaluate_polynomial_horner,
     "evaluate_integer_gcd": evaluate_integer_gcd,

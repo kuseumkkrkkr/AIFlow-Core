@@ -240,6 +240,22 @@ def test_arithmetic_sequence_sum_contract_is_shared_for_text_and_latex() -> None
             assert response["result"]["verified"] is True
 
 
+def test_motion_meeting_tool_is_shared_for_text_and_latex() -> None:
+    """속도함수 위치 일치 계약은 평문·LaTeX 모두 같은 계수 슬롯과 양의 시각 검산에 도달해야 한다."""
+    cases = [
+        "시각 t=0일 때 동시에 원점을 출발한 두 점 P,Q의 속도가 v1(t)=t^2-t, v2(t)=t이다. 출발한 후 두 점의 위치가 같아지는 양수 시각 k",
+        r"시각 $t=0$에 원점에서 출발하고 $v_1(t)=t^2-t,\;v_2(t)=t$일 때 두 점의 위치가 다시 같은 양수 시각 $k$",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "hs2_motion_meeting"
+            assert response["parse"]["slots"] == {"first_quadratic": 1, "first_linear": -1, "second_linear": 1}
+            assert response["result"]["answer"] == 3
+            assert response["result"]["verified"] is True
+
+
 def test_nonunique_sine_interval_is_rejected_without_unrelated_pass() -> None:
     """특수각 해가 둘 이상인 구간은 다른 숫자 파서의 우연한 PASS 없이 세 라우터가 거부해야 한다."""
     question = "0<=x<=2pi에서 2sin x+sqrt(3)=0을 만족시키는 x의 값"
@@ -298,6 +314,7 @@ if __name__ == "__main__":
     test_log_interval_extrema_tool_is_shared_for_text_and_latex()
     test_sine_linear_interval_tool_is_shared_for_text_and_latex()
     test_arithmetic_sequence_sum_contract_is_shared_for_text_and_latex()
+    test_motion_meeting_tool_is_shared_for_text_and_latex()
     test_nonunique_sine_interval_is_rejected_without_unrelated_pass()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()

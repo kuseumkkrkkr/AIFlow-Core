@@ -34,6 +34,7 @@ def test_core_domains() -> None:
         ("함수 f(x)=3x^2-x+1에 대하여 lim x->1 (f(x)-f(1))/(x-1)", "hs2_limit", 5),
         ("미분 f(x)=x^3, x=2", "hs2_derivative", 12),
         ("정적분 0부터 2 x^1", "hs2_integral", 2),
+        ("시각 t=0일 때 동시에 원점을 출발한 두 점 P,Q의 속도가 v1(t)=t^2-t, v2(t)=t이다. 출발한 후 시각 t=k에서 두 점의 위치가 같아질 때 양수 k", "hs2_motion_meeting", 3),
         ("지수방정식 2^x=8", "hs1_exponential_equation", 3),
         ("방정식 3^(x-6)=(1/9)^x", "hs1_exponential_equation", 2),
         ("로그방정식 log_2 x=3", "hs1_exponential_equation", 8),

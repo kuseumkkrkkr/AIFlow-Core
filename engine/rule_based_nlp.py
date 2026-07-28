@@ -466,6 +466,17 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         coefficient = -1 if coefficient_raw == "-" else int(coefficient_raw or "1")
         return {"coefficient": coefficient, "constant_sign": -1 if equation.group(2) == "-" else 1, "radical": int(equation.group(3)), "left_numerator": left[0], "left_denominator": left[1], "right_numerator": right[0], "right_denominator": right[1]}
     if domain == "hs1_exponential_log":
+        root_rational_power = re.search(
+            r"root_\s*(\d+)\s*\(\s*(\d+)\s*\)\s*\*\s*(\d+)\s*\^\s*\(\s*([+-]?\d+)\s*/\s*(\d+)\s*\)",
+            text,
+            flags=re.IGNORECASE,
+        )
+        if root_rational_power:
+            return {
+                "kind": "root_rational_power_product", "root_index": int(root_rational_power.group(1)),
+                "radicand": int(root_rational_power.group(2)), "base": int(root_rational_power.group(3)),
+                "exponent_numerator": int(root_rational_power.group(4)), "exponent_denominator": int(root_rational_power.group(5)),
+            }
         power = re.search(r"([0-9]+)\s*\^\s*([0-9]+)", text)
         logarithm = re.search(r"log\s*_?\s*([0-9]+)\s*([0-9]+)", text, flags=re.IGNORECASE)
         if logarithm:
@@ -643,8 +654,18 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
         return isinstance(answer, str) and answer.startswith("(x")
     if domain == "hs1_polynomial_factor":
         return isinstance(answer, str) and answer.startswith("(x")
-    if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_derivative", "hs2_integral"}:
+    if domain in {"hs1_trigonometry", "hs2_derivative", "hs2_integral"}:
         return isinstance(answer, (int, float))
+    if domain == "hs1_exponential_log":
+        if not isinstance(answer, (int, float)):
+            return False
+        if slots.get("kind") == "root_rational_power_product":
+            root_index, radicand, base = slots["root_index"], slots["radicand"], slots["base"]
+            if root_index <= 0 or radicand < 0 or base <= 0 or slots["exponent_denominator"] == 0:
+                return False
+            expected = radicand ** (1 / root_index) * base ** (slots["exponent_numerator"] / slots["exponent_denominator"])
+            return abs(answer - expected) < 1e-12
+        return True
     if domain == "hs2_limit":
         if not isinstance(answer, (int, float)):
             return False
@@ -806,7 +827,14 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         u, v = factors[0]
         answer = f"(x{u:+d})(x{v:+d})"
     elif domain == "hs1_exponential_log":
-        if slots.get("kind") == "power":
+        if slots.get("kind") == "root_rational_power_product":
+            root_index, radicand, base = (slots[key] for key in ("root_index", "radicand", "base"))
+            denominator = slots["exponent_denominator"]
+            if root_index <= 0 or radicand < 0 or base <= 0 or denominator == 0:
+                return {"status": "FAIL", "reason": "n제곱근·유리수 지수의 정의역 조건이 올바르지 않습니다."}
+            answer = radicand ** (1 / root_index) * base ** (slots["exponent_numerator"] / denominator)
+            answer = int(round(answer)) if abs(answer - round(answer)) < 1e-12 else answer
+        elif slots.get("kind") == "power":
             answer = slots["base"] ** slots["exponent"]
         elif slots.get("kind") == "log":
             value, base, current = slots["value"], slots["base"], 1

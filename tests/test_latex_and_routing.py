@@ -19,6 +19,16 @@ def test_core_latex_forms_are_normalized() -> None:
     assert normalize_latex_input(r"\log_3 2\times\log_4 a=2")["normalized"] == "log_3 2*log_4 a=2"
 
 
+def test_indexed_root_latex_and_rational_power_route() -> None:
+    """LaTeX n제곱근과 유리수 지수가 공통 지수 슬롯·검산 결과로 이어지는지 확인한다."""
+    normalized = normalize_latex_input(r"\sqrt[3]{9}\times3^{-5/3}")
+    assert normalized["normalized"] == "root_3(9)*3^(-5/3)"
+    result = solve_with_router(r"\sqrt[3]{9}\times3^{-5/3}", "rule")
+    assert result["status"] == "PASS"
+    assert abs(result["result"]["answer"] - 1 / 3) < 1e-12
+    assert result["result"]["verified"] is True
+
+
 def test_all_router_modes_solve_same_latex_cases() -> None:
     """동일 LaTeX 문항이 rule·neural·embedding에서 같은 검산 정답으로 끝나는지 확인한다."""
     cases = [(r"$2x+3=9$", 3), (r"지수방정식 $2^x=16$", 4), (r"$5^{x+4}=25^{2x-4}$", 4), (r"$\log_3 2\times\log_4 a=2$", 81), (r"$\lim_{x\to 3}x^2+3x$", 18), (r"$\int_0^2 x^1 dx$", 2)]

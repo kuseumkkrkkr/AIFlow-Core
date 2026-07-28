@@ -66,6 +66,8 @@ def normalize_latex_input(text: str) -> dict[str, Any]:
     normalized = original.replace("$", "").replace(r"\[", "").replace(r"\]", "")
     normalized = _replace_matrix(normalized)
     normalized = _replace_fraction(normalized)
+    # n제곱근은 root_n(피제곱수)로 보존해 유리수 지수 도구가 같은 슬롯을 읽게 한다.
+    normalized = re.sub(r"\\sqrt\[\s*(\d+)\s*\]\{([^{}]+)\}", r"root_\1(\2)", normalized)
     normalized = re.sub(r"\\sqrt\{([^{}]+)\}", r"sqrt(\1)", normalized)
     normalized = re.sub(r"\\lim\s*_\{?\s*([a-zA-Z])\s*\\to\s*([^}\s]+)\s*\}?", r"lim \1->\2", normalized)
     normalized = re.sub(r"\\int\s*_\{?([^}^\s]+)\}?\s*\^\{?([^}\s]+)\}?", r"정적분 \1부터 \2", normalized)

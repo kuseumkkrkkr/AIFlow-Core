@@ -6,6 +6,8 @@ sources:
   - ../../../knowledge/rule_library.json
   - ../../../knowledge/high_school_curriculum_catalog.json
   - ../../../engine/problem_generation_loop.py
+  - ../../../engine/latex_normalizer.py
+  - ../../../engine/rule_based_nlp.py
 ---
 
 # 지식 베이스·계약
@@ -28,7 +30,7 @@ sources:
 대표 실행 규칙:
 
 - 수열: 등차수열, 등비수열 일반항·합
-- 수학Ⅰ: 지수·로그, 특수각 삼각함수, 함수·합성·역함수
+- 수학Ⅰ: 지수·로그(양의 유리수 밑의 일차 지수방정식, `n`제곱근·유리수 지수 포함), 특수각 삼각함수, 함수·합성·역함수
 - 수학Ⅱ: 다항식 극한, 거듭제곱 미분·접선·정적분
 - 미적분: `sin`, `cos` 미분값
 - 확률과 통계: 조합·순열·조건부확률·이항분포 점확률
@@ -37,6 +39,8 @@ sources:
 대표 도구 호출: 두 일차식 나머지 보간, 유리함수 구간 극값, 양의 정수 미지수를 포함한 2×2 행렬 곱, Horner 다항식 값, 최대공약수, 로그 곱 방정식, 지수함수 점근선 거리, 로그함수 역함수의 거듭제곱 좌표, 일차식 절댓값 방정식의 두 분기 해다. 도구는 추출된 슬롯만 받고, 등록되지 않은 도구 ID 호출과 임의 코드 실행을 허용하지 않는다.
 
 각 과목 도구 카탈로그는 `concept_id`, `required_slots`, `tool`, `formula`, `verification_invariant`, `supported_example`, `unsupported_boundary`를 가진다. 이 형식은 키워드 나열이 아니라 새 파서·도구·검산 규칙을 추가하기 위한 구현 계약이다.
+
+LaTeX 정규화는 `\sqrt[n]{r}`을 `root_n(r)`로, `\frac`·지수를 평문 구조로 보존한다. 지수 도구는 `root_index`, `radicand`, `base`, 유리수 지수의 분자·분모 슬롯을 모두 갖춘 경우에만 실행하며, 두 거듭제곱을 독립 재계산한다. 복잡한 근호의 합·차나 문자 지수는 추측하지 않는다.
 
 예를 들어 `fn_ineq_absolute_value_equation_linear`은 `a,b,target` 슬롯만 `solve_absolute_linear_equation`에 전달한다. 도구는 `ax+b=target`과 `ax+b=-target`을 각각 풀고, 반환한 모든 해를 원래 절댓값식에 재대입한다. `target<0`, `a=0`, 이차 이상 내부식, 양변 절댓값은 `PASS`하지 않는다. 이 구조는 `|ax+b|=c`를 보통 일차방정식으로 오인해 한 해만 반환하는 허위 PASS도 차단한다.
 

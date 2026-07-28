@@ -163,6 +163,25 @@ def solve_linear_inequality(slots: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def dot_product_3d(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 정수 3차원 벡터 두 개. 원리: 성분별 곱의 합을 양방향으로 재계산하고 자기 내적 비음수 불변식을 확인한다."""
+    left, right = slots.get("vector_a"), slots.get("vector_b")
+    if not isinstance(left, list) or not isinstance(right, list) or len(left) != 3 or len(right) != 3:
+        return {"status": "FAIL", "reason": "3차원 벡터 두 개의 성분이 필요합니다."}
+    try:
+        first = [int(value) for value in left]
+        second = [int(value) for value in right]
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "현재 3차원 내적 도구는 정수 성분만 지원합니다."}
+    answer = sum(a * b for a, b in zip(first, second))
+    reverse = sum(b * a for a, b in zip(first, second))
+    verified = answer == reverse and sum(a * a for a in first) >= 0 and sum(b * b for b in second) >= 0
+    return {
+        "status": "PASS", "answer": answer, "formula": "u·v=u₁v₁+u₂v₂+u₃v₃",
+        "verified": verified, "parameters": {"vector_a": first, "vector_b": second}, "tool": "dot_product_3d",
+    }
+
+
 def solve_log_product_equation(slots: dict[str, Any]) -> dict[str, Any]:
     """변수: 첫 로그의 밑·진수, 둘째 로그의 밑, 곱의 값. 원리: log_b(x)를 고립해 양의 실수 해를 계산·재대입한다."""
     first_base, first_value, second_base, target = (slots.get(key) for key in ("first_base", "first_value", "second_base", "target"))
@@ -331,6 +350,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "evaluate_integer_gcd": evaluate_integer_gcd,
     "solve_absolute_linear_equation": solve_absolute_linear_equation,
     "solve_linear_inequality": solve_linear_inequality,
+    "dot_product_3d": dot_product_3d,
     "solve_log_product_equation": solve_log_product_equation,
     "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
     "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,

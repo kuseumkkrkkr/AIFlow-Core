@@ -110,6 +110,22 @@ def test_linear_inequality_is_shared_and_reverses_negative_coefficient() -> None
         assert all(not (attempt["domain"] == "fn_linear_inequality" and attempt["status"] == "PASS") for attempt in response["attempts"])
 
 
+def test_three_dimensional_dot_product_is_shared_for_text_and_latex() -> None:
+    """공간벡터 내적은 점곱·LaTeX 곱 기호 모두에서 동일한 세 성분 슬롯과 검산 정답을 반환해야 한다."""
+    cases = [
+        "공간벡터 (1,2,3)·(2,-1,0)의 내적",
+        r"$\left(1,2,3\right)\cdot\left(2,-1,0\right)$의 내적",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "csg_vector_dot_3d"
+            assert response["parse"]["slots"] == {"vector_a": [1, 2, 3], "vector_b": [2, -1, 0]}
+            assert response["result"]["answer"] == 0
+            assert response["result"]["verified"] is True
+
+
 def test_exponential_asymptote_distance_tool_is_shared() -> None:
     """지수함수의 수평 점근선 거리 문제를 세 라우터가 같은 범용 도구로 검산하는지 확인한다."""
     question = "곡선 y=2^x 위의 점 (a,b)와 곡선 y=2^x-3의 점근선 사이의 거리가 7일 때, a+b의 값"
@@ -225,6 +241,7 @@ if __name__ == "__main__":
     test_integer_gcd_tool_is_selected_and_verified_by_all_routers()
     test_absolute_linear_equation_is_shared_and_blocks_linear_false_pass()
     test_linear_inequality_is_shared_and_reverses_negative_coefficient()
+    test_three_dimensional_dot_product_is_shared_for_text_and_latex()
     test_exponential_asymptote_distance_tool_is_shared()
     test_inverse_log_power_coordinate_tool_is_shared()
     test_log_interval_extrema_tool_is_shared_for_text_and_latex()

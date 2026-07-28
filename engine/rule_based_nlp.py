@@ -129,6 +129,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs_matrix_product": ["두 행렬", "AB=", "행렬 A", "행렬 B"],
         "hs_absolute_linear_equation": ["절댓값", "|", "절대값"],
         "fn_linear_inequality": ["부등식", "≤", "≥", "<=", ">="],
+        "csg_vector_dot_3d": ["공간벡터", "3차원", "공간 내적"],
     }
     for domain_name, keywords in aliases.items():
         hits = [word for word in keywords if word in normalized]
@@ -196,6 +197,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs_absolute_linear_equation"] = scores.get("hs_absolute_linear_equation", 0) + 20
     if re.search(r"[+-]?\d*\s*x\s*(?:[+-]\s*\d+)?\s*(?:<=|>=|<|>|≤|≥)\s*[+-]?\d+", normalized):
         scores["fn_linear_inequality"] = scores.get("fn_linear_inequality", 0) + 20
+    if re.search(r"\(\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?\d+\s*\)\s*[·.*]\s*\(\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?\d+\s*\)", normalized):
+        scores["csg_vector_dot_3d"] = scores.get("csg_vector_dot_3d", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -259,6 +262,12 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
     if domain == "geo_vector_dot":
         match = re.search(r"\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)\s*[·.]\s*\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)", text)
         return {"x1": int(match.group(1)), "y1": int(match.group(2)), "x2": int(match.group(3)), "y2": int(match.group(4))} if match else {}
+    if domain == "csg_vector_dot_3d":
+        match = re.search(r"\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)\s*[·.*]\s*\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)", text)
+        if not match:
+            return {}
+        values = [int(value) for value in match.groups()]
+        return {"vector_a": values[:3], "vector_b": values[3:]}
     if domain == "cal_trig_derivative":
         kind = "sin" if "sin" in text else "cos" if "cos" in text else None
         input_value = value(r"x\s*=\s*([+-]?\d+)")
@@ -611,6 +620,7 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "integer_gcd": "evaluate_integer_gcd",
         "hs_absolute_linear_equation": "solve_absolute_linear_equation",
         "fn_linear_inequality": "solve_linear_inequality",
+        "csg_vector_dot_3d": "dot_product_3d",
         "hs_polynomial_value": "evaluate_polynomial_horner",
         "hs_polynomial_remainder": "polynomial_remainder_two_linear",
         "hs_rational_interval_extrema": "rational_interval_extrema",
@@ -922,6 +932,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "integer_gcd": "evaluate_integer_gcd",
             "hs_absolute_linear_equation": "solve_absolute_linear_equation",
             "fn_linear_inequality": "solve_linear_inequality",
+            "csg_vector_dot_3d": "dot_product_3d",
             "hs_log_product_equation": "solve_log_product_equation",
             "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
             "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",

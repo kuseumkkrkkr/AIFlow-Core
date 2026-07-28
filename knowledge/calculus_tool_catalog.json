@@ -60,6 +60,18 @@
       "unsupported_boundary": "음이 아닌 정수 지수 다항식 전용이다. 지수·로그·삼각함수는 별도 미분 도구를 사용한다."
     },
     {
+      "concept_id": "math2_factored_linear_quadratic_derivative_value",
+      "subject": "수학Ⅱ",
+      "name": "일차식×이차식 다항함수의 도함수값",
+      "execution_status": "실행 가능",
+      "input_slots": ["linear_x", "linear_constant", "quadratic_x2", "quadratic_x", "quadratic_constant", "input"],
+      "tool": {"kind": "rule_solver", "id": "hs2_power_derivative"},
+      "formula": "f(x)=(ax+b)(cx²+dx+e)이면 f'(t)=a(ct²+dt+e)+(at+b)(2ct+d)",
+      "verification_invariants": ["곱의 미분법 두 항을 독립 계산한 합과 반환값이 같아야 한다.", "작은 h에 대한 중심 차분 (f(t+h)-f(t-h))/(2h)과 허용 오차 안에서 일치해야 한다."],
+      "supported_example": "f(x)=(3x-1)(x²-2x+2)일 때 f'(2). → 22",
+      "unsupported_boundary": "세 인수 이상 곱, 분수·루트·지수 인수, 문자 계수, 도함수식 자체를 요구하는 문항은 이 제한 도구 밖이다."
+    },
+    {
       "concept_id": "math2_tangent_line",
       "subject": "수학Ⅱ",
       "name": "곡선의 접선 방정식",

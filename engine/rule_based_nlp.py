@@ -556,6 +556,25 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
             return {"kind": "quadratic_plus_linear", "point": point}
         return {}
     if domain == "hs2_derivative":
+        factored = re.search(
+            r"f\s*\(\s*x\s*\)\s*=\s*\(\s*([+-]?\s*\d*)\s*x\s*([+-]\s*\d+)\s*\)\s*"
+            r"\(\s*([+-]?\s*\d*)\s*x\s*\^\s*2\s*([+-]\s*\d*)\s*x\s*([+-]\s*\d+)\s*\).*?"
+            r"f\s*'\s*\(\s*([+-]?\d+)\s*\)",
+            text,
+            flags=re.IGNORECASE,
+        )
+        if factored:
+            def signed_coefficient(raw: str) -> int:
+                """변수: 부호 포함 계수 문자열. 원리: 생략된 ±1 계수를 정수로 표준화한다."""
+                compact = raw.replace(" ", "")
+                return -1 if compact == "-" else (1 if compact in ("", "+") else int(compact))
+
+            return {
+                "kind": "factored_linear_quadratic", "linear_x": signed_coefficient(factored.group(1)),
+                "linear_constant": int(factored.group(2).replace(" ", "")), "quadratic_x2": signed_coefficient(factored.group(3)),
+                "quadratic_x": signed_coefficient(factored.group(4)), "quadratic_constant": int(factored.group(5).replace(" ", "")),
+                "input": int(factored.group(6)),
+            }
         match = re.search(r"f\s*\(x\)\s*=\s*x\s*\^\s*([0-9]+).*?(?:x\s*=|at\s*)([+-]?\d+)", text, flags=re.IGNORECASE)
         return {"power": int(match.group(1)), "input": int(match.group(2))} if match else {}
     if domain == "hs2_tangent":
@@ -654,8 +673,19 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
         return isinstance(answer, str) and answer.startswith("(x")
     if domain == "hs1_polynomial_factor":
         return isinstance(answer, str) and answer.startswith("(x")
-    if domain in {"hs1_trigonometry", "hs2_derivative", "hs2_integral"}:
+    if domain in {"hs1_trigonometry", "hs2_integral"}:
         return isinstance(answer, (int, float))
+    if domain == "hs2_derivative":
+        if not isinstance(answer, (int, float)):
+            return False
+        if slots.get("kind") == "factored_linear_quadratic":
+            value = slots["input"]
+            linear_x, linear_constant = slots["linear_x"], slots["linear_constant"]
+            quadratic_x2, quadratic_x, quadratic_constant = (slots[key] for key in ("quadratic_x2", "quadratic_x", "quadratic_constant"))
+            function = lambda x: (linear_x * x + linear_constant) * (quadratic_x2 * x * x + quadratic_x * x + quadratic_constant)
+            step = 1e-6
+            return abs(answer - (function(value + step) - function(value - step)) / (2 * step)) < 1e-5
+        return "power" in slots and "input" in slots and answer == slots["power"] * slots["input"] ** (slots["power"] - 1)
     if domain == "hs1_exponential_log":
         if not isinstance(answer, (int, float)):
             return False
@@ -885,10 +915,16 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         else:
             return {"status": "FAIL", "reason": "지원하는 다항식 극한 또는 차분몫 구조가 필요합니다."}
     elif domain == "hs2_derivative":
-        power, input_value = slots.get("power"), slots.get("input")
-        if power is None or input_value is None:
-            return {"status": "FAIL", "reason": "x^n과 입력값이 필요합니다."}
-        answer = power * (input_value ** (power - 1))
+        if slots.get("kind") == "factored_linear_quadratic":
+            value = slots["input"]
+            linear = slots["linear_x"] * value + slots["linear_constant"]
+            quadratic = slots["quadratic_x2"] * value * value + slots["quadratic_x"] * value + slots["quadratic_constant"]
+            answer = slots["linear_x"] * quadratic + linear * (2 * slots["quadratic_x2"] * value + slots["quadratic_x"])
+        else:
+            power, input_value = slots.get("power"), slots.get("input")
+            if power is None or input_value is None:
+                return {"status": "FAIL", "reason": "x^n과 입력값이 필요합니다."}
+            answer = power * (input_value ** (power - 1))
     elif domain == "hs2_tangent":
         power, input_value = slots.get("power"), slots.get("input")
         if power is None or input_value is None:

@@ -40,6 +40,17 @@ def test_all_router_modes_solve_same_latex_cases() -> None:
             assert response["result"]["verified"] is True
 
 
+def test_factored_polynomial_derivative_is_shared_by_all_routers() -> None:
+    """일차식×이차식 다항식의 도함수값은 세 라우터가 같은 슬롯·독립 차분 검산으로 계산한다."""
+    question = "함수 f(x)=(3x-1)(x^2-2x+2)에 대하여 f'(2)의 값을 구하시오."
+    for mode in ("rule", "neural", "embedding"):
+        response = solve_with_router(question, mode)
+        assert response["status"] == "PASS"
+        assert response["router"]["selected_domain"] == "hs2_derivative"
+        assert response["result"]["answer"] == 16
+        assert response["result"]["verified"] is True
+
+
 def test_unsupported_latex_is_rejected() -> None:
     """지원하지 않는 aligned 환경은 추측 풀이 대신 재현 가능한 FAIL을 반환하는지 확인한다."""
     response = solve_with_router(r"\begin{aligned}x&=1\end{aligned}", "rule")
@@ -259,7 +270,9 @@ def test_private_corpus_contract_requires_full_metadata() -> None:
 
 if __name__ == "__main__":
     test_core_latex_forms_are_normalized()
+    test_indexed_root_latex_and_rational_power_route()
     test_all_router_modes_solve_same_latex_cases()
+    test_factored_polynomial_derivative_is_shared_by_all_routers()
     test_unsupported_latex_is_rejected()
     test_horner_tool_is_selected_and_verified_by_all_routers()
     test_polynomial_addition_tool_is_shared_for_text_and_latex()

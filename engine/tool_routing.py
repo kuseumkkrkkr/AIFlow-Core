@@ -48,7 +48,7 @@ ROUTE_SPECS = (
     RouteSpec("hs1_exponential_equation", "지수방정식과 로그방정식", ("지수방정식", "로그방정식", "^x=", "log_")),
     RouteSpec("hs1_trigonometry", "특수각 삼각함수", ("삼각함수", "sin", "cos", "tan", "사인", "코사인")),
     RouteSpec("hs2_limit", "다항식 극한", ("극한", "lim", "->")),
-    RouteSpec("hs2_derivative", "거듭제곱 함수 미분", ("미분", "도함수", "f'(x)")),
+    RouteSpec("hs2_derivative", "다항식 함수 미분", ("미분", "도함수", "f'(x)", "f'(")),
     RouteSpec("hs2_tangent", "접선 기울기", ("접선", "접선의 기울기")),
     RouteSpec("hs2_integral", "거듭제곱 정적분", ("정적분", "적분", "부터")),
     RouteSpec("hs_rational_interval_extrema", "유리함수 구간 최댓값 최솟값", ("최댓값", "최솟값", "a/(x-", "a/(x -")),
@@ -91,6 +91,8 @@ def _rule_score(text: str, spec: RouteSpec) -> float:
         structure_bonus = 12.0
     elif spec.domain == "hs2_limit" and "lim" in lowered and "->" in lowered:
         structure_bonus = 14.0
+    elif spec.domain == "hs2_derivative" and re.search(r"f\s*'\s*\(\s*[+-]?\d+\s*\)", lowered):
+        structure_bonus = 16.0
     elif spec.domain == "hs2_integral" and "정적분" in lowered:
         structure_bonus = 12.0
     elif spec.domain == "fn_linear_inequality" and re.search(r"[+-]?\d*\s*x\s*(?:[+-]\s*\d+)?\s*(?:<=|>=|<|>|≤|≥)\s*[+-]?\d+", lowered):

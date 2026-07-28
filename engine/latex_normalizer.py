@@ -12,7 +12,7 @@ from typing import Any
 
 _COMMAND_REPLACEMENTS = {
     r"\left": "", r"\right": "", r"\cdot": "*", r"\times": "*",
-    r"\pi": "pi", r"\sin": "sin", r"\cos": "cos", r"\tan": "tan",
+    r"\pi": "pi", r"\theta": "theta", r"\sin": "sin", r"\cos": "cos", r"\tan": "tan",
     r"\log": "log", r"\to": "->", r"\rightarrow": "->",
     r"\infty": "infinity", r"\geq": ">=", r"\leq": "<=",
     r"\ge": ">=", r"\le": "<=", r"\neq": "!=", r"\in": "in ",

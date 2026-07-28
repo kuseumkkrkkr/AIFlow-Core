@@ -272,6 +272,21 @@ def test_linked_log_ratio_tool_is_shared_for_text_and_latex() -> None:
             assert response["result"]["verified"] is True
 
 
+def test_tangent_from_cosine_square_is_shared_for_text_and_latex() -> None:
+    """사분면과 cos² 조건은 평문·LaTeX 모두 같은 탄젠트 부호·제곱 검산에 도달해야 한다."""
+    cases = [
+        "3pi/2<theta<2pi인 theta에 대하여 cos^2 theta=1/10일 때 tan theta의 값",
+        r"$3\pi/2<\theta<2\pi,\;\cos^2\theta=\frac{1}{10}$일 때 $\tan\theta$의 값",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "hs_tangent_from_cosine_square"
+            assert response["result"]["answer"] == -3
+            assert response["result"]["verified"] is True
+
+
 def test_nonunique_sine_interval_is_rejected_without_unrelated_pass() -> None:
     """특수각 해가 둘 이상인 구간은 다른 숫자 파서의 우연한 PASS 없이 세 라우터가 거부해야 한다."""
     question = "0<=x<=2pi에서 2sin x+sqrt(3)=0을 만족시키는 x의 값"
@@ -332,6 +347,7 @@ if __name__ == "__main__":
     test_arithmetic_sequence_sum_contract_is_shared_for_text_and_latex()
     test_motion_meeting_tool_is_shared_for_text_and_latex()
     test_linked_log_ratio_tool_is_shared_for_text_and_latex()
+    test_tangent_from_cosine_square_is_shared_for_text_and_latex()
     test_nonunique_sine_interval_is_rejected_without_unrelated_pass()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()

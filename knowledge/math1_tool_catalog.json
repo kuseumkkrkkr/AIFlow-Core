@@ -127,6 +127,17 @@
       "unsupported_boundary": "밑이 정수 거듭제곱 관계가 아니거나, 변수·로그 항이 세 개 이상이거나, 다른 변수 결합식·부등식이 있는 일반 연립로그는 별도 선형계 계약이 필요하다."
     },
     {
+      "concept_id": "math1_tangent_from_cosine_square_quadrant",
+      "name_kr": "사분면과 코사인 제곱값으로 탄젠트 결정",
+      "execution_status": "실행 가능",
+      "input_slots": ["cosine_square_numerator", "cosine_square_denominator", "quadrant"],
+      "tool": {"kind": "math_tool", "id": "solve_tangent_from_cosine_square_quadrant"},
+      "formula": "tan²θ=(1-cos²θ)/cos²θ이며 tanθ의 부호는 사분면으로 결정한다.",
+      "verification_invariant": "0<cos²θ<1, tan²θ 재대입, 사분면 부호를 모두 만족해야 한다.",
+      "supported_example": "3π/2<θ<2π, cos²θ=1/10일 때 tanθ. → -3",
+      "unsupported_boundary": "tan²θ가 유리수 제곱이 아니거나, 사분면이 유일하지 않거나, sin·cos의 추가 미지수가 있는 식은 이 제한 계약 밖이다."
+    },
+    {
       "concept_id": "math1_special_angle_trigonometry",
       "name_kr": "특수각 삼각함수값",
       "execution_status": "실행 가능",

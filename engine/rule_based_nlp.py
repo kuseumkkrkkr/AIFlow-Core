@@ -113,6 +113,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs_log_interval_extrema": ["최댓값", "최솟값", "log_", "구간"],
         "hs_sine_linear_interval": ["sin", "sqrt", "≤", "방정식"],
         "hs_cosine_law_side": ["코사인 법칙", "삼각형", "cos", "AB=", "BC="],
+        "hs_tangent_from_cosine_square": ["cos^2", "tan", "theta", "pi"],
         "hs1_exponential_log": ["지수", "로그", "log", "log_"],
         "hs1_exponential_equation": ["지수방정식", "로그방정식", "2^x", "log_2 x"],
         "hs1_trigonometry": ["삼각함수", "sin", "cos", "tan", "사인", "코사인", "탄젠트"],
@@ -161,6 +162,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs1_exponential_log"] = scores.get("hs1_exponential_log", 0) + 4
     if any(token in normalized for token in ("sin", "cos", "tan", "사인", "코사인", "탄젠트")):
         scores["hs1_trigonometry"] = scores.get("hs1_trigonometry", 0) + 4
+    if re.search(r"cos\s*\^\s*2\s*(?:theta|θ).*?tan\s*(?:theta|θ)", normalized, flags=re.IGNORECASE):
+        scores["hs_tangent_from_cosine_square"] = scores.get("hs_tangent_from_cosine_square", 0) + 20
     if "극한" in normalized or "lim" in normalized.lower():
         scores["hs2_limit"] = scores.get("hs2_limit", 0) + 6
     if "미분" in normalized or "도함수" in normalized:
@@ -540,6 +543,12 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
     if domain == "hs1_trigonometry":
         match = re.search(r"(sin|cos|tan|사인|코사인|탄젠트)\s*([0-9]+)", text, flags=re.IGNORECASE)
         return {"kind": match.group(1).lower(), "angle": int(match.group(2))} if match else {}
+    if domain == "hs_tangent_from_cosine_square":
+        value_match = re.search(r"cos\s*\^\s*2\s*(?:theta|θ)\s*=\s*([+-]?\d+)\s*/\s*([+-]?\d+)", text, flags=re.IGNORECASE)
+        fourth_quadrant = re.search(r"3\s*(?:pi|π)\s*/\s*2\s*<\s*(?:theta|θ)\s*<\s*2\s*(?:pi|π)", text, flags=re.IGNORECASE)
+        if not value_match or not fourth_quadrant or not re.search(r"tan\s*(?:theta|θ)", text, flags=re.IGNORECASE):
+            return {}
+        return {"cosine_square_numerator": int(value_match.group(1)), "cosine_square_denominator": int(value_match.group(2)), "quadrant": 4}
     if domain == "hs2_limit":
         point = value(r"(?:x|t)\s*(?:->|→)\s*([+-]?\d+)")
         if point is None:
@@ -799,6 +808,7 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs_polynomial_addition": "add_polynomial_coefficients",
         "hs_sine_linear_interval": "solve_sine_linear_special_interval",
         "hs_cosine_law_side": "solve_cosine_law_adjacent_side",
+        "hs_tangent_from_cosine_square": "solve_tangent_from_cosine_square_quadrant",
         "hs2_motion_meeting": "solve_motion_meeting_from_velocities",
         "hs_log_interval_extrema": "solve_log_interval_extrema_sum",
         "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",

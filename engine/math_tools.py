@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Callable
 from fractions import Fraction
-from math import gcd, log, pi, sin, sqrt
+from math import gcd, isqrt, log, pi, sin, sqrt
 
 
 def polynomial_remainder_two_linear(slots: dict[str, Any]) -> dict[str, Any]:
@@ -75,6 +75,28 @@ def solve_cosine_law_adjacent_side(slots: dict[str, Any]) -> dict[str, Any]:
     answer = valid[0]
     answer = int(answer) if abs(answer - round(answer)) < 1e-10 else answer
     return {"status": "PASS", "answer": answer, "formula": "a²=b²+c²-2bc cos(A)", "verified": True, "tool": "solve_cosine_law_adjacent_side"}
+
+
+def solve_tangent_from_cosine_square_quadrant(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: cos² 값의 유리수 분자·분모와 사분면.
+    원리: tan²θ=(1-cos²θ)/cos²θ를 정확한 유리수로 계산하고 사분면 부호로 유일한 tanθ를 선택한다.
+    """
+    numerator, denominator, quadrant = (slots.get(key) for key in ("cosine_square_numerator", "cosine_square_denominator", "quadrant"))
+    try:
+        cosine_square = Fraction(int(numerator), int(denominator))
+    except (TypeError, ValueError, ZeroDivisionError):
+        return {"status": "FAIL", "reason": "cos²θ의 유리수 값과 사분면이 필요합니다."}
+    if not 0 < cosine_square < 1 or quadrant not in {1, 2, 3, 4}:
+        return {"status": "FAIL", "reason": "0<cos²θ<1 및 유효한 사분면 조건이 필요합니다."}
+    tangent_square = (1 - cosine_square) / cosine_square
+    top, bottom = isqrt(tangent_square.numerator), isqrt(tangent_square.denominator)
+    if top * top != tangent_square.numerator or bottom * bottom != tangent_square.denominator:
+        return {"status": "FAIL", "reason": "현재 도구는 tan²θ가 유리수 제곱인 경우만 지원합니다."}
+    magnitude = Fraction(top, bottom)
+    answer = magnitude if quadrant in {1, 3} else -magnitude
+    normalized = int(answer) if answer.denominator == 1 else float(answer)
+    verified = answer * answer == tangent_square and (answer > 0) == (quadrant in {1, 3})
+    return {"status": "PASS", "answer": normalized, "formula": "tan²θ=(1-cos²θ)/cos²θ", "verified": verified, "tool": "solve_tangent_from_cosine_square_quadrant"}
 
 
 def solve_motion_meeting_from_velocities(slots: dict[str, Any]) -> dict[str, Any]:
@@ -448,6 +470,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
     "solve_cosine_law_adjacent_side": solve_cosine_law_adjacent_side,
+    "solve_tangent_from_cosine_square_quadrant": solve_tangent_from_cosine_square_quadrant,
     "solve_motion_meeting_from_velocities": solve_motion_meeting_from_velocities,
     "symbolic_matrix_product_2x2": symbolic_matrix_product_2x2,
     "evaluate_polynomial_horner": evaluate_polynomial_horner,

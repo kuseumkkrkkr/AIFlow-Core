@@ -26,6 +26,7 @@ ROUTE_SPECS = (
     RouteSpec("cm_probability", "조합 순열 기본 확률", ("확률", "조합", "순열", "경우의 수", "%")),
     RouteSpec("cm_geometry", "피타고라스와 기본 도형 넓이", ("피타고라스", "직각삼각형", "삼각형", "원의 넓이", "직사각형", "반지름")),
     RouteSpec("hs_cosine_law_side", "코사인 법칙으로 삼각형 변 계산", ("삼각형", "cos", "cosine", "ab=", "bc=")),
+    RouteSpec("hs_tangent_from_cosine_square", "사분면과 코사인 제곱에서 탄젠트", ("cos^2", "tan", "theta", "3pi/2", "2pi")),
     RouteSpec("cm_arith_sequence", "등차수열 일반항과 합", ("등차수열", "첫항", "공차", "수열의 합")),
     RouteSpec("hs1_geometric_sequence", "등비수열 일반항과 합", ("등비수열", "공비")),
     RouteSpec("hs1_function_basic", "일차함수 함숫값", ("함수", "함숫값", "f(x)=")),
@@ -89,6 +90,8 @@ def _rule_score(text: str, spec: RouteSpec) -> float:
     elif spec.domain == "cm_quadratic" and re.search(r"x\s*(?:\^\s*2|²)", lowered):
         structure_bonus = 8.0
     elif spec.domain == "hs_cosine_law_side" and re.search(r"ab\s*=\s*\d+.*?bc\s*=\s*\d+.*?cos\s*a\s*=", lowered):
+        structure_bonus = 18.0
+    elif spec.domain == "hs_tangent_from_cosine_square" and re.search(r"cos\s*\^\s*2.*?=.*?\d+\s*/\s*\d+.*?tan", lowered):
         structure_bonus = 18.0
     elif spec.domain == "hs1_exponential_equation" and re.search(r"\d+\s*\^\s*\(?\s*[+-]?\s*\d*\s*x", lowered):
         structure_bonus = 16.0
@@ -182,6 +185,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
         "fn_linear_inequality": ("부등식", "≤", "≥", "<=", ">=", "<", ">"),
         "csg_vector_dot_3d": ("공간벡터", "3차원", "내적", "·"),
         "hs_log_product_equation": ("log_",),
+        "hs_tangent_from_cosine_square": ("cos^2", "tan", "theta"),
         "hs_linked_log_ratio": ("log_", "a/b"),
         "hs_exponential_asymptote_distance": ("점근선", "거리"),
         "hs_inverse_log_power_coordinate": ("역함수", "log_", "^k"),

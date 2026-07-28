@@ -434,6 +434,8 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         match = re.search(r"f\s*\(x\)\s*=\s*x\s*\^\s*([0-9]+).*?(?:x\s*=|at\s*)([+-]?\d+)", text, flags=re.IGNORECASE)
         return {"power": int(match.group(1)), "input": int(match.group(2))} if match else {}
     if domain == "hs2_integral":
+        if not any(marker in text for marker in ("정적분", "부정적분", "적분")):
+            return {}
         match = re.search(r"(?:0|적분)\s*(?:부터|to|,)\s*([0-9]+).*?x\s*(?:\^\s*)?([0-9]*)", text, flags=re.IGNORECASE)
         numbers = [int(item) for item in re.findall(r"[+-]?\d+", text)]
         if len(numbers) >= 2:

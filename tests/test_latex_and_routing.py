@@ -109,6 +109,15 @@ def test_sine_linear_interval_tool_is_shared_for_text_and_latex() -> None:
             assert response["result"]["verified"] is True
 
 
+def test_nonunique_sine_interval_is_rejected_without_unrelated_pass() -> None:
+    """특수각 해가 둘 이상인 구간은 다른 숫자 파서의 우연한 PASS 없이 세 라우터가 거부해야 한다."""
+    question = "0<=x<=2pi에서 2sin x+sqrt(3)=0을 만족시키는 x의 값"
+    for mode in ("rule", "neural", "embedding"):
+        response = solve_with_router(question, mode)
+        assert response["status"] == "FAIL"
+        assert all(attempt["domain"] != "hs2_integral" or attempt["status"] != "PASS" for attempt in response["attempts"])
+
+
 def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     """실험 보고서가 정답 정확도·허위 PASS·미지원 거부를 독립 지표로 집계하는지 확인한다."""
     records = [
@@ -147,6 +156,7 @@ if __name__ == "__main__":
     test_inverse_log_power_coordinate_tool_is_shared()
     test_log_interval_extrema_tool_is_shared_for_text_and_latex()
     test_sine_linear_interval_tool_is_shared_for_text_and_latex()
+    test_nonunique_sine_interval_is_rejected_without_unrelated_pass()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()
     print("PASS: latex and routing")

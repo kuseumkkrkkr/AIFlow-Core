@@ -134,6 +134,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
         "hs_inverse_log_power_coordinate": ("역함수", "log_", "^k"),
         "hs_log_interval_extrema": ("최댓값", "최솟값", "log_"),
         "hs_sine_linear_interval": ("sin", "sqrt"),
+        "hs2_integral": ("정적분", "부정적분", "적분"),
         "hs_rational_interval_extrema": ("최댓값", "최솟값"),
     }
     markers = strict_markers.get(domain)

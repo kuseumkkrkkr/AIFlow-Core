@@ -67,6 +67,13 @@ python scripts/evaluate_local_math_model.py --model <로컬-서버의-모델-ID>
 
 기본 서버 주소는 `http://127.0.0.1:1234/v1`이며, 다른 주소는 `--api-base`로 명시한다. 스크립트는 각 문항 뒤 중간 보고서를 저장하므로 실행이 끊겨도 마지막 완료 문항까지의 결과를 보존한다.
 
+GSM8K로 현재 도구 라우터 자체를 점검할 때는 초등 서술형 산수 전용 계약이 없다는 사실을 유지한다. 즉 정답 정확도를 주장하는 코퍼스가 아니라, 1,319문항에서 도구가 임의 `PASS`를 내지 않는지 확인하는 미지원 거부 평가다.
+
+```powershell
+python scripts/adapt_gsm8k_for_router_experiment.py
+python scripts/run_router_experiment.py --corpus private_benchmarks\public\gsm8k_main_test\gsm8k_router_rejection_corpus.json --output private_benchmarks\reports\gsm8k_router_rejection_report.json
+```
+
 ## 공식 PDF 수집
 
 평가원 등 원문 공개처의 문제지와 정답표는 아래처럼 **로컬 전용**으로 수집한다. 수집기는 원문을 Git·Vercel에 쓰지 않고, 재현을 위해 URL과 SHA-256만 `manifest.json`에 남긴다.

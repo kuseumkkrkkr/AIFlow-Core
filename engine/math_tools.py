@@ -154,6 +154,22 @@ def solve_exponential_asymptote_distance_sum(slots: dict[str, Any]) -> dict[str,
     return {"status": "PASS", "answer": answer, "formula": "|b-shift|=distance, a=log_base(b)", "verified": verified, "parameters": {"a": a, "b": b}, "tool": "solve_exponential_asymptote_distance_sum"}
 
 
+def solve_inverse_log_power_coordinate(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 로그 밑·수직 이동·역함수 입력·좌표의 거듭제곱 밑. 원리: f⁻¹(t)=b^(t-c)를 좌표의 q^k와 비교한다."""
+    base, shift, input_value, coordinate_base = (slots.get(key) for key in ("base", "shift", "input", "coordinate_base"))
+    try:
+        base, shift, input_value, coordinate_base = (float(base), float(shift), float(input_value), float(coordinate_base))
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "로그의 밑·이동값·역함수 입력·좌표 거듭제곱의 밑이 필요합니다."}
+    if min(base, coordinate_base) <= 0 or base == 1 or coordinate_base == 1:
+        return {"status": "FAIL", "reason": "로그와 거듭제곱의 밑은 양수이고 1이 아니어야 합니다."}
+    inverse_value = base ** (input_value - shift)
+    exponent = log(inverse_value, coordinate_base)
+    exponent = int(round(exponent)) if abs(exponent - round(exponent)) < 1e-10 else exponent
+    verified = abs(coordinate_base ** float(exponent) - inverse_value) < 1e-8
+    return {"status": "PASS", "answer": exponent, "formula": "f⁻¹(t)=b^(t-c)=q^k", "verified": verified, "parameters": {"inverse_value": inverse_value}, "tool": "solve_inverse_log_power_coordinate"}
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
@@ -162,6 +178,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "evaluate_integer_gcd": evaluate_integer_gcd,
     "solve_log_product_equation": solve_log_product_equation,
     "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
+    "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,
 }
 
 

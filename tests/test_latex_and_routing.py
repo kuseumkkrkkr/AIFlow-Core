@@ -68,6 +68,17 @@ def test_exponential_asymptote_distance_tool_is_shared() -> None:
         assert response["result"]["verified"] is True
 
 
+def test_inverse_log_power_coordinate_tool_is_shared() -> None:
+    """로그 역함수의 좌표 거듭제곱 문제를 세 라우터가 같은 도구로 계산·검산하는지 확인한다."""
+    question = r"함수 $y=\log_5 x+2$의 역함수의 그래프가 점 $(4,5^k)$를 지날 때, k의 값"
+    for mode in ("rule", "neural", "embedding"):
+        response = solve_with_router(question, mode)
+        assert response["status"] == "PASS"
+        assert response["router"]["selected_domain"] == "hs_inverse_log_power_coordinate"
+        assert response["result"]["answer"] == 2
+        assert response["result"]["verified"] is True
+
+
 def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     """실험 보고서가 정답 정확도·허위 PASS·미지원 거부를 독립 지표로 집계하는지 확인한다."""
     records = [
@@ -103,6 +114,7 @@ if __name__ == "__main__":
     test_horner_tool_is_selected_and_verified_by_all_routers()
     test_integer_gcd_tool_is_selected_and_verified_by_all_routers()
     test_exponential_asymptote_distance_tool_is_shared()
+    test_inverse_log_power_coordinate_tool_is_shared()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()
     print("PASS: latex and routing")

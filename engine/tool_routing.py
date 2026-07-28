@@ -35,6 +35,7 @@ ROUTE_SPECS = (
     RouteSpec("integer_gcd", "정수 최대공약수 유클리드 호제법", ("최대공약수", "gcd(")),
     RouteSpec("hs_log_product_equation", "두 로그의 곱 방정식", ("log_", "로그", "×", "*")),
     RouteSpec("hs_exponential_asymptote_distance", "지수함수 수평 점근선과 점 사이 거리", ("점근선", "거리", "a+b", "2^x")),
+    RouteSpec("hs_inverse_log_power_coordinate", "로그함수 역함수 위 거듭제곱 좌표", ("역함수", "log_", "^k", "점")),
     RouteSpec("hs_polynomial_remainder", "두 일차식 나머지 조건 보간", ("나눈 나머지", "r(x)", "나머지를")),
     RouteSpec("hs1_exponential_log", "지수와 로그 값 계산", ("지수", "로그", "log_", "log ", "^")),
     RouteSpec("hs1_exponential_equation", "지수방정식과 로그방정식", ("지수방정식", "로그방정식", "^x=", "log_")),
@@ -128,6 +129,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
         "integer_gcd": ("최대공약수", "gcd("),
         "hs_log_product_equation": ("log_",),
         "hs_exponential_asymptote_distance": ("점근선", "거리"),
+        "hs_inverse_log_power_coordinate": ("역함수", "log_", "^k"),
         "hs_rational_interval_extrema": ("최댓값", "최솟값"),
     }
     markers = strict_markers.get(domain)

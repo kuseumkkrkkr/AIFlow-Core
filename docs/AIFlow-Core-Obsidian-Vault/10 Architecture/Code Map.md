@@ -18,7 +18,7 @@ last_verified: 2026-07-28
 | `engine/tool_routing.py` | `rank_tools` | rule·neural·embedding의 같은 도구 후보 순위화 |
 | `engine/mini_neural_router.py` | `neural_probabilities` | 저장소 가중치의 의존성 없는 소형 MLP 추론 |
 | `engine/experiment_runner.py` | `run_experiment` | 실제 전문 로컬 코퍼스의 세 라우터 비교 보고서 |
-| `engine/math_tools.py` | `call_math_tool`, `MATH_TOOL_REGISTRY` | 범용 수학 계산 도구의 허용 목록·호출 |
+| `engine/math_tools.py` | `call_math_tool`, `MATH_TOOL_REGISTRY` | 다항식·정수론·로그·지수의 범용 계산 도구 허용 목록·호출 |
 | `engine/knowledge_catalog.py` | `load_tool_knowledge_catalogs` | 과목별 카탈로그를 공통 지식 계약으로 정규화 |
 | `engine/problem_generation_loop.py` | `generate_and_validate` | 난이도 계약을 포함한 생성 실험 |
 | `engine/corpus_runner.py` | `evaluate_records`, `run_corpus` | 코퍼스 회귀 평가 |
@@ -34,8 +34,9 @@ last_verified: 2026-07-28
 
 새 수학 지식을 추가할 때는 다음 변경을 한 묶음으로 만든다.
 
-1. `high_school_curriculum_catalog.json`에 개념과 실행 상태를 기록한다.
+1. `*_tool_catalog.json`에 개념·선수지식·실행 상태를 기록한다.
 2. `rule_library.json`에 적용 조건·필수 슬롯·위험도를 기록한다.
-3. `rule_based_nlp.py`에 분류, 슬롯 추출, 계산, 독립 검산을 추가한다.
-4. `tests/test_rule_based_nlp.py`와 필요 시 코퍼스 fixture에 정상·거부 사례를 추가한다.
+3. `tool_routing.py`와 `rule_based_nlp.py`에 후보 분류·최소 근거·슬롯 추출을 추가한다.
+4. 계산이 공통화될 수 있으면 `math_tools.py`에 도구와 독립 검산을 추가하고 허용 목록에 등록한다.
+5. `tests/test_latex_and_routing.py`와 필요 시 비공개 실제 코퍼스에 정상·거부 사례를 추가한다.
 5. 이 Vault의 [[30 Reference/Knowledge Base and Contracts]]를 갱신한다.

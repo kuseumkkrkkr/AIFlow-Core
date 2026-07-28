@@ -44,3 +44,7 @@ flowchart TD
 ## 예시: 이항분포
 
 `이항분포 n=5, p=1/2에서 X=2일 확률`은 `stat_binomial_distribution`으로 분류된다. 슬롯 `n=5, p=1/2, k=2`를 추출한 뒤 `nCk·p^k·(1-p)^(n-k)`를 적용하고, 같은 식을 독립 계산해 `0.3125`를 검산한다.
+
+## 예시: LaTeX 로그 역함수 좌표
+
+`$y=\log_5 x+2$의 역함수가 $(4,5^k)$를 지난다`는 정규화 뒤 `hs_inverse_log_power_coordinate` 후보로 간다. 슬롯 `base=5`, `shift=2`, `input=4`, `coordinate_base=5`를 추출하고 공용 도구가 `f⁻¹(4)=5^(4-2)=5^k`를 풀어 `k=2`를 반환한다. 같은 거듭제곱을 다시 계산해 검산한다.

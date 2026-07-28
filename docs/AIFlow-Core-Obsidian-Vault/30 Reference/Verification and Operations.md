@@ -5,6 +5,8 @@ sources:
   - ../../../scripts/continuous_validation.ps1
   - ../../../vercel.json
   - ../../../tests
+  - ../../../scripts/build_local_tool_dataset.py
+  - ../../../scripts/train_local_tool_embedder.py
 ---
 
 # 검증·운영
@@ -19,6 +21,22 @@ python tests/test_api_serialization.py
 python tests/test_latex_and_routing.py
 python -c "import sys; sys.path.insert(0, 'engine'); from experiment_runner import run_experiment; print(run_experiment('private_benchmarks/official/corpus.json'))"
 ```
+
+## 로컬 임베더 학습
+
+도구 감지 임베더는 답을 생성하는 모델이 아니라, 문제와 풀이의 구조에 맞는 기존 수학 도구 후보를 검색하는 로컬 모델이다. OMJ 데이터 추출은 아래 테이블만 read-only로 사용한다.
+
+- `quest_data`: 문제 본문·정답·태그
+- `solve_step`: 생성·저장된 풀이 단계
+
+학습 레이블은 문제 원문을 기존 규칙 엔진으로 풀었을 때 `PASS`와 독립 검산을 함께 만족한 도구로만 만든다. 사용자 답안, 사용자 식별자, 채팅, 제출 이력은 사용하지 않는다.
+
+```powershell
+python scripts/build_local_tool_dataset.py --database ..\Upstudy-app-vercel\omj\quests.db --output-dir private_benchmarks\local_embedder
+python scripts/train_local_tool_embedder.py --dataset private_benchmarks\local_embedder\omj_tool_detection.jsonl --output-dir private_models\tool-embedder-v1 --epochs 2
+```
+
+기본 모델은 `intfloat/multilingual-e5-small`이며, 로컬 디스크에 모델·체크포인트를 위한 충분한 여유 공간이 있어야 한다. 이 데이터와 모델은 `private_*` 경로로 Git·Vercel에서 제외된다.
 
 검증 스크립트는 핵심 규칙, 생성 루프, 난이도 입력 검증, seed 매트릭스, 코퍼스 회귀를 실행한다. 보고서는 UTF-8 JSON으로 `docs/`에 기록한다.
 

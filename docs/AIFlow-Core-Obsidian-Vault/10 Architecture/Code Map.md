@@ -23,6 +23,8 @@ last_verified: 2026-07-28
 | `engine/geometry_gui.py` | `solve_geometry_payload` | 자연어 라우터와 분리된 좌표 GUI 기하 계산·독립 검산 |
 | `engine/knowledge_catalog.py` | `load_tool_knowledge_catalogs` | 과목별 카탈로그를 공통 지식 계약으로 정규화 |
 | `engine/problem_generation_loop.py` | `generate_and_validate` | 난이도 계약을 포함한 생성 실험 |
+| `scripts/build_local_tool_dataset.py` | `build_records` | OMJ 문제·풀이를 read-only로 읽어 검산된 도구 감지 학습셋을 비공개 생성 |
+| `scripts/train_local_tool_embedder.py` | `main` | 다국어 임베더를 도구 분류로 미세조정하고 도구 중심 벡터를 로컬 저장 |
 | `engine/corpus_runner.py` | `evaluate_records`, `run_corpus` | 코퍼스 회귀 평가 |
 | `engine/run_benchmark_matrix.py` | `run_matrix` | 학년·seed 매트릭스 반복 평가 |
 | `knowledge/*.json` | JSON 데이터 | 규칙 후보, 개념 그래프, 과목 카탈로그 |
@@ -31,6 +33,8 @@ last_verified: 2026-07-28
 ## 코드 의존 방향
 
 `UI → API → Engine → Knowledge`가 단방향 의존이다. 좌표 GUI는 `UI → /api/geometry → geometry_gui`로 자연어 라우터를 우회하며, 그 대신 점·연산 JSON을 엄격히 검증한다. `Knowledge`는 엔진을 import하지 않으며, `tests`와 `docs`는 제품 요청 처리 경로에 포함되지 않는다. 따라서 웹 요청마다 DB 연결이나 전체 코퍼스 스캔이 발생하지 않는다. 미니 신경망 가중치는 요청마다 재학습하지 않고 모듈 캐시로 한 번만 로드한다.
+
+로컬 임베더 학습은 Vercel 요청 경로와 분리한다. `quests.db`에서는 `quest_data`, `solve_step`만 SQLite read-only로 읽으며, 사용자·대화·제출 테이블은 학습에 사용하지 않는다. 원문 문제·체크포인트는 `private_benchmarks/`, `private_models/`에만 생성되어 Git과 배포에서 제외된다.
 
 ## 확장 규칙
 

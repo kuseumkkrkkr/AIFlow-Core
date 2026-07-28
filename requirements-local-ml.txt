@@ -1,0 +1,4 @@
+# 로컬 전용: Vercel 함수에는 포함하지 않는다.
+torch>=2.5
+transformers>=4.46
+sentencepiece>=0.2

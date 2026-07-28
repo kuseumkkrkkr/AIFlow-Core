@@ -6,3 +6,5 @@ engine/aiflow_alpha_knowledge/
 .vercel
 # 저작권이 있는 기출·문제집 전문과 추출 이미지는 로컬 검증용으로만 보관한다.
 private_benchmarks/
+# 로컬 학습 코퍼스·체크포인트는 원문 문제와 모델 가중치를 포함하므로 배포·Git에서 제외한다.
+private_models/

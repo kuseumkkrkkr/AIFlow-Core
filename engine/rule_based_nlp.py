@@ -107,6 +107,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs_polynomial_addition": ["두 다항식", "A+B", "A =", "B ="],
         "integer_gcd": ["최대공약수", "gcd("],
         "hs_log_product_equation": ["log_", "로그의 곱", "×log"],
+        "hs_linked_log_ratio": ["log_", "양수", "a/b"],
         "hs_exponential_asymptote_distance": ["점근선", "사이의 거리", "a+b"],
         "hs_inverse_log_power_coordinate": ["역함수", "log_", "^k"],
         "hs_log_interval_extrema": ["최댓값", "최솟값", "log_", "구간"],
@@ -196,6 +197,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["integer_gcd"] = scores.get("integer_gcd", 0) + 20
     if len(re.findall(r"log\s*_?\s*\d+", normalized, flags=re.IGNORECASE)) >= 2 and "=" in normalized:
         scores["hs_log_product_equation"] = scores.get("hs_log_product_equation", 0) + 20
+    if len(re.findall(r"log\s*_?\s*\d+\s*[ab]", normalized, flags=re.IGNORECASE)) >= 4 and "a/b" in normalized:
+        scores["hs_linked_log_ratio"] = scores.get("hs_linked_log_ratio", 0) + 30
     if "점근선" in normalized and "거리" in normalized and re.search(r"y\s*=\s*\d+\s*\^\s*x", normalized, flags=re.IGNORECASE):
         scores["hs_exponential_asymptote_distance"] = scores.get("hs_exponential_asymptote_distance", 0) + 20
     if "역함수" in normalized and re.search(r"log\s*_?\s*\d+\s*x\s*[+-]", normalized, flags=re.IGNORECASE) and re.search(r"\(\s*\d+\s*,\s*\d+\s*\^\s*[a-zA-Z]", normalized):
@@ -427,6 +430,12 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         if not match:
             return {}
         return {"first_base": int(match.group(1)), "first_value": int(match.group(2)), "second_base": int(match.group(3)), "variable": match.group(4), "target": float(match.group(5))}
+    if domain == "hs_linked_log_ratio":
+        first = re.search(r"log\s*_?\s*(\d+)\s*a\s*\+\s*log\s*_?\s*(\d+)\s*b\s*=\s*([+-]?\d+)", text, flags=re.IGNORECASE)
+        second = re.search(r"log\s*_?\s*(\d+)\s*a\s*=\s*([+-]?\d+)\s*log\s*_?\s*(\d+)\s*b", text, flags=re.IGNORECASE)
+        if not first or not second or "a/b" not in text.lower() or int(first.group(1)) != int(second.group(3)) or int(first.group(2)) != int(second.group(1)):
+            return {}
+        return {"high_base": int(first.group(1)), "low_base": int(first.group(2)), "target": int(first.group(3)), "multiplier": int(second.group(2))}
     if domain == "hs_exponential_asymptote_distance":
         base_match = re.search(r"y\s*=\s*(\d+)\s*\^\s*x", text, flags=re.IGNORECASE)
         shifted_match = re.search(r"y\s*=\s*\d+\s*\^\s*x\s*([+-])\s*(\d+)", text, flags=re.IGNORECASE)
@@ -795,6 +804,7 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",
         "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
         "hs_log_product_equation": "solve_log_product_equation",
+        "hs_linked_log_ratio": "solve_linked_log_ratio",
         "integer_gcd": "evaluate_integer_gcd",
         "hs_absolute_linear_equation": "solve_absolute_linear_equation",
         "fn_linear_inequality": "solve_linear_inequality",

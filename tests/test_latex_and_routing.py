@@ -256,6 +256,22 @@ def test_motion_meeting_tool_is_shared_for_text_and_latex() -> None:
             assert response["result"]["verified"] is True
 
 
+def test_linked_log_ratio_tool_is_shared_for_text_and_latex() -> None:
+    """거듭제곱 관계 로그 밑의 연립 조건은 평문·LaTeX에서 같은 비율 정답과 대수 검산으로 끝나야 한다."""
+    cases = [
+        "양수 a,b가 log_9 a+log_3 b=2, log_3 a=8log_9 b를 만족시킬 때 a/b의 값",
+        r"양수 $a,b$가 $\log_9 a+\log_3 b=2,\;\log_3 a=8\log_9 b$를 만족시킬 때 $a/b$의 값",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "hs_linked_log_ratio"
+            assert response["parse"]["slots"] == {"high_base": 9, "low_base": 3, "target": 2, "multiplier": 8}
+            assert response["result"]["answer"] == 9
+            assert response["result"]["verified"] is True
+
+
 def test_nonunique_sine_interval_is_rejected_without_unrelated_pass() -> None:
     """특수각 해가 둘 이상인 구간은 다른 숫자 파서의 우연한 PASS 없이 세 라우터가 거부해야 한다."""
     question = "0<=x<=2pi에서 2sin x+sqrt(3)=0을 만족시키는 x의 값"
@@ -315,6 +331,7 @@ if __name__ == "__main__":
     test_sine_linear_interval_tool_is_shared_for_text_and_latex()
     test_arithmetic_sequence_sum_contract_is_shared_for_text_and_latex()
     test_motion_meeting_tool_is_shared_for_text_and_latex()
+    test_linked_log_ratio_tool_is_shared_for_text_and_latex()
     test_nonunique_sine_interval_is_rejected_without_unrelated_pass()
     test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()

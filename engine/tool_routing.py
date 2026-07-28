@@ -40,6 +40,7 @@ ROUTE_SPECS = (
     RouteSpec("csg_vector_dot_3d", "3차원 공간벡터 성분 내적", ("공간벡터", "3차원", "내적", "·")),
     RouteSpec("la_matrix_multiply", "명시적 정수 행렬의 행렬곱", ("행렬곱", "행렬의 곱", "a=", "b=")),
     RouteSpec("hs_log_product_equation", "두 로그의 곱 방정식", ("log_", "로그", "×", "*")),
+    RouteSpec("hs_linked_log_ratio", "거듭제곱 관계 로그 밑의 연립 비", ("log_", "양수", "a/b", "log_9", "log_3")),
     RouteSpec("hs_exponential_asymptote_distance", "지수함수 수평 점근선과 점 사이 거리", ("점근선", "거리", "a+b", "2^x")),
     RouteSpec("hs_inverse_log_power_coordinate", "로그함수 역함수 위 거듭제곱 좌표", ("역함수", "log_", "^k", "점")),
     RouteSpec("hs_log_interval_extrema", "로그함수 닫힌 구간 최댓값 최솟값의 합", ("최댓값", "최솟값", "log_", "x-", "x+")),
@@ -93,6 +94,8 @@ def _rule_score(text: str, spec: RouteSpec) -> float:
         structure_bonus = 16.0
     elif spec.domain == "hs1_exponential_log" and re.search(r"\d+\s*\^\s*\d+|log\s*_?\s*\d+", lowered):
         structure_bonus = 12.0
+    elif spec.domain == "hs_linked_log_ratio" and len(re.findall(r"log\s*_?\s*\d+\s*[ab]", lowered)) >= 4 and "a/b" in lowered:
+        structure_bonus = 20.0
     elif spec.domain == "hs2_limit" and "lim" in lowered and "->" in lowered:
         structure_bonus = 14.0
     elif spec.domain == "hs2_derivative" and re.search(r"f\s*'\s*\(\s*[+-]?\d+\s*\)", lowered):
@@ -179,6 +182,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
         "fn_linear_inequality": ("부등식", "≤", "≥", "<=", ">=", "<", ">"),
         "csg_vector_dot_3d": ("공간벡터", "3차원", "내적", "·"),
         "hs_log_product_equation": ("log_",),
+        "hs_linked_log_ratio": ("log_", "a/b"),
         "hs_exponential_asymptote_distance": ("점근선", "거리"),
         "hs_inverse_log_power_coordinate": ("역함수", "log_", "^k"),
         "hs_log_interval_extrema": ("최댓값", "최솟값", "log_"),

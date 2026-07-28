@@ -116,6 +116,17 @@
       "unsupported_boundary": "밑·지수에 미지수가 둘 이상 있거나 지수식의 합·차가 있는 경우, 치환 후 이차방정식이 되는 로그방정식은 현재 범위 밖이다."
     },
     {
+      "concept_id": "math1_linked_log_ratio_power_bases",
+      "name_kr": "거듭제곱 관계 로그 밑의 연립 비",
+      "execution_status": "실행 가능",
+      "input_slots": ["high_base", "low_base", "target", "multiplier"],
+      "tool": {"kind": "math_tool", "id": "solve_linked_log_ratio"},
+      "formula": "p=q^r, x=log_q(a), y=log_q(b)일 때 log_p(a)+log_q(b)=T, log_q(a)=m log_p(b)를 x/r+y=T, x=(m/r)y로 바꾸고 a/b=q^(x-y)를 계산한다.",
+      "verification_invariant": "p=q^r(r≥2)인지 확인하고, 계산한 x,y가 두 로그식에 각각 성립하며 반환 비가 q^(x-y)와 같은지 확인한다.",
+      "supported_example": "log_9(a)+log_3(b)=2, log_3(a)=8log_9(b)일 때 a/b. → 9",
+      "unsupported_boundary": "밑이 정수 거듭제곱 관계가 아니거나, 변수·로그 항이 세 개 이상이거나, 다른 변수 결합식·부등식이 있는 일반 연립로그는 별도 선형계 계약이 필요하다."
+    },
+    {
       "concept_id": "math1_special_angle_trigonometry",
       "name_kr": "특수각 삼각함수값",
       "execution_status": "실행 가능",

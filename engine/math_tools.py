@@ -271,6 +271,37 @@ def solve_log_product_equation(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "log_b2(x)=target/log_b1(v)", "verified": verified, "tool": "solve_log_product_equation"}
 
 
+def solve_linked_log_ratio(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 거듭제곱 관계인 두 로그 밑·합 조건·비례 계수.
+    원리: log_q(a)=x, log_q(b)=y로 치환한 2원 일차 연립을 유리수로 풀고 a/b를 원식에 독립 재대입한다.
+    """
+    high_base, low_base, target, multiplier = (slots.get(key) for key in ("high_base", "low_base", "target", "multiplier"))
+    try:
+        high_base, low_base, target, multiplier = int(high_base), int(low_base), Fraction(str(target)), int(multiplier)
+    except (TypeError, ValueError, ZeroDivisionError):
+        return {"status": "FAIL", "reason": "두 로그의 정수 밑·합 조건·비례 계수가 필요합니다."}
+    if high_base <= 1 or low_base <= 1 or multiplier == 0:
+        return {"status": "FAIL", "reason": "로그의 밑과 비례 계수 조건이 올바르지 않습니다."}
+    exponent = next((power for power in range(2, 13) if low_base ** power == high_base), None)
+    if exponent is None:
+        return {"status": "FAIL", "reason": "두 로그의 밑이 정수 거듭제곱 관계여야 합니다."}
+    # x=log_low(a), y=log_low(b)일 때 x/exponent+y=target, x=multiplier*y/exponent이다.
+    denominator = multiplier + exponent * exponent
+    y = target * exponent * exponent / denominator
+    x = target * multiplier * exponent / denominator
+    difference = x - y
+    answer = low_base ** float(difference)
+    answer = int(round(answer)) if abs(answer - round(answer)) < 1e-10 else answer
+    verified = x / exponent + y == target and x == Fraction(multiplier, exponent) * y and abs(float(answer) - low_base ** float(difference)) < 1e-9
+    return {
+        "status": "PASS", "answer": answer,
+        "formula": "x=log_q(a), y=log_q(b): x/r+y=T, x=(m/r)y, a/b=q^(x-y)",
+        "verified": verified,
+        "parameters": {"log_low_a": str(x), "log_low_b": str(y), "power_relation": exponent},
+        "tool": "solve_linked_log_ratio",
+    }
+
+
 def solve_exponential_asymptote_distance_sum(slots: dict[str, Any]) -> dict[str, Any]:
     """변수: 지수 밑·수직 이동·점근선 거리. 원리: 점의 y값 후보에서 양수인  b를 고르고 a=log_base(b)를 역산한다."""
     base, shift, distance = (slots.get(key) for key in ("base", "shift", "distance"))
@@ -426,6 +457,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "dot_product_3d": dot_product_3d,
     "matrix_multiply": matrix_multiply,
     "solve_log_product_equation": solve_log_product_equation,
+    "solve_linked_log_ratio": solve_linked_log_ratio,
     "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
     "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,
     "solve_log_interval_extrema_sum": solve_log_interval_extrema_sum,

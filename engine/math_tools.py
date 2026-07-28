@@ -81,10 +81,28 @@ def symbolic_matrix_product_2x2(slots: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def evaluate_polynomial_horner(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 최고차항부터 계수 배열과 대입점. 원리: Horner 중첩 곱으로 다항식 값을 선형 시간에 계산·검산한다."""
+    coefficients, point = slots.get("coefficients"), slots.get("point")
+    if not isinstance(coefficients, list) or not coefficients or point is None:
+        return {"status": "FAIL", "reason": "최고차항부터의 다항식 계수와 대입점이 필요합니다."}
+    try:
+        normalized = [int(value) for value in coefficients]
+        numeric_point = int(point)
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "현재 Horner 도구는 정수 계수와 정수 대입점만 지원합니다."}
+    answer = normalized[0]
+    for coefficient in normalized[1:]:
+        answer = answer * numeric_point + coefficient
+    direct = sum(coefficient * numeric_point ** (len(normalized) - index - 1) for index, coefficient in enumerate(normalized))
+    return {"status": "PASS", "answer": answer, "formula": "Horner: (((c_n x+c_{n-1})x+…)x+c_0)", "verified": answer == direct, "tool": "evaluate_polynomial_horner"}
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
     "symbolic_matrix_product_2x2": symbolic_matrix_product_2x2,
+    "evaluate_polynomial_horner": evaluate_polynomial_horner,
 }
 
 

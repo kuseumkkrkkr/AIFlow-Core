@@ -81,6 +81,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs1_inverse_function": ["역함수", "f⁻¹", "f^-1"],
         "hs1_conditional_probability": ["조건부확률", "P(A|B)", "P(A∩B)"],
         "hs1_polynomial_factor": ["다항식", "인수분해", "인수정리", "나머지정리"],
+        "hs_polynomial_value": ["P(x)=", "다항식의 값", "다항식 함숫값"],
         "hs1_exponential_log": ["지수", "로그", "log", "log_"],
         "hs1_exponential_equation": ["지수방정식", "로그방정식", "2^x", "log_2 x"],
         "hs1_trigonometry": ["삼각함수", "sin", "cos", "tan", "사인", "코사인", "탄젠트"],
@@ -144,6 +145,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs_rational_interval_extrema"] = scores.get("hs_rational_interval_extrema", 0) + 20
     if "AB=" in normalized and "두 행렬" in normalized:
         scores["hs_matrix_product"] = scores.get("hs_matrix_product", 0) + 20
+    if re.search(r"P\s*\(\s*x\s*\)\s*=", normalized, flags=re.IGNORECASE) and re.search(r"P\s*\(\s*[+-]?\d+\s*\)", normalized, flags=re.IGNORECASE):
+        scores["hs_polynomial_value"] = scores.get("hs_polynomial_value", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -272,6 +275,27 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         b = value(r"x(?:\^\s*2|2)\s*([+-])\s*(\d+)\s*x")
         c = value(r"x(?:\^\s*2|2).*?[+-]\s*\d+\s*x\s*([+-])\s*(\d+)")
         return {k: v for k, v in {"b": b, "c": c}.items() if v is not None}
+    if domain == "hs_polynomial_value":
+        expression = re.search(r"P\s*\(\s*x\s*\)\s*=\s*(.+?)(?=\s*(?:일 때|에서|[,;]|P\s*\(\s*[+-]?\d+)|$)", text, flags=re.IGNORECASE)
+        point_match = re.search(r"P\s*\(\s*([+-]?\d+)\s*\)", text, flags=re.IGNORECASE)
+        if not expression or not point_match:
+            return {}
+        raw = expression.group(1).replace(" ", "").replace("²", "^2").replace("-", "+-")
+        terms = [term for term in raw.split("+") if term]
+        parsed_terms: dict[int, int] = {}
+        for term in terms:
+            match = re.fullmatch(r"([+-]?)(\d*)x(?:\^(\d+))?", term, flags=re.IGNORECASE)
+            if match:
+                sign = -1 if match.group(1) == "-" else 1
+                parsed_terms[int(match.group(3) or "1")] = int(match.group(2) or "1") * sign
+            elif re.fullmatch(r"[+-]?\d+", term):
+                parsed_terms[0] = int(term)
+            else:
+                return {}
+        if not parsed_terms:
+            return {}
+        highest = max(parsed_terms)
+        return {"coefficients": [parsed_terms.get(power, 0) for power in range(highest, -1, -1)], "point": int(point_match.group(1))}
     if domain == "hs1_exponential_log":
         power = re.search(r"([0-9]+)\s*\^\s*([0-9]+)", text)
         logarithm = re.search(r"log\s*_?\s*([0-9]+)\s*([0-9]+)", text, flags=re.IGNORECASE)
@@ -430,6 +454,7 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
 def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     """필요 변수: 분류 도메인과 슬롯. 중3 기본 규칙을 계산하고 검산 결과를 함께 반환한다."""
     tool_by_domain = {
+        "hs_polynomial_value": "evaluate_polynomial_horner",
         "hs_polynomial_remainder": "polynomial_remainder_two_linear",
         "hs_rational_interval_extrema": "rational_interval_extrema",
         "hs_matrix_product": "symbolic_matrix_product_2x2",
@@ -737,6 +762,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs2_derivative": "hs2_power_derivative",
             "hs2_tangent": "hs2_tangent_slope",
             "hs2_integral": "hs2_power_integral",
+            "hs_polynomial_value": "evaluate_polynomial_horner",
             "hs_polynomial_remainder": "polynomial_remainder_two_linear",
             "hs_rational_interval_extrema": "rational_interval_extrema",
             "hs_matrix_product": "symbolic_matrix_product_2x2",

@@ -15,12 +15,12 @@
       "name": "다항식의 함숫값과 조립제법 형태 계산",
       "subject": "대수·다항식",
       "input_slots": ["polynomial_coefficients", "point"],
-      "tool": {"kind": "planned_math_tool", "id": "evaluate_polynomial_horner"},
+      "tool": {"kind": "math_tool", "id": "evaluate_polynomial_horner"},
       "formula": "P(a)=c_n a^n+…+c_1a+c_0이며 Horner 형태로 중첩 계산할 수 있다.",
       "verification_invariant": "Horner 계산 결과와 계수를 직접 대입한 P(a)가 정확히 같아야 한다.",
       "supported_example": "P(x)=2x³-3x+1일 때 P(2)를 구한다. → 11",
       "unsupported_boundary": "문자 계수의 부호 조건, 다변수 다항식, 근삿값 오차가 허용되지 않는 무리수 대입은 기호 연산 계약이 추가돼야 한다.",
-      "execution_status": "계획됨"
+      "execution_status": "제한 실행"
     },
     {
       "concept_id": "alg_remainder_theorem_single_linear",

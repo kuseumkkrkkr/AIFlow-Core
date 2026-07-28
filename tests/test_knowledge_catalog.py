@@ -16,9 +16,10 @@ def test_tool_knowledge_catalogs_are_complete() -> None:
         "advanced_algebra_tool_catalog", "advanced_calculus_tool_catalog", "advanced_stats_geometry_tool_catalog",
         "functions_inequalities_tool_catalog", "calculus_applications_tool_catalog", "combinatorics_spacegeo_tool_catalog",
         "linear_algebra_tool_catalog", "foundations_analysis_tool_catalog", "discrete_math_tool_catalog",
+        "abstract_algebra_tool_catalog", "numerical_optimization_tool_catalog", "advanced_geometry_tool_catalog",
     } <= set(catalogs)
     entries = [item for catalog in catalogs.values() for item in catalog["items"]]
-    assert len(entries) >= 260
+    assert len(entries) >= 350
     assert len({item["concept_id"] for item in entries}) == len(entries)
     assert all(item.get(field) for item in entries for field in REQUIRED_ITEM_FIELDS)
     assert {item["execution_status"] for item in entries} <= {"실행 가능", "제한 실행", "도구 구현 대기"}

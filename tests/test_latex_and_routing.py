@@ -36,6 +36,16 @@ def test_unsupported_latex_is_rejected() -> None:
     assert "지원하지 않는 LaTeX" in response["reason"]
 
 
+def test_horner_tool_is_selected_and_verified_by_all_routers() -> None:
+    """새 범용 다항식 도구가 후보 선택·슬롯 추출·독립 계산을 모두 통과하는지 확인한다."""
+    for mode in ("rule", "neural", "embedding"):
+        response = solve_with_router("P(x)=2x^3-3x+1; P(2)", mode)
+        assert response["status"] == "PASS"
+        assert response["router"]["selected_domain"] == "hs_polynomial_value"
+        assert response["result"]["answer"] == 11
+        assert response["result"]["verified"] is True
+
+
 def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     """실험 보고서가 정답 정확도·허위 PASS·미지원 거부를 독립 지표로 집계하는지 확인한다."""
     records = [
@@ -53,5 +63,6 @@ if __name__ == "__main__":
     test_core_latex_forms_are_normalized()
     test_all_router_modes_solve_same_latex_cases()
     test_unsupported_latex_is_rejected()
+    test_horner_tool_is_selected_and_verified_by_all_routers()
     test_experiment_metrics_separate_false_pass_and_rejection()
     print("PASS: latex and routing")

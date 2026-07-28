@@ -21,6 +21,9 @@ CATALOG_SUBJECT_DEFAULTS = {
     "linear_algebra_tool_catalog": "대학 기초수학·선형대수",
     "foundations_analysis_tool_catalog": "대학 기초수학·해석",
     "discrete_math_tool_catalog": "대학 기초수학·이산수학",
+    "abstract_algebra_tool_catalog": "대학 기초수학·정수론·추상대수",
+    "numerical_optimization_tool_catalog": "대학 기초수학·수치해석·최적화",
+    "advanced_geometry_tool_catalog": "대학 기초수학·고급기하",
 }
 STATUS_ALIASES = {
     "실행 가능": "실행 가능",

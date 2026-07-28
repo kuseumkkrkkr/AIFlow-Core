@@ -63,12 +63,12 @@
       "subject": "선형대수·행렬",
       "prerequisite_ids": ["la_matrix_shape_validation", "la_matrix_entry_access"],
       "input_slots": ["left_matrix", "right_matrix"],
-      "tool": {"kind": "planned_math_tool", "id": "matrix_multiply"},
+      "tool": {"kind": "math_tool", "id": "matrix_multiply"},
       "formula": "(AB)_ij=Σ_k a_ik b_kj.",
       "verification_invariant": "결과의 모든 (i,j) 성분이 i행과 j열의 내적으로 재계산한 값과 같아야 한다.",
       "supported_example": "[[1,2],[3,4]][[0,1],[1,0]]=[[2,1],[4,3]].",
       "unsupported_boundary": "무한 행렬, 텐서 곱, 수치 오차 허용 행렬곱은 별도 정책이 필요하다.",
-      "execution_status": "도구 구현 대기"
+      "execution_status": "제한 실행"
     },
     {
       "concept_id": "la_matrix_product_symbolic_condition_2x2",

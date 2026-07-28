@@ -37,6 +37,7 @@ ROUTE_SPECS = (
     RouteSpec("hs_absolute_linear_equation", "일차식 절댓값 방정식의 두 분기 해", ("절댓값", "절대값", "|", "=", "x")),
     RouteSpec("fn_linear_inequality", "일차부등식의 해집합과 부등호 방향", ("부등식", "≤", "≥", "<=", ">=", "<", ">", "x")),
     RouteSpec("csg_vector_dot_3d", "3차원 공간벡터 성분 내적", ("공간벡터", "3차원", "내적", "·")),
+    RouteSpec("la_matrix_multiply", "명시적 정수 행렬의 행렬곱", ("행렬곱", "행렬의 곱", "a=", "b=")),
     RouteSpec("hs_log_product_equation", "두 로그의 곱 방정식", ("log_", "로그", "×", "*")),
     RouteSpec("hs_exponential_asymptote_distance", "지수함수 수평 점근선과 점 사이 거리", ("점근선", "거리", "a+b", "2^x")),
     RouteSpec("hs_inverse_log_power_coordinate", "로그함수 역함수 위 거듭제곱 좌표", ("역함수", "log_", "^k", "점")),
@@ -96,6 +97,8 @@ def _rule_score(text: str, spec: RouteSpec) -> float:
         structure_bonus = 16.0
     elif spec.domain == "csg_vector_dot_3d" and re.search(r"\([^()]+,[^()]+,[^()]+\)\s*[·.*]\s*\([^()]+,[^()]+,[^()]+\)", lowered):
         structure_bonus = 16.0
+    elif spec.domain == "la_matrix_multiply" and "a=" in lowered and "b=" in lowered and "ab=" not in lowered:
+        structure_bonus = 16.0
     return hits * 10.0 + token_overlap + structure_bonus
 
 
@@ -148,6 +151,8 @@ def rank_tools(text: str, mode: str = "rule", limit: int = 5) -> list[dict[str, 
 def has_minimum_evidence(text: str, domain: str) -> bool:
     """변수: 정규화 문제·후보 도메인. 원리: 숫자 우연 일치만으로 다른 규칙이 PASS가 되는 허위 성공을 차단한다."""
     lowered = text.lower()
+    if domain == "la_matrix_multiply":
+        return "a=" in lowered and "b=" in lowered and "ab=" not in lowered
     # |ax+b|=c는 일반 일차방정식으로 괄호를 무시해 풀면 두 해 중 하나를 허위 PASS할 수 있다.
     if domain == "cm_linear" and ("|" in lowered or any(marker in lowered for marker in ("<=", ">=", "≤", "≥", "<", ">"))):
         return False

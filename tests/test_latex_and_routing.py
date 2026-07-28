@@ -126,6 +126,21 @@ def test_three_dimensional_dot_product_is_shared_for_text_and_latex() -> None:
             assert response["result"]["verified"] is True
 
 
+def test_numeric_matrix_product_is_shared_for_text_and_latex() -> None:
+    """명시적 2×2 정수 행렬곱은 평문·LaTeX에서 같은 행렬 슬롯과 성분별 검산 결과를 반환해야 한다."""
+    cases = [
+        "행렬곱 A=((1,2),(3,4)), B=((2,0),(-1,5))",
+        r"$A=\begin{pmatrix}1&2\\3&4\end{pmatrix}, B=\begin{pmatrix}2&0\\-1&5\end{pmatrix}$의 행렬곱",
+    ]
+    for mode in ("rule", "neural", "embedding"):
+        for question in cases:
+            response = solve_with_router(question, mode)
+            assert response["status"] == "PASS"
+            assert response["router"]["selected_domain"] == "la_matrix_multiply"
+            assert response["result"]["answer"] == [[0, 10], [2, 20]]
+            assert response["result"]["verified"] is True
+
+
 def test_exponential_asymptote_distance_tool_is_shared() -> None:
     """지수함수의 수평 점근선 거리 문제를 세 라우터가 같은 범용 도구로 검산하는지 확인한다."""
     question = "곡선 y=2^x 위의 점 (a,b)와 곡선 y=2^x-3의 점근선 사이의 거리가 7일 때, a+b의 값"
@@ -242,6 +257,7 @@ if __name__ == "__main__":
     test_absolute_linear_equation_is_shared_and_blocks_linear_false_pass()
     test_linear_inequality_is_shared_and_reverses_negative_coefficient()
     test_three_dimensional_dot_product_is_shared_for_text_and_latex()
+    test_numeric_matrix_product_is_shared_for_text_and_latex()
     test_exponential_asymptote_distance_tool_is_shared()
     test_inverse_log_power_coordinate_tool_is_shared()
     test_log_interval_extrema_tool_is_shared_for_text_and_latex()

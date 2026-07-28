@@ -130,6 +130,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs_absolute_linear_equation": ["절댓값", "|", "절대값"],
         "fn_linear_inequality": ["부등식", "≤", "≥", "<=", ">="],
         "csg_vector_dot_3d": ["공간벡터", "3차원", "공간 내적"],
+        "la_matrix_multiply": ["행렬곱", "행렬의 곱", "A=", "B="],
     }
     for domain_name, keywords in aliases.items():
         hits = [word for word in keywords if word in normalized]
@@ -199,6 +200,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["fn_linear_inequality"] = scores.get("fn_linear_inequality", 0) + 20
     if re.search(r"\(\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?\d+\s*\)\s*[·.*]\s*\(\s*[+-]?\d+\s*,\s*[+-]?\d+\s*,\s*[+-]?\d+\s*\)", normalized):
         scores["csg_vector_dot_3d"] = scores.get("csg_vector_dot_3d", 0) + 20
+    if "A=" in normalized and "B=" in normalized and "AB=" not in normalized:
+        scores["la_matrix_multiply"] = scores.get("la_matrix_multiply", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -311,6 +314,13 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
             elif re.fullmatch(r"[a-z]", item):
                 requested.append([row, column])
         return {"left": [left_values[:2], left_values[2:]], "right": [right_values[:2], right_values[2:]], "targets": targets, "requested": requested}
+    if domain == "la_matrix_multiply":
+        matrix_pattern = r"\(\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)\s*,\s*\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)\s*\)"
+        left_match = re.search(r"A\s*=\s*" + matrix_pattern, text)
+        right_match = re.search(r"B\s*=\s*" + matrix_pattern, text)
+        if not left_match or not right_match:
+            return {}
+        return {"left_matrix": [[int(left_match.group(1)), int(left_match.group(2))], [int(left_match.group(3)), int(left_match.group(4))]], "right_matrix": [[int(right_match.group(1)), int(right_match.group(2))], [int(right_match.group(3)), int(right_match.group(4))]]}
     if domain == "cm_set":
         return {k: v for k, v in {"a": value(r"\|A\|\s*=\s*([+-]?\d+)"), "b": value(r"\|B\|\s*=\s*([+-]?\d+)"), "c": value(r"\|A∩B\|\s*=\s*([+-]?\d+)")}.items() if v is not None}
     if domain == "cm_linear":
@@ -621,6 +631,7 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs_absolute_linear_equation": "solve_absolute_linear_equation",
         "fn_linear_inequality": "solve_linear_inequality",
         "csg_vector_dot_3d": "dot_product_3d",
+        "la_matrix_multiply": "matrix_multiply",
         "hs_polynomial_value": "evaluate_polynomial_horner",
         "hs_polynomial_remainder": "polynomial_remainder_two_linear",
         "hs_rational_interval_extrema": "rational_interval_extrema",
@@ -933,6 +944,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs_absolute_linear_equation": "solve_absolute_linear_equation",
             "fn_linear_inequality": "solve_linear_inequality",
             "csg_vector_dot_3d": "dot_product_3d",
+            "la_matrix_multiply": "matrix_multiply",
             "hs_log_product_equation": "solve_log_product_equation",
             "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",
             "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",

@@ -182,6 +182,23 @@ def dot_product_3d(slots: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def matrix_multiply(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 정수 직사각 행렬 left_matrix,right_matrix. 원리: 행-열 내적으로 곱을 만들고 모든 성분을 독립 재계산한다."""
+    left, right = slots.get("left_matrix"), slots.get("right_matrix")
+    if not isinstance(left, list) or not isinstance(right, list) or not left or not right or not all(isinstance(row, list) and row for row in left + right):
+        return {"status": "FAIL", "reason": "비어 있지 않은 두 행렬이 필요합니다."}
+    try:
+        left = [[int(value) for value in row] for row in left]
+        right = [[int(value) for value in row] for row in right]
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "현재 행렬곱 도구는 정수 성분만 지원합니다."}
+    if len({len(row) for row in left}) != 1 or len({len(row) for row in right}) != 1 or len(left[0]) != len(right):
+        return {"status": "FAIL", "reason": "행렬의 행·열 크기가 곱셈 조건을 만족하지 않습니다."}
+    result = [[sum(left[i][k] * right[k][j] for k in range(len(right))) for j in range(len(right[0]))] for i in range(len(left))]
+    verified = all(result[i][j] == sum(left[i][k] * right[k][j] for k in range(len(right))) for i in range(len(left)) for j in range(len(right[0])))
+    return {"status": "PASS", "answer": result, "formula": "(AB)_ij=Σ_k a_ik b_kj", "verified": verified, "tool": "matrix_multiply"}
+
+
 def solve_log_product_equation(slots: dict[str, Any]) -> dict[str, Any]:
     """변수: 첫 로그의 밑·진수, 둘째 로그의 밑, 곱의 값. 원리: log_b(x)를 고립해 양의 실수 해를 계산·재대입한다."""
     first_base, first_value, second_base, target = (slots.get(key) for key in ("first_base", "first_value", "second_base", "target"))
@@ -351,6 +368,7 @@ MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "solve_absolute_linear_equation": solve_absolute_linear_equation,
     "solve_linear_inequality": solve_linear_inequality,
     "dot_product_3d": dot_product_3d,
+    "matrix_multiply": matrix_multiply,
     "solve_log_product_equation": solve_log_product_equation,
     "solve_exponential_asymptote_distance_sum": solve_exponential_asymptote_distance_sum,
     "solve_inverse_log_power_coordinate": solve_inverse_log_power_coordinate,

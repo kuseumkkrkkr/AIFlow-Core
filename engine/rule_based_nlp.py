@@ -20,6 +20,28 @@ from math_tools import call_math_tool
 
 _ROOT = Path(__file__).resolve().parents[1] / "knowledge"
 
+# 카탈로그의 rule_solver ID가 실제 solve_rule 도메인으로 연결되는 공개 계약이다.
+# 새 항목을 실행 가능으로 승격할 때 이 표와 회귀 사례를 함께 추가한다.
+RULE_SOLVER_DOMAIN_BY_ID = {
+    "ar_seq_an_formula": "cm_arith_sequence",
+    "cal_trig_derivative": "cal_trig_derivative",
+    "equiprobable_probability": "cm_probability",
+    "evaluate_binomial_probability": "stat_binomial_distribution",
+    "hs1_exponential_equation_basic": "hs1_exponential_equation",
+    "hs1_exponential_log_basic": "hs1_exponential_log",
+    "hs1_factor_remainder": "hs1_polynomial_factor",
+    "hs1_function_composition": "hs1_function_composition",
+    "hs1_function_value": "hs1_function_basic",
+    "hs1_geometric_sequence": "hs1_geometric_sequence",
+    "hs1_inverse_function": "hs1_inverse_function",
+    "hs1_special_angle_trig": "hs1_trigonometry",
+    "hs2_polynomial_limit": "hs2_limit",
+    "hs2_power_derivative": "hs2_derivative",
+    "hs2_power_integral": "hs2_integral",
+    "hs2_tangent_slope": "hs2_tangent",
+    "sum_component_products": "geo_vector_dot",
+}
+
 
 @lru_cache(maxsize=8)
 def _load(name: str) -> dict[str, Any]:

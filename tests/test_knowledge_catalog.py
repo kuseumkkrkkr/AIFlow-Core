@@ -6,6 +6,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
 from knowledge_catalog import REQUIRED_ITEM_FIELDS, load_tool_knowledge_catalogs  # noqa: E402
+from math_tools import MATH_TOOL_REGISTRY  # noqa: E402
+from rule_based_nlp import RULE_SOLVER_DOMAIN_BY_ID  # noqa: E402
 
 
 def test_tool_knowledge_catalogs_are_complete() -> None:
@@ -26,6 +28,32 @@ def test_tool_knowledge_catalogs_are_complete() -> None:
     assert {item["execution_status"] for item in entries} <= {"실행 가능", "제한 실행", "도구 구현 대기"}
     assert all("_tool_catalog" not in item["subject"] for item in entries)
     assert all(isinstance(item.get("prerequisite_ids"), list) for item in entries)
+    known_ids = {item["concept_id"] for item in entries}
+    assert all(prerequisite in known_ids for item in entries for prerequisite in item["prerequisite_ids"])
+    prerequisites = {item["concept_id"]: item["prerequisite_ids"] for item in entries}
+    visiting, visited = set(), set()
+
+    def visit(concept_id: str) -> None:
+        """변수: 개념 ID와 선수 그래프. 원리: DFS 방문 상태로 자기 참조·순환 선수관계를 거부한다."""
+        assert concept_id not in visiting
+        if concept_id in visited:
+            return
+        visiting.add(concept_id)
+        for prerequisite in prerequisites[concept_id]:
+            visit(prerequisite)
+        visiting.remove(concept_id)
+        visited.add(concept_id)
+
+    for concept_id in prerequisites:
+        visit(concept_id)
+    active_entries = [item for item in entries if item["execution_status"] in {"실행 가능", "제한 실행"}]
+    for item in active_entries:
+        tool = item["tool"]
+        if isinstance(tool, dict) and tool.get("kind") == "math_tool":
+            assert tool.get("id") in MATH_TOOL_REGISTRY
+        else:
+            tool_id = tool.get("id") if isinstance(tool, dict) else tool
+            assert tool_id in RULE_SOLVER_DOMAIN_BY_ID
 
 
 if __name__ == "__main__":

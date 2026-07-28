@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
 
-from experiment_runner import evaluate_router  # noqa: E402
+from experiment_runner import evaluate_router, validate_private_records  # noqa: E402
 from latex_normalizer import normalize_latex_input  # noqa: E402
 from solver_router import solve_with_router  # noqa: E402
 
@@ -69,11 +69,27 @@ def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     assert report["unsupported_rejection_accuracy"] == 1.0
 
 
+def test_private_corpus_contract_requires_full_metadata() -> None:
+    """실제 기출 코퍼스는 문제 전문·LaTeX·정답·출처·지원 범위를 빠짐없이 제공해야 한다."""
+    valid = [{"case_id": "official-01", "source": "local", "source_document_sha256": "sha256:test", "question_number": 1,
+              "question": "2x+3=9", "latex_question": "$2x+3=9$", "expected": 3, "expected_domain": "cm_linear",
+              "curriculum": "고등학교", "diagram_dependent": False, "supported": True}]
+    validate_private_records(valid)
+    invalid = [dict(valid[0], latex_question="")]
+    try:
+        validate_private_records(invalid)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("LaTeX 전문이 없는 실제 코퍼스는 거부해야 합니다.")
+
+
 if __name__ == "__main__":
     test_core_latex_forms_are_normalized()
     test_all_router_modes_solve_same_latex_cases()
     test_unsupported_latex_is_rejected()
     test_horner_tool_is_selected_and_verified_by_all_routers()
     test_integer_gcd_tool_is_selected_and_verified_by_all_routers()
+    test_private_corpus_contract_requires_full_metadata()
     test_experiment_metrics_separate_false_pass_and_rejection()
     print("PASS: latex and routing")

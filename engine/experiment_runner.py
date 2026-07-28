@@ -9,6 +9,30 @@ from typing import Any
 from solver_router import ROUTER_VERSIONS, solve_with_router
 
 
+PRIVATE_CORPUS_REQUIRED_FIELDS = (
+    "case_id", "source", "source_document_sha256", "question_number", "question", "latex_question",
+    "expected", "curriculum", "diagram_dependent", "supported",
+)
+
+
+def validate_private_records(records: list[dict[str, Any]]) -> None:
+    """변수: 비공개 기출 레코드 배열. 원리: 전문·LaTeX·출처·정답·그림 의존 메타데이터 누락을 실행 전에 거부한다."""
+    if not isinstance(records, list) or not records:
+        raise ValueError("실전 코퍼스는 비어 있지 않은 JSON 배열이어야 합니다.")
+    seen: set[str] = set()
+    for record in records:
+        if not isinstance(record, dict) or any(field not in record for field in PRIVATE_CORPUS_REQUIRED_FIELDS):
+            raise ValueError("실전 코퍼스 레코드에 필수 메타데이터가 없습니다.")
+        case_id = str(record["case_id"])
+        if not case_id or case_id in seen or not str(record["question"]).strip() or not str(record["latex_question"]).strip():
+            raise ValueError("실전 코퍼스의 case_id·문제 전문·LaTeX는 유일하고 비어 있지 않아야 합니다.")
+        if not isinstance(record["question_number"], int) or record["question_number"] < 1 or not isinstance(record["diagram_dependent"], bool) or not isinstance(record["supported"], bool):
+            raise ValueError("문항 번호·그림 의존·지원 여부의 자료형이 올바르지 않습니다.")
+        if record["supported"] and not str(record.get("expected_domain", "")).strip():
+            raise ValueError("지원 문항에는 expected_domain이 필요합니다.")
+        seen.add(case_id)
+
+
 def _same_answer(actual: Any, expected: Any) -> bool:
     """변수: 실제 반환값·정답지 값. 원리: 정확한 동치 후 수치 오차만 제한적으로 허용한다."""
     if actual == expected:
@@ -59,6 +83,5 @@ def run_experiment(path: str | Path) -> dict[str, Any]:
     """변수: UTF-8 JSON 코퍼스 경로. 원리: 정확히 같은 전문 문항으로 rule/neural/embedding 세 보고서를 만든다."""
     source = Path(path)
     records = json.loads(source.read_text(encoding="utf-8"))
-    if not isinstance(records, list) or not records:
-        raise ValueError("실험 코퍼스는 비어 있지 않은 JSON 배열이어야 합니다.")
+    validate_private_records(records)
     return {"source": str(source), "reports": [evaluate_router(records, mode) for mode in ("rule", "neural", "embedding")]}

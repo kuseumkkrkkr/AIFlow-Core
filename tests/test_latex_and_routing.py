@@ -51,6 +51,17 @@ def test_factored_polynomial_derivative_is_shared_by_all_routers() -> None:
         assert response["result"]["verified"] is True
 
 
+def test_cubic_parameter_extrema_is_shared_by_all_routers() -> None:
+    """Ax³+ax+C의 극대 조건에서 극솟값은 세 라우터가 같은 정지점 계약으로 계산한다."""
+    question = "함수 f(x)=x^3+ax+9는 x=-1에서 극대이다. 함수 f(x)의 극솟값을 구하시오."
+    for mode in ("rule", "neural", "embedding"):
+        response = solve_with_router(question, mode)
+        assert response["status"] == "PASS"
+        assert response["router"]["selected_domain"] == "hs2_derivative"
+        assert response["result"]["answer"] == 7
+        assert response["result"]["verified"] is True
+
+
 def test_unsupported_latex_is_rejected() -> None:
     """지원하지 않는 aligned 환경은 추측 풀이 대신 재현 가능한 FAIL을 반환하는지 확인한다."""
     response = solve_with_router(r"\begin{aligned}x&=1\end{aligned}", "rule")
@@ -273,6 +284,7 @@ if __name__ == "__main__":
     test_indexed_root_latex_and_rational_power_route()
     test_all_router_modes_solve_same_latex_cases()
     test_factored_polynomial_derivative_is_shared_by_all_routers()
+    test_cubic_parameter_extrema_is_shared_by_all_routers()
     test_unsupported_latex_is_rejected()
     test_horner_tool_is_selected_and_verified_by_all_routers()
     test_polynomial_addition_tool_is_shared_for_text_and_latex()

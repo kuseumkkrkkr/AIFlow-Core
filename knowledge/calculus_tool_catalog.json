@@ -72,6 +72,18 @@
       "unsupported_boundary": "세 인수 이상 곱, 분수·루트·지수 인수, 문자 계수, 도함수식 자체를 요구하는 문항은 이 제한 도구 밖이다."
     },
     {
+      "concept_id": "math2_cubic_parameter_extrema_value",
+      "subject": "수학Ⅱ",
+      "name": "매개변수 삼차함수의 극대·극솟값",
+      "execution_status": "실행 가능",
+      "input_slots": ["cubic", "constant", "maximum_point"],
+      "tool": {"kind": "rule_solver", "id": "hs2_power_derivative"},
+      "formula": "f(x)=Ax³+ax+C에서 x=r이 극대이면 a=-3Ar², 극솟점은 -r이고 f(-r)을 계산한다.",
+      "verification_invariants": ["f'(r)=0 및 f''(r)=6Ar<0이어야 한다.", "-r에서 f''(-r)>0이고 반환값은 f(-r)와 같아야 한다."],
+      "supported_example": "f(x)=x³+ax+9가 x=-1에서 극대일 때 극솟값. → 7",
+      "unsupported_boundary": "x²항이 있거나 매개변수가 둘 이상인 삼차함수, 극점 위치가 부등식·그래프로만 주어진 경우는 별도 도구가 필요하다."
+    },
+    {
       "concept_id": "math2_tangent_line",
       "subject": "수학Ⅱ",
       "name": "곡선의 접선 방정식",

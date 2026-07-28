@@ -556,6 +556,22 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
             return {"kind": "quadratic_plus_linear", "point": point}
         return {}
     if domain == "hs2_derivative":
+        cubic_extrema = re.search(
+            r"f\s*\(\s*x\s*\)\s*=\s*([+-]?\s*\d*)\s*x\s*\^\s*3\s*\+\s*a\s*x\s*([+-]\s*\d+).*?"
+            r"x\s*=\s*([+-]?\d+).*?극대.*?극솟값",
+            text,
+            flags=re.IGNORECASE,
+        )
+        if cubic_extrema:
+            def cubic_leading(raw: str) -> int:
+                """변수: x³ 계수 문자열. 원리: 생략된 ±1을 포함해 정수 계수로 정규화한다."""
+                compact = raw.replace(" ", "")
+                return -1 if compact == "-" else (1 if compact in ("", "+") else int(compact))
+
+            return {
+                "kind": "cubic_parameter_extrema", "cubic": cubic_leading(cubic_extrema.group(1)),
+                "constant": int(cubic_extrema.group(2).replace(" ", "")), "maximum_point": int(cubic_extrema.group(3)),
+            }
         factored = re.search(
             r"f\s*\(\s*x\s*\)\s*=\s*\(\s*([+-]?\s*\d*)\s*x\s*([+-]\s*\d+)\s*\)\s*"
             r"\(\s*([+-]?\s*\d*)\s*x\s*\^\s*2\s*([+-]\s*\d*)\s*x\s*([+-]\s*\d+)\s*\).*?"
@@ -685,6 +701,12 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
             function = lambda x: (linear_x * x + linear_constant) * (quadratic_x2 * x * x + quadratic_x * x + quadratic_constant)
             step = 1e-6
             return abs(answer - (function(value + step) - function(value - step)) / (2 * step)) < 1e-5
+        if slots.get("kind") == "cubic_parameter_extrema":
+            cubic, maximum_point, constant = slots["cubic"], slots["maximum_point"], slots["constant"]
+            linear = -3 * cubic * maximum_point * maximum_point
+            minimum_point = -maximum_point
+            expected = cubic * minimum_point ** 3 + linear * minimum_point + constant
+            return cubic != 0 and 6 * cubic * maximum_point < 0 and answer == expected
         return "power" in slots and "input" in slots and answer == slots["power"] * slots["input"] ** (slots["power"] - 1)
     if domain == "hs1_exponential_log":
         if not isinstance(answer, (int, float)):
@@ -915,7 +937,14 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         else:
             return {"status": "FAIL", "reason": "지원하는 다항식 극한 또는 차분몫 구조가 필요합니다."}
     elif domain == "hs2_derivative":
-        if slots.get("kind") == "factored_linear_quadratic":
+        if slots.get("kind") == "cubic_parameter_extrema":
+            cubic, maximum_point = slots["cubic"], slots["maximum_point"]
+            if cubic == 0 or 6 * cubic * maximum_point >= 0:
+                return {"status": "FAIL", "reason": "주어진 점이 이 형태의 삼차함수 극대점이라는 조건을 만족하지 않습니다."}
+            linear = -3 * cubic * maximum_point * maximum_point
+            minimum_point = -maximum_point
+            answer = cubic * minimum_point ** 3 + linear * minimum_point + slots["constant"]
+        elif slots.get("kind") == "factored_linear_quadratic":
             value = slots["input"]
             linear = slots["linear_x"] * value + slots["linear_constant"]
             quadratic = slots["quadratic_x2"] * value * value + slots["quadratic_x"] * value + slots["quadratic_constant"]

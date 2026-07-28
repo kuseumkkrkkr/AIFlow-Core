@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from typing import Any, Callable
-from math import gcd
+from math import gcd, log
 
 
 def polynomial_remainder_two_linear(slots: dict[str, Any]) -> dict[str, Any]:
@@ -114,12 +114,31 @@ def evaluate_integer_gcd(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "gcd(a,b)=gcd(b,a mod b)", "verified": left % answer == 0 and right % answer == 0, "tool": "evaluate_integer_gcd"}
 
 
+def solve_log_product_equation(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 첫 로그의 밑·진수, 둘째 로그의 밑, 곱의 값. 원리: log_b(x)를 고립해 양의 실수 해를 계산·재대입한다."""
+    first_base, first_value, second_base, target = (slots.get(key) for key in ("first_base", "first_value", "second_base", "target"))
+    try:
+        first_base, first_value, second_base, target = (float(first_base), float(first_value), float(second_base), float(target))
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "두 로그의 밑·첫 진수·곱의 값이 필요합니다."}
+    if min(first_base, first_value, second_base) <= 0 or first_base == 1 or second_base == 1:
+        return {"status": "FAIL", "reason": "로그의 밑은 양수이고 1이 아니며 진수는 양수여야 합니다."}
+    first_log = log(first_value, first_base)
+    if abs(first_log) < 1e-12:
+        return {"status": "FAIL", "reason": "첫 로그값이 0이면 이 곱 조건으로 해를 유일하게 정할 수 없습니다."}
+    answer = second_base ** (target / first_log)
+    answer = int(round(answer)) if abs(answer - round(answer)) < 1e-10 else answer
+    verified = abs(log(first_value, first_base) * log(float(answer), second_base) - target) < 1e-9
+    return {"status": "PASS", "answer": answer, "formula": "log_b2(x)=target/log_b1(v)", "verified": verified, "tool": "solve_log_product_equation"}
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
     "symbolic_matrix_product_2x2": symbolic_matrix_product_2x2,
     "evaluate_polynomial_horner": evaluate_polynomial_horner,
     "evaluate_integer_gcd": evaluate_integer_gcd,
+    "solve_log_product_equation": solve_log_product_equation,
 }
 
 

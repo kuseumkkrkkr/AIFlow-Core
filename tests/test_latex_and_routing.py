@@ -16,11 +16,12 @@ def test_core_latex_forms_are_normalized() -> None:
     assert normalize_latex_input(r"\frac{1}{2}")["normalized"] == "1/2"
     assert normalize_latex_input(r"\lim_{x\to 3}x^2")["normalized"] == "lim x->3x^2"
     assert normalize_latex_input(r"\int_0^2 x^1 dx")["normalized"] == "정적분 0부터 2 x^1 dx"
+    assert normalize_latex_input(r"\log_3 2\times\log_4 a=2")["normalized"] == "log_3 2*log_4 a=2"
 
 
 def test_all_router_modes_solve_same_latex_cases() -> None:
     """동일 LaTeX 문항이 rule·neural·embedding에서 같은 검산 정답으로 끝나는지 확인한다."""
-    cases = [(r"$2x+3=9$", 3), (r"지수방정식 $2^x=16$", 4), (r"$5^{x+4}=25^{2x-4}$", 4), (r"$\lim_{x\to 3}x^2+3x$", 18), (r"$\int_0^2 x^1 dx$", 2)]
+    cases = [(r"$2x+3=9$", 3), (r"지수방정식 $2^x=16$", 4), (r"$5^{x+4}=25^{2x-4}$", 4), (r"$\log_3 2\times\log_4 a=2$", 81), (r"$\lim_{x\to 3}x^2+3x$", 18), (r"$\int_0^2 x^1 dx$", 2)]
     for mode in ("rule", "neural", "embedding"):
         for question, expected in cases:
             response = solve_with_router(question, mode)

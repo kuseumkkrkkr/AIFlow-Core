@@ -108,12 +108,12 @@
       "concept_id": "math1_exponential_log_equation",
       "name_kr": "기본 지수·로그 방정식",
       "execution_status": "실행 가능",
-      "input_slots": ["kind", "base", "target"],
+      "input_slots": ["kind", "base", "target", "left_base", "left_x", "left_constant", "right_base", "right_x", "right_constant"],
       "tool": {"kind": "rule_solver", "id": "hs1_exponential_equation_basic"},
-      "formula": "a^x=b 이면 x=log_a b, log_a x=c 이면 x=a^c",
-      "verification_invariant": "밑 조건 a>0, a≠1 및 진수 조건을 만족하며 구한 x를 원식에 대입해 성립해야 한다.",
-      "supported_example": "3^x=81. → 4",
-      "unsupported_boundary": "서로 다른 밑의 합·차가 있는 지수방정식, 치환 후 이차방정식이 되는 로그방정식은 현재 범위 밖이다."
+      "formula": "a^(mx+p)=b^(nx+q) 이면 (m-n·log_a(b))x=q·log_a(b)-p; a^x=b 이면 x=log_a b, log_a x=c 이면 x=a^c",
+      "verification_invariant": "두 밑은 양수이고 1이 아니며, 계산한 x를 양변 지수식에 독립 재대입해 오차 범위 안에서 같아야 한다.",
+      "supported_example": "3^(x-6)=(1/9)^x. → 2",
+      "unsupported_boundary": "밑·지수에 미지수가 둘 이상 있거나 지수식의 합·차가 있는 경우, 치환 후 이차방정식이 되는 로그방정식은 현재 범위 밖이다."
     },
     {
       "concept_id": "math1_special_angle_trigonometry",

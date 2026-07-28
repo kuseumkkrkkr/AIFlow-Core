@@ -15,6 +15,18 @@
       "unsupported_boundary": "분모가 0이 되는 유리함수, 절댓값·조각함수의 좌우극한 판정은 이 도구 하나로 처리하지 않는다."
     },
     {
+      "concept_id": "math2_quadratic_difference_quotient",
+      "subject": "수학Ⅱ",
+      "name": "이차다항식 차분몫의 미분계수",
+      "execution_status": "실행 가능",
+      "input_slots": ["quadratic", "linear", "constant", "point"],
+      "tool": {"kind": "rule_solver", "id": "hs2_polynomial_limit"},
+      "formula": "lim(x→a) (f(x)-f(a))/(x-a)=f'(a)=2Aa+B, f(x)=Ax²+Bx+C",
+      "verification_invariants": ["반환값은 h≠0인 작은 h에 대한 (f(a+h)-f(a))/h의 극한값과 일치해야 한다.", "상수항 C는 미분계수에 영향을 주지 않는다.", "분모의 접근점은 f(a)의 입력과 같아야 한다."],
+      "supported_example": "f(x)=3x²-x+1, lim(x→1)(f(x)-f(1))/(x-1). → 5",
+      "unsupported_boundary": "삼차 이상, 유리·무리·지수·삼각함수, 분모 접근점이 f(a)와 다른 차분몫은 별도 계약이 필요하다."
+    },
+    {
       "concept_id": "math2_rational_limit_factor_cancel",
       "subject": "수학Ⅱ",
       "name": "인수분해 후 약분하는 유리함수 극한",

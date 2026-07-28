@@ -146,7 +146,13 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs1_function_composition"] = scores.get("hs1_function_composition", 0) + 5
     if "역함수" in normalized or "f⁻¹" in normalized or "f^-1" in normalized:
         scores["hs1_inverse_function"] = scores.get("hs1_inverse_function", 0) + 5
-    if "지수방정식" in normalized or "로그방정식" in normalized or re.search(r"(?:\^\s*x|log\s*_?\s*\d+\s*x)\s*=", normalized, flags=re.IGNORECASE):
+    rational_power_equation = re.search(
+        r"(?:\d+|\(\s*\d+\s*/\s*\d+\s*\))\s*\^\s*\(?\s*[+-]?\s*\d*\s*x.*?="
+        r".*?(?:\d+|\(\s*\d+\s*/\s*\d+\s*\))\s*\^\s*\(?\s*[+-]?\s*\d*\s*x",
+        normalized,
+        flags=re.IGNORECASE,
+    )
+    if "지수방정식" in normalized or "로그방정식" in normalized or rational_power_equation or re.search(r"(?:\^\s*x|log\s*_?\s*\d+\s*x)\s*=", normalized, flags=re.IGNORECASE):
         scores["hs1_exponential_equation"] = scores.get("hs1_exponential_equation", 0) + 7
     if re.search(r"(?:^|\s)(?:lim|log_?)", normalized, flags=re.IGNORECASE):
         scores["hs1_exponential_log"] = scores.get("hs1_exponential_log", 0) + 4
@@ -468,19 +474,31 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
             return {"kind": "power", "base": int(power.group(1)), "exponent": int(power.group(2))}
         return {}
     if domain == "hs1_exponential_equation":
+        # 밑은 정수 또는 (p/q)인 양의 유리수만 구조화한다. 임의의 식은 추측하지 않는다.
+        base_pattern = r"(?:[0-9]+|\(\s*[0-9]+\s*/\s*[0-9]+\s*\))"
         complex_power = re.search(
-            r"([0-9]+)\s*\^\s*\(?\s*([+-]?\s*[0-9]*)\s*x\s*([+-]\s*[0-9]+)?\s*\)?\s*=\s*"
-            r"([0-9]+)\s*\^\s*\(?\s*([+-]?\s*[0-9]*)\s*x\s*([+-]\s*[0-9]+)?\s*\)?", text, flags=re.IGNORECASE,
+            rf"({base_pattern})\s*\^\s*\(?\s*([+-]?\s*[0-9]*)\s*x\s*([+-]\s*[0-9]+)?\s*\)?\s*=\s*"
+            rf"({base_pattern})\s*\^\s*\(?\s*([+-]?\s*[0-9]*)\s*x\s*([+-]\s*[0-9]+)?\s*\)?", text, flags=re.IGNORECASE,
         )
         if complex_power:
+            def base(raw: str) -> float:
+                """변수: 정수 또는 (p/q) 밑 문자열. 원리: 양의 유리수 밑을 부동소수값으로 정규화한다."""
+                compact = raw.replace(" ", "").strip("()")
+                numerator, separator, denominator = compact.partition("/")
+                return int(numerator) / int(denominator) if separator else float(int(numerator))
+
             def coefficient(raw: str) -> int:
+                """변수: x의 계수 문자열. 원리: 생략 부호를 ±1로 보정해 정수 계수로 반환한다."""
                 compact = raw.replace(" ", "")
                 return -1 if compact == "-" else (1 if compact in ("", "+") else int(compact))
+
             def constant(raw: str | None) -> int:
+                """변수: 지수의 상수항 문자열. 원리: 생략된 상수항을 0으로 정규화한다."""
                 return int((raw or "0").replace(" ", ""))
+
             return {
-                "kind": "linear_power_equation", "left_base": int(complex_power.group(1)), "left_x": coefficient(complex_power.group(2)),
-                "left_constant": constant(complex_power.group(3)), "right_base": int(complex_power.group(4)),
+                "kind": "linear_power_equation", "left_base": base(complex_power.group(1)), "left_x": coefficient(complex_power.group(2)),
+                "left_constant": constant(complex_power.group(3)), "right_base": base(complex_power.group(4)),
                 "right_x": coefficient(complex_power.group(5)), "right_constant": constant(complex_power.group(6)),
             }
         power = re.search(r"([0-9]+)\s*\^\s*x\s*=\s*([0-9]+)", text, flags=re.IGNORECASE)
@@ -495,8 +513,37 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         return {"kind": match.group(1).lower(), "angle": int(match.group(2))} if match else {}
     if domain == "hs2_limit":
         point = value(r"(?:x|t)\s*(?:->|→)\s*([+-]?\d+)")
-        coeffs = [int(item) for item in re.findall(r"[+-]?\d+", text)]
-        return {"point": point, "coefficients": coeffs} if point is not None else {}
+        if point is None:
+            return {}
+        difference_quotient = re.search(
+            r"f\s*\(\s*x\s*\)\s*=\s*([+-]?\s*\d*)\s*x\s*\^\s*2\s*"
+            r"([+-]\s*(?:\d*)\s*x)?\s*([+-]\s*\d+)?",
+            text,
+            flags=re.IGNORECASE,
+        )
+        if difference_quotient and re.search(r"f\s*\(\s*x\s*\)\s*-\s*f\s*\(", text, flags=re.IGNORECASE):
+            def polynomial_coefficient(raw: str | None, variable: bool = False) -> int:
+                """변수: 다항식 항 문자열·변수 포함 여부. 원리: ±x·±n·생략 계수를 정수로 표준화한다."""
+                compact = (raw or "").replace(" ", "")
+                if variable:
+                    compact = compact.replace("x", "")
+                if compact in ("", "+"):
+                    return 1
+                if compact == "-":
+                    return -1
+                return int(compact)
+
+            return {
+                "kind": "quadratic_difference_quotient",
+                "point": point,
+                "quadratic": polynomial_coefficient(difference_quotient.group(1)),
+                "linear": polynomial_coefficient(difference_quotient.group(2), variable=True),
+                "constant": polynomial_coefficient(difference_quotient.group(3)) if difference_quotient.group(3) else 0,
+            }
+        # 기존에 검증된 단항식 조합만 연속성 대입으로 계산한다. 다른 극한은 추측하지 않는다.
+        if re.search(r"x\s*(?:\^\s*2|²|2)\s*\+\s*3\s*x", text, flags=re.IGNORECASE):
+            return {"kind": "quadratic_plus_linear", "point": point}
+        return {}
     if domain == "hs2_derivative":
         match = re.search(r"f\s*\(x\)\s*=\s*x\s*\^\s*([0-9]+).*?(?:x\s*=|at\s*)([+-]?\d+)", text, flags=re.IGNORECASE)
         return {"power": int(match.group(1)), "input": int(match.group(2))} if match else {}
@@ -596,8 +643,17 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
         return isinstance(answer, str) and answer.startswith("(x")
     if domain == "hs1_polynomial_factor":
         return isinstance(answer, str) and answer.startswith("(x")
-    if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_limit", "hs2_derivative", "hs2_integral"}:
+    if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_derivative", "hs2_integral"}:
         return isinstance(answer, (int, float))
+    if domain == "hs2_limit":
+        if not isinstance(answer, (int, float)):
+            return False
+        if slots.get("kind") == "quadratic_difference_quotient":
+            point, quadratic, linear = slots["point"], slots["quadratic"], slots["linear"]
+            step = 1e-6
+            value_at = lambda x: quadratic * x * x + linear * x + slots.get("constant", 0)
+            return abs(answer - (value_at(point + step) - value_at(point)) / step) < 1e-5
+        return slots.get("kind") == "quadratic_plus_linear" and answer == slots["point"] ** 2 + 3 * slots["point"]
     if domain == "hs1_exponential_equation":
         if slots.get("kind") == "linear_power_equation":
             left = slots["left_base"] ** (slots["left_x"] * answer + slots["left_constant"])
@@ -794,10 +850,12 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         if answer is None:
             return {"status": "FAIL", "reason": "특수각(0,30,45,60,90)만 지원합니다."}
     elif domain == "hs2_limit":
-        point, coefficients = slots.get("point"), slots.get("coefficients", [])
-        if point is None:
-            return {"status": "FAIL", "reason": "극한점이 필요합니다."}
-        answer = point * point + 3 * point if len(coefficients) >= 2 else point
+        if slots.get("kind") == "quadratic_difference_quotient":
+            answer = 2 * slots["quadratic"] * slots["point"] + slots["linear"]
+        elif slots.get("kind") == "quadratic_plus_linear":
+            answer = slots["point"] ** 2 + 3 * slots["point"]
+        else:
+            return {"status": "FAIL", "reason": "지원하는 다항식 극한 또는 차분몫 구조가 필요합니다."}
     elif domain == "hs2_derivative":
         power, input_value = slots.get("power"), slots.get("input")
         if power is None or input_value is None:

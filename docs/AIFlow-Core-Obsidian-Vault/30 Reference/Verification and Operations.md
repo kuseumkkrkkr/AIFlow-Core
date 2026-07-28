@@ -8,6 +8,7 @@ sources:
   - ../../../scripts/build_local_tool_dataset.py
   - ../../../scripts/train_local_tool_embedder.py
   - ../../../scripts/import_official_pdf_corpus.py
+  - ../../../engine/rule_based_nlp.py
 ---
 
 # 검증·운영
@@ -53,6 +54,8 @@ python scripts/run_router_experiment.py --corpus private_benchmarks\official\202
 ```powershell
 python scripts/import_official_pdf_corpus.py --exam-id kice_2027_06 --question-url https://cdn2.kice.re.kr/suneung27mo06/suneung27mo06_2.pdf --answer-url https://cdn2.kice.re.kr/suneung27mo06/suneung27mo06_2a.pdf --output-dir private_benchmarks\official\kice_2027_06
 ```
+
+2027학년도 6월 수학 영역의 로컬 점검에서는 원문 해시를 붙인 문항을 `private_benchmarks/official/kice_2027_06/corpus.json`에만 추가한다. 이 코퍼스에서 확인된 `a^(mx+p)=b^(nx+q)` 및 이차다항식 차분몫은 실행 계약으로 승격하고, 지원하지 않는 유리 지수·일반 극한은 성공값을 추정하지 않고 `FAIL`로 남긴다. 보고서의 허위 `PASS`율은 이 미지원 문항까지 포함해 계산한다.
 
 라우터 회귀에는 지원 문항뿐 아니라 해가 유일하지 않거나 필수 표현이 빠진 문항도 둔다. 이 경우 유사한 숫자 패턴을 가진 다른 도구가 `PASS`하지 않아야 하며, 예를 들어 정적분 도구는 `정적분`·`부정적분`·`적분` 중 하나가 없는 입력을 실행하지 않는다.
 

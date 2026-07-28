@@ -9,8 +9,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "engine"))
 from knowledge_catalog import load_tool_knowledge_catalogs  # noqa: E402
+from mini_neural_router import MODEL_VERSION  # noqa: E402
 from math_tools import MATH_TOOL_REGISTRY  # noqa: E402
 from problem_generation_loop import DIFFICULTY_POLICY, FORMULA_KNOWLEDGE  # noqa: E402
+from solver_router import ROUTER_VERSIONS  # noqa: E402
 
 
 def _load_curriculum_catalog() -> dict:
@@ -22,8 +24,8 @@ def _load_curriculum_catalog() -> dict:
 ALGORITHM = {
     "version": "AIFlow-Core v0.5",
     "pipeline": [
-        {"step": 1, "name": "정규화", "detail": "NFKC와 유니코드 숫자를 통일한다."},
-        {"step": 2, "name": "개념 분류", "detail": "키워드·별칭·수식 패턴으로 도메인과 신뢰도를 계산한다."},
+        {"step": 1, "name": "LaTeX·문자 정규화", "detail": "고교 핵심 LaTeX, NFKC와 유니코드 숫자를 통일하고 미지원 명령은 FAIL로 표시한다."},
+        {"step": 2, "name": "도구 후보 검색", "detail": "rule·mini neural·local embedding 중 선택한 라우터가 같은 도구 후보의 순서를 정한다."},
         {"step": 3, "name": "슬롯 추출", "detail": "계수·입력값·범위·조건을 구조화한다."},
         {"step": 4, "name": "규칙 경로 선택", "detail": "필수 슬롯 누락·위험도·단계 수가 가장 작은 지식 규칙을 선택한다."},
         {"step": 5, "name": "수학 도구 호출", "detail": "구조화된 슬롯만 허용 목록의 계산 도구로 전달하고, 도구 결과를 trace에 기록한다."},
@@ -35,6 +37,12 @@ ALGORITHM = {
         "formula_knowledge": list(FORMULA_KNOWLEDGE),
     },
     "math_tools": sorted(MATH_TOOL_REGISTRY),
+    "routing_experiments": {
+        "modes": ROUTER_VERSIONS,
+        "neural_model": MODEL_VERSION,
+        "embedding": "local-char-ngram-embedding-v1",
+        "comparison_contract": "후보 집합·슬롯 추출·계산·검산·시간 제한을 공유하고 도구 순서만 비교한다.",
+    },
     # 카탈로그는 검색·확장 우선순위를 위한 지식 목록이며, 모든 항목이 아직 실행 규칙이라는 뜻은 아니다.
     "curriculum_knowledge": _load_curriculum_catalog(),
     "tool_knowledge_catalogs": load_tool_knowledge_catalogs(),

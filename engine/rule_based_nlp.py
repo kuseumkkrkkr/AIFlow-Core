@@ -14,6 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from latex_normalizer import normalize_latex_input
 from math_tools import call_math_tool
 
 
@@ -28,6 +29,7 @@ def _load(name: str) -> dict[str, Any]:
 
 def normalize_text(text: str) -> str:
     """필요 변수: 사용자 문장. 유니코드 숫자와 수학 기호를 검색 친화적으로 통일한다."""
+    text = normalize_latex_input(text)["normalized"]
     out: list[str] = []
     for ch in unicodedata.normalize("NFKC", text or ""):
         try:
@@ -35,6 +37,23 @@ def normalize_text(text: str) -> str:
         except (TypeError, ValueError):
             out.append(ch)
     return "".join(out).replace("−", "-").replace("×", "*").replace("∩", "∩")
+
+
+def parse_for_domain(text: str, domain: str) -> dict[str, Any]:
+    """변수: 원문 문제와 라우터가 선택한 도메인. 원리: 공통 LaTeX 정규화 뒤 해당 도구의 슬롯만 추출한다.
+
+    라우팅 실험에서는 classify의 최종 선택을 사용하지 않는다. 세 라우터가 같은
+    입력에서 선택한 domain으로 이 함수를 호출해 슬롯 추출·계산·검산을 공평하게 공유한다.
+    """
+    latex = normalize_latex_input(text)
+    normalized = normalize_text(latex["normalized"])
+    return {
+        "original": latex["original"],
+        "normalized": normalized,
+        "latex": latex,
+        "domain": domain,
+        "slots": _extract_slots(normalized, domain),
+    }
 
 
 def classify(text: str) -> dict[str, Any]:
@@ -262,6 +281,21 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
             return {"kind": "power", "base": int(power.group(1)), "exponent": int(power.group(2))}
         return {}
     if domain == "hs1_exponential_equation":
+        complex_power = re.search(
+            r"([0-9]+)\s*\^\s*\(?\s*([+-]?\s*[0-9]*)\s*x\s*([+-]\s*[0-9]+)?\s*\)?\s*=\s*"
+            r"([0-9]+)\s*\^\s*\(?\s*([+-]?\s*[0-9]*)\s*x\s*([+-]\s*[0-9]+)?\s*\)?", text, flags=re.IGNORECASE,
+        )
+        if complex_power:
+            def coefficient(raw: str) -> int:
+                compact = raw.replace(" ", "")
+                return -1 if compact == "-" else (1 if compact in ("", "+") else int(compact))
+            def constant(raw: str | None) -> int:
+                return int((raw or "0").replace(" ", ""))
+            return {
+                "kind": "linear_power_equation", "left_base": int(complex_power.group(1)), "left_x": coefficient(complex_power.group(2)),
+                "left_constant": constant(complex_power.group(3)), "right_base": int(complex_power.group(4)),
+                "right_x": coefficient(complex_power.group(5)), "right_constant": constant(complex_power.group(6)),
+            }
         power = re.search(r"([0-9]+)\s*\^\s*x\s*=\s*([0-9]+)", text, flags=re.IGNORECASE)
         log_eq = re.search(r"log\s*_?\s*([0-9]+)\s*x\s*=\s*([0-9]+)", text, flags=re.IGNORECASE)
         if power:
@@ -373,7 +407,13 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
         return isinstance(answer, str) and answer.startswith("(x")
     if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_limit", "hs2_derivative", "hs2_integral"}:
         return isinstance(answer, (int, float))
-    if domain in {"hs1_exponential_equation", "hs2_tangent"}:
+    if domain == "hs1_exponential_equation":
+        if slots.get("kind") == "linear_power_equation":
+            left = slots["left_base"] ** (slots["left_x"] * answer + slots["left_constant"])
+            right = slots["right_base"] ** (slots["right_x"] * answer + slots["right_constant"])
+            return abs(left - right) < 1e-8
+        return isinstance(answer, (int, float))
+    if domain == "hs2_tangent":
         return isinstance(answer, (int, float))
     if domain == "cm_quadratic":
         a, b, c = (slots.get(key) for key in ("a", "b", "c"))
@@ -520,7 +560,19 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         else:
             return {"status": "FAIL", "reason": "a^n 또는 log_a b 형식이 필요합니다."}
     elif domain == "hs1_exponential_equation":
-        if slots.get("kind") == "power_equation":
+        if slots.get("kind") == "linear_power_equation":
+            import math
+            left_base, right_base = slots["left_base"], slots["right_base"]
+            if left_base <= 0 or left_base == 1 or right_base <= 0 or right_base == 1:
+                return {"status": "FAIL", "reason": "지수방정식의 밑 조건이 올바르지 않습니다."}
+            base_change = math.log(right_base) / math.log(left_base)
+            coefficient = slots["left_x"] - base_change * slots["right_x"]
+            constant = base_change * slots["right_constant"] - slots["left_constant"]
+            if abs(coefficient) < 1e-12:
+                return {"status": "FAIL", "reason": "해가 유일한 일차 지수방정식이 아닙니다."}
+            answer = constant / coefficient
+            answer = int(answer) if abs(answer - round(answer)) < 1e-12 else answer
+        elif slots.get("kind") == "power_equation":
             base, value, exponent = slots["base"], slots["value"], 0
             current = 1
             while current < value and value % base == 0:

@@ -13,6 +13,11 @@ last_verified: 2026-07-28
 | `api/corpus.py` | `handler.do_POST` | 최대 100개 사용자 문항을 일괄 채점 |
 | `api/algorithm.py` | `ALGORITHM` | 웹에 알고리즘·지식 카탈로그 공개 |
 | `engine/rule_based_nlp.py` | `classify`, `solve_rule`, `verify_result` | 엔진의 핵심 해석·계산·검산 |
+| `engine/latex_normalizer.py` | `normalize_latex_input` | 고교 핵심 LaTeX를 안전한 평문 수식으로 정규화 |
+| `engine/solver_router.py` | `solve_with_router` | LaTeX 정규화→후보 도구→공통 계산·검산을 조정 |
+| `engine/tool_routing.py` | `rank_tools` | rule·neural·embedding의 같은 도구 후보 순위화 |
+| `engine/mini_neural_router.py` | `neural_probabilities` | 저장소 가중치의 의존성 없는 소형 MLP 추론 |
+| `engine/experiment_runner.py` | `run_experiment` | 실제 전문 로컬 코퍼스의 세 라우터 비교 보고서 |
 | `engine/math_tools.py` | `call_math_tool`, `MATH_TOOL_REGISTRY` | 범용 수학 계산 도구의 허용 목록·호출 |
 | `engine/knowledge_catalog.py` | `load_tool_knowledge_catalogs` | 과목별 카탈로그를 공통 지식 계약으로 정규화 |
 | `engine/problem_generation_loop.py` | `generate_and_validate` | 난이도 계약을 포함한 생성 실험 |
@@ -23,7 +28,7 @@ last_verified: 2026-07-28
 
 ## 코드 의존 방향
 
-`UI → API → Engine → Knowledge`가 단방향 의존이다. `Knowledge`는 엔진을 import하지 않으며, `tests`와 `docs`는 제품 요청 처리 경로에 포함되지 않는다. 따라서 웹 요청마다 DB 연결이나 전체 코퍼스 스캔이 발생하지 않는다.
+`UI → API → Engine → Knowledge`가 단방향 의존이다. `Knowledge`는 엔진을 import하지 않으며, `tests`와 `docs`는 제품 요청 처리 경로에 포함되지 않는다. 따라서 웹 요청마다 DB 연결이나 전체 코퍼스 스캔이 발생하지 않는다. 미니 신경망 가중치는 요청마다 재학습하지 않고 모듈 캐시로 한 번만 로드한다.
 
 ## 확장 규칙
 

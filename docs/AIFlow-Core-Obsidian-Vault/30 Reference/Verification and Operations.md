@@ -16,10 +16,13 @@ sources:
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/continuous_validation.ps1
 python tests/test_api_serialization.py
-python engine/corpus_runner.py benchmarks/official_exam_regression.json --repeats 20
+python tests/test_latex_and_routing.py
+python -c "import sys; sys.path.insert(0, 'engine'); from experiment_runner import run_experiment; print(run_experiment('private_benchmarks/official/corpus.json'))"
 ```
 
 검증 스크립트는 핵심 규칙, 생성 루프, 난이도 입력 검증, seed 매트릭스, 코퍼스 회귀를 실행한다. 보고서는 UTF-8 JSON으로 `docs/`에 기록한다.
+
+`private_benchmarks/`는 Git에서 제외된다. 공개 기출·문제집 전문·PDF·이미지는 이 경로에만 보관하고, 저장소에는 출처·문항번호·원문 SHA-256·집계 결과만 남긴다. `engine/experiment_runner.py`는 같은 전문으로 `rule`, `neural`, `embedding`을 비교해 도구 선택 정확도, 정답 정확도, 검산 통과율, 허위 PASS율, 미지원 거부 정확도, 평균 처리 시간을 각각 기록한다.
 
 ## API 운영 한계
 

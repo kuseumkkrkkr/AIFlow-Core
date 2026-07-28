@@ -19,6 +19,9 @@ function Invoke-ValidationStep {
 }
 
 Invoke-ValidationStep "핵심 규칙" @("tests/test_rule_based_nlp.py")
+Invoke-ValidationStep "LaTeX router" "tests/test_latex_and_routing.py"
+Invoke-ValidationStep "knowledge contract" "tests/test_knowledge_catalog.py"
+Invoke-ValidationStep "API serialization" "tests/test_api_serialization.py"
 Invoke-ValidationStep "문제 생성 루프" @("tests/test_generation_loop.py")
 Invoke-ValidationStep "생성 검증 계약" @("tests/test_generation_validation.py")
 Invoke-ValidationStep "다중 seed 매트릭스" @("tests/test_benchmark_matrix.py")

@@ -1,0 +1,64 @@
+"""세 도구 라우터를 동일한 실제 문제 코퍼스로 비교하는 재현 가능한 평가기."""
+from __future__ import annotations
+
+import json
+import time
+from pathlib import Path
+from typing import Any
+
+from solver_router import ROUTER_VERSIONS, solve_with_router
+
+
+def _same_answer(actual: Any, expected: Any) -> bool:
+    """변수: 실제 반환값·정답지 값. 원리: 정확한 동치 후 수치 오차만 제한적으로 허용한다."""
+    if actual == expected:
+        return True
+    try:
+        return abs(float(actual) - float(expected)) < 1e-9
+    except (TypeError, ValueError):
+        return False
+
+
+def evaluate_router(records: list[dict[str, Any]], mode: str) -> dict[str, Any]:
+    """변수: 전문 코퍼스·라우터. 원리: 공통 solver 결과로 선택·정답·검산·거부 지표를 분리 집계한다."""
+    cases: list[dict[str, Any]] = []
+    for index, record in enumerate(records, start=1):
+        started = time.perf_counter()
+        response = solve_with_router(str(record.get("question", "")), mode)
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 3)
+        expected = record.get("expected")
+        expected_domain = record.get("expected_domain")
+        supported = bool(record.get("supported", expected_domain is not None))
+        selected = response.get("router", {}).get("selected_domain")
+        passed = response.get("status") == "PASS"
+        answer_ok = passed and _same_answer(response.get("result", {}).get("answer"), expected)
+        cases.append({
+            "case_id": record.get("case_id", f"case-{index:04d}"), "source": record.get("source", "local-private"),
+            "question_hash": record.get("question_hash"), "expected_domain": expected_domain, "selected_domain": selected,
+            "supported": supported, "status": response.get("status"), "answer_ok": answer_ok,
+            "verified": response.get("result", {}).get("verified") is True, "false_pass": passed and not answer_ok,
+            "unsupported_rejected": not supported and not passed, "elapsed_ms": elapsed_ms,
+            "reason": response.get("reason", response.get("result", {}).get("reason", "")),
+        })
+    routed = [case for case in cases if case["expected_domain"]]
+    supported_cases = [case for case in cases if case["supported"]]
+    unsupported_cases = [case for case in cases if not case["supported"]]
+    rate = lambda values: sum(values) / len(values) if values else None
+    return {
+        "router": {"mode": mode, "version": ROUTER_VERSIONS[mode]}, "total": len(cases), "cases": cases,
+        "tool_selection_accuracy": rate([case["selected_domain"] == case["expected_domain"] for case in routed]),
+        "answer_accuracy": rate([case["answer_ok"] for case in supported_cases]),
+        "verification_pass_rate": rate([case["verified"] for case in supported_cases]),
+        "false_pass_rate": rate([case["false_pass"] for case in cases]),
+        "unsupported_rejection_accuracy": rate([case["unsupported_rejected"] for case in unsupported_cases]),
+        "mean_elapsed_ms": rate([case["elapsed_ms"] for case in cases]),
+    }
+
+
+def run_experiment(path: str | Path) -> dict[str, Any]:
+    """변수: UTF-8 JSON 코퍼스 경로. 원리: 정확히 같은 전문 문항으로 rule/neural/embedding 세 보고서를 만든다."""
+    source = Path(path)
+    records = json.loads(source.read_text(encoding="utf-8"))
+    if not isinstance(records, list) or not records:
+        raise ValueError("실험 코퍼스는 비어 있지 않은 JSON 배열이어야 합니다.")
+    return {"source": str(source), "reports": [evaluate_router(records, mode) for mode in ("rule", "neural", "embedding")]}

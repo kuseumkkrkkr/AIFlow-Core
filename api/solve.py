@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "engine"))
 
-from rule_based_nlp import build_solution_trace, classify, select_optimal_rule, solve_rule  # noqa: E402
+from solver_router import solve_with_router  # noqa: E402
 
 
 def _json_default(value: object) -> str:
@@ -55,22 +55,13 @@ class handler(BaseHTTPRequestHandler):
             if not question:
                 self._send(400, {"status": "FAIL", "reason": "question이 비어 있습니다."})
                 return
-            parsed = classify(question)
-            result = solve_rule(parsed.get("domain", ""), parsed.get("slots", {}))
-            path = select_optimal_rule(parsed)
-            response = {
-                "status": result.get("status", "FAIL"),
-                "question": question,
-                "parse": parsed,
-                "path": path,
-                "result": result,
-                "steps": build_solution_trace(parsed, result) if result.get("status") == "PASS" else [],
-                "summary": (
-                    f"{parsed.get('domain')} 규칙을 적용해 정답 {result.get('answer')}를 계산하고 재검산했습니다."
-                    if result.get("status") == "PASS"
-                    else str(result.get("reason", "문제를 해석하지 못했습니다."))
-                ),
-            }
+            mode = str(payload.get("router", "rule"))
+            response = solve_with_router(question, mode)
+            response["summary"] = (
+                f"{response['router'].get('selected_domain')} 도구 경로로 정답 {response['result'].get('answer')}를 계산하고 재검산했습니다."
+                if response.get("status") == "PASS"
+                else str(response.get("reason", "문제를 해석하지 못했습니다."))
+            )
             self._send(200, response)
         except (ValueError, TypeError, json.JSONDecodeError) as exc:
             self._send(400, {"status": "FAIL", "reason": f"입력 해석 실패: {exc}"})

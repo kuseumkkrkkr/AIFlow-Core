@@ -1,0 +1,20 @@
+{
+  "format": "AIFlow-Core private benchmark v1",
+  "storage": "private_benchmarks/official/*.json (gitignored)",
+  "required_record_fields": ["case_id", "source", "exam_date", "question_number", "question_hash", "question", "latex_question", "expected", "expected_domain", "curriculum", "diagram_dependent", "supported"],
+  "policy": "원문 전문·PDF·이미지는 private_benchmarks에만 저장한다. 저장소에는 출처와 해시, 집계 보고서만 남긴다.",
+  "example": {
+    "case_id": "official-YYYY-MM-g2-math-08",
+    "source": "공개 공식 문제지 URL",
+    "exam_date": "YYYY-MM",
+    "question_number": 8,
+    "question_hash": "sha256:원문_UTF-8_해시",
+    "question": "로컬 비공개 원문 전문",
+    "latex_question": "선택: 정규화 전 LaTeX",
+    "expected": 7,
+    "expected_domain": "hs_rational_interval_extrema",
+    "curriculum": "수학Ⅱ",
+    "diagram_dependent": false,
+    "supported": true
+  }
+}

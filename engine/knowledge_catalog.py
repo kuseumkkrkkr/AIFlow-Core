@@ -18,6 +18,9 @@ CATALOG_SUBJECT_DEFAULTS = {
     "advanced_algebra_tool_catalog": "고2 대수·다항식·행렬",
     "advanced_calculus_tool_catalog": "고2 수열·극한·미적분",
     "advanced_stats_geometry_tool_catalog": "고2 확률분포·좌표기하·벡터",
+    "linear_algebra_tool_catalog": "대학 기초수학·선형대수",
+    "foundations_analysis_tool_catalog": "대학 기초수학·해석",
+    "discrete_math_tool_catalog": "대학 기초수학·이산수학",
 }
 STATUS_ALIASES = {
     "실행 가능": "실행 가능",
@@ -43,6 +46,7 @@ def _normalize_item(item: dict[str, Any], catalog_name: str) -> dict[str, Any]:
         "concept_id": item.get("concept_id"),
         "name": item.get("name", item.get("name_kr")),
         "subject": item.get("subject", CATALOG_SUBJECT_DEFAULTS.get(catalog_name, catalog_name)),
+        "prerequisite_ids": item.get("prerequisite_ids", []),
         "input_slots": item.get("input_slots", []),
         "tool": item.get("tool"),
         "formula": item.get("formula"),

@@ -17,7 +17,7 @@ flowchart TD
     D --> E[classify<br/>키워드·수식 패턴 점수화]
     E --> F[_extract_slots<br/>계수·항·확률·벡터 성분 추출]
     F --> G[select_optimal_rule<br/>누락 슬롯·위험도·단계 수 비교]
-    G --> H[solve_rule]
+    G --> H[solve_rule / call_math_tool]
     H --> I{규칙의 입력 조건 충족?}
     I -- 아니오 --> J[FAIL + reason]
     I -- 예 --> K[verify_result<br/>독립 불변식 재계산]

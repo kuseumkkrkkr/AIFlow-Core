@@ -36,7 +36,9 @@ def test_core_domains() -> None:
         ("지수방정식 2^x=8", "hs1_exponential_equation", 3),
         ("로그방정식 log_2 x=3", "hs1_exponential_equation", 8),
         ("접선의 기울기 f(x)=x^2, x=3", "hs2_tangent", 6),
-        ("양수 a와 이차함수 f(x)에 대하여 조각함수 g(x)=sin(3πx/a), 서로 다른 실근의 개수를 h(n)이라 할 때 g(10)의 값", "hs2_piecewise_trig_quadratic", 224),
+        ("3 ≤ x ≤ 5에서 함수 f(x)=a/(x-1)+b (a>0)의 최댓값이 5, 최솟값이 4일 때 a+b의 값", "hs_rational_interval_extrema", 7),
+        ("다항식 P(x)를 x+1로 나눈 나머지는 3이고, x-2로 나눈 나머지는 -3이다. P(x)를 (x+1)(x-2)로 나눈 나머지를 R(x)라 할 때 R(3)의 값", "hs_polynomial_remainder", -5),
+        ("양수 k에 대하여 두 행렬 A=((1,3),(k,5)), B=((k,1),(-2,4))라 하자. AB=((a,13),(-1,b))일 때 a+b의 값", "hs_matrix_product", 20),
         ("복합중 등차수열 첫항 2, 공차 3에서 a5+a8의 값", "hs_composite_sequence", 37),
         ("복합상 등차수열 첫항 2, 공차 3에서 M=a5+a8, f(x)=2x+1, g(x)=x+M일 때 log_2(2^(f(g(4)))", "hs_composite_sequence_function", 83),
         ("등비수열 첫항 3, 공비 2일 때 a5", "hs1_geometric_sequence", 48),
@@ -61,7 +63,15 @@ def test_invalid_geometry_is_rejected() -> None:
     assert result["status"] == "FAIL"
 
 
+def test_removed_exam_specific_rule_is_rejected() -> None:
+    """특정 시험 문항의 숫자에만 의존하던 전용 규칙이 제거됐는지 확인한다."""
+    parsed = classify("양수 a와 이차함수 f(x)에 대하여 조각함수 g(x)=sin(3πx/a), 서로 다른 실근의 개수를 h(n)이라 할 때 g(10)의 값")
+    result = solve_rule(parsed["domain"], parsed["slots"])
+    assert result["status"] == "FAIL"
+
+
 if __name__ == "__main__":
     test_core_domains()
     test_invalid_geometry_is_rejected()
+    test_removed_exam_specific_rule_is_rejected()
     print("PASS: rule_based_nlp core domains")

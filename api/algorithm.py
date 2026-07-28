@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "engine"))
+from math_tools import MATH_TOOL_REGISTRY  # noqa: E402
 from problem_generation_loop import DIFFICULTY_POLICY, FORMULA_KNOWLEDGE  # noqa: E402
 
 
@@ -32,13 +33,14 @@ ALGORITHM = {
         "tuple_definition": ["최소 공식 수", "최대 공식 수", "동일 공식 최대 중복"],
         "formula_knowledge": list(FORMULA_KNOWLEDGE),
     },
+    "math_tools": sorted(MATH_TOOL_REGISTRY),
     # 카탈로그는 검색·확장 우선순위를 위한 지식 목록이며, 모든 항목이 아직 실행 규칙이라는 뜻은 아니다.
     "curriculum_knowledge": _load_curriculum_catalog(),
     "supported_domains": [
         "중3: 일차·이차방정식, 비율, 집합, 확률, 도형, 등차수열",
         "고1·수1: 함수, 합성·역함수, 인수분해, 지수·로그, 삼각함수",
         "수2: 극한, 미분, 접선, 적분",
-        "결합: 조각 삼각함수·이차함수·실근 개수 조건",
+        "도구 호출: 두 일차식 나머지 보간, 유리함수 구간 극값, 2×2 행렬 곱",
     ],
 }
 

@@ -14,6 +14,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from math_tools import call_math_tool
+
 
 _ROOT = Path(__file__).resolve().parents[1] / "knowledge"
 
@@ -67,13 +69,15 @@ def classify(text: str) -> dict[str, Any]:
         "hs2_derivative": ["미분", "도함수", "미분계수"],
         "hs2_tangent": ["접선", "접선의 기울기", "접선 기울기"],
         "hs2_integral": ["적분", "부정적분", "정적분"],
-        "hs2_piecewise_trig_quadratic": ["조각함수", "서로 다른 실근", "h(", "g(10)", "이차함수"],
         "hs_composite_sequence": ["복합중", "a5+a8", "수열합성"],
         "hs_composite_sequence_function": ["복합상", "M=a", "수열함수합성"],
         "hs1_geometric_sequence": ["등비수열", "공비"],
         "stat_binomial_distribution": ["이항분포", "이항확률"],
         "geo_vector_dot": ["벡터 내적", "내적"],
         "cal_trig_derivative": ["sin x의 도함수", "cos x의 도함수", "삼각함수 미분"],
+        "hs_polynomial_remainder": ["나눈 나머지", "나머지를 R(x)"],
+        "hs_rational_interval_extrema": ["최댓값", "최솟값", "a/(x-"],
+        "hs_matrix_product": ["두 행렬", "AB=", "행렬 A", "행렬 B"],
     }
     for domain_name, keywords in aliases.items():
         hits = [word for word in keywords if word in normalized]
@@ -103,9 +107,6 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs2_tangent"] = scores.get("hs2_tangent", 0) + 7
     if "적분" in normalized:
         scores["hs2_integral"] = scores.get("hs2_integral", 0) + 6
-    # 조각함수·삼각함수·이차함수·실근 개수가 결합된 고난도 유형을 별도 분류한다.
-    if all(token in normalized for token in ("sin", "이차함수", "서로 다른 실근")) and ("g(" in normalized or "g" in normalized):
-        scores["hs2_piecewise_trig_quadratic"] = scores.get("hs2_piecewise_trig_quadratic", 0) + 20
     if "복합중" in normalized:
         scores["hs_composite_sequence"] = scores.get("hs_composite_sequence", 0) + 30
     if "복합상" in normalized:
@@ -118,6 +119,12 @@ def classify(text: str) -> dict[str, Any]:
         scores["geo_vector_dot"] = scores.get("geo_vector_dot", 0) + 12
     if "sin x의 도함수" in normalized or "cos x의 도함수" in normalized or "삼각함수 미분" in normalized:
         scores["cal_trig_derivative"] = scores.get("cal_trig_derivative", 0) + 12
+    if normalized.count("나눈 나머지") >= 2 and "R(" in normalized:
+        scores["hs_polynomial_remainder"] = scores.get("hs_polynomial_remainder", 0) + 20
+    if "최댓값" in normalized and "최솟값" in normalized and "a/(x-" in normalized:
+        scores["hs_rational_interval_extrema"] = scores.get("hs_rational_interval_extrema", 0) + 20
+    if "AB=" in normalized and "두 행렬" in normalized:
+        scores["hs_matrix_product"] = scores.get("hs_matrix_product", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -185,6 +192,45 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         kind = "sin" if "sin" in text else "cos" if "cos" in text else None
         input_value = value(r"x\s*=\s*([+-]?\d+)")
         return {"kind": kind, "input": input_value} if kind and input_value is not None else {}
+    if domain == "hs_polynomial_remainder":
+        matches = re.findall(r"x\s*([+-])\s*(\d+)\s*로\s*나눈\s*나머지는\s*([+-]?\d+)", text)
+        point = value(r"R\s*\(\s*([+-]?\d+)\s*\)")
+        if len(matches) < 2 or point is None:
+            return {}
+        roots = [(-int(constant) if sign == "+" else int(constant), int(remainder)) for sign, constant, remainder in matches[:2]]
+        return {"root1": roots[0][0], "remainder1": roots[0][1], "root2": roots[1][0], "remainder2": roots[1][1], "point": point}
+    if domain == "hs_rational_interval_extrema":
+        function = re.search(r"a\s*/\s*\(\s*x\s*([+-])\s*(\d+)\s*\)\s*\+\s*b", text)
+        interval = re.search(r"([+-]?\d+)\s*≤\s*x\s*≤\s*([+-]?\d+)", text)
+        maximum = value(r"최댓값이\s*([+-]?\d+)")
+        minimum = value(r"최솟값이\s*([+-]?\d+)")
+        if not function or not interval or maximum is None or minimum is None:
+            return {}
+        shift = int(function.group(2)) if function.group(1) == "-" else -int(function.group(2))
+        return {"shift": shift, "left": int(interval.group(1)), "right": int(interval.group(2)), "maximum": maximum, "minimum": minimum}
+    if domain == "hs_matrix_product":
+        matrix_pattern = r"\(\(\s*([^,()]+)\s*,\s*([^,()]+)\s*\)\s*,\s*\(\s*([^,()]+)\s*,\s*([^,()]+)\s*\)\s*\)"
+        left_match = re.search(r"A\s*=\s*" + matrix_pattern, text)
+        right_match = re.search(r"B\s*=\s*" + matrix_pattern, text)
+        product_match = re.search(r"AB\s*=\s*" + matrix_pattern, text)
+        if not left_match or not right_match or not product_match:
+            return {}
+        def parse_entry(raw: str) -> int | str | None:
+            item = raw.strip()
+            return item if item == "k" else int(item) if re.fullmatch(r"[+-]?\d+", item) else None
+        left_values = [parse_entry(item) for item in left_match.groups()]
+        right_values = [parse_entry(item) for item in right_match.groups()]
+        if any(item is None for item in left_values + right_values):
+            return {}
+        targets: dict[tuple[int, int], int] = {}
+        requested: list[tuple[int, int]] = []
+        for index, item in enumerate(entry.strip() for entry in product_match.groups()):
+            row, column = divmod(index, 2)
+            if re.fullmatch(r"[+-]?\d+", item):
+                targets[(row, column)] = int(item)
+            elif re.fullmatch(r"[a-z]", item):
+                requested.append((row, column))
+        return {"left": [left_values[:2], left_values[2:]], "right": [right_values[:2], right_values[2:]], "targets": targets, "requested": requested}
     if domain == "cm_set":
         return {k: v for k, v in {"a": value(r"\|A\|\s*=\s*([+-]?\d+)"), "b": value(r"\|B\|\s*=\s*([+-]?\d+)"), "c": value(r"\|A∩B\|\s*=\s*([+-]?\d+)")}.items() if v is not None}
     if domain == "cm_linear":
@@ -242,9 +288,6 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         if len(numbers) >= 2:
             return {"lower": numbers[0], "upper": numbers[1], "power": int(match.group(2) or 1) if match else 1}
         return {}
-    if domain == "hs2_piecewise_trig_quadratic":
-        target = value(r"g\s*(?:\(|)\s*([+-]?\d+)\s*(?:\)|)")
-        return {"target": target} if target is not None else {}
     if domain in {"hs_composite_sequence", "hs_composite_sequence_function"}:
         sequence = re.search(r"첫항\s*([+-]?\d+)\s*,?\s*공차\s*([+-]?\d+).*?a\s*([0-9]+)\s*\+\s*a\s*([0-9]+)", text)
         if not sequence:
@@ -328,7 +371,7 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
         return isinstance(answer, str) and answer.startswith("(x")
     if domain == "hs1_polynomial_factor":
         return isinstance(answer, str) and answer.startswith("(x")
-    if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_limit", "hs2_derivative", "hs2_integral", "hs2_piecewise_trig_quadratic"}:
+    if domain in {"hs1_exponential_log", "hs1_trigonometry", "hs2_limit", "hs2_derivative", "hs2_integral"}:
         return isinstance(answer, (int, float))
     if domain in {"hs1_exponential_equation", "hs2_tangent"}:
         return isinstance(answer, (int, float))
@@ -346,12 +389,13 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
 
 def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     """필요 변수: 분류 도메인과 슬롯. 중3 기본 규칙을 계산하고 검산 결과를 함께 반환한다."""
-    if domain == "hs2_piecewise_trig_quadratic":
-        # 조건 (가)(나)의 결합을 해석한 전용 규칙: a=18/5, 꼭짓점 (4,-1), 계수 25/4.
-        if slots.get("target") != 10:
-            return {"status": "FAIL", "reason": "현재 결합 규칙은 g(10) 목표형만 지원합니다."}
-        return {"status": "PASS", "answer": 224, "formula": "g(x)=25/4·(x-4)^2-1 (x≥18/5)", "verified": True,
-                "parameters": {"a": 18 / 5, "quadratic_coefficient": 25 / 4, "vertex": [4, -1]}}
+    tool_by_domain = {
+        "hs_polynomial_remainder": "polynomial_remainder_two_linear",
+        "hs_rational_interval_extrema": "rational_interval_extrema",
+        "hs_matrix_product": "symbolic_matrix_product_2x2",
+    }
+    if domain in tool_by_domain:
+        return call_math_tool(tool_by_domain[domain], slots)
     if domain == "hs_composite_sequence":
         a1, d, n1, n2 = (slots.get(key) for key in ("a1", "d", "n1", "n2"))
         if None in (a1, d, n1, n2):
@@ -606,7 +650,6 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
         "hs2_derivative": "(x^n)'=nx^(n-1)",
         "hs2_tangent": "접선 기울기=f'(a)",
         "hs2_integral": "∫x^n dx=x^(n+1)/(n+1)",
-        "hs2_piecewise_trig_quadratic": "주기·최솟값·실근 개수 조건→매개변수 결정→이차식 대입",
         "hs_composite_sequence": "a_n=a_1+(n-1)d → a_p+a_q",
         "hs_composite_sequence_function": "수열 → 합성함수 → 지수·로그 역연산",
         "hs1_geometric_sequence": "a_n=a_1r^(n-1), S_n=a_1(r^n-1)/(r-1)",
@@ -642,7 +685,9 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs2_derivative": "hs2_power_derivative",
             "hs2_tangent": "hs2_tangent_slope",
             "hs2_integral": "hs2_power_integral",
-            "hs2_piecewise_trig_quadratic": "hs2_piecewise_trig_quadratic",
+            "hs_polynomial_remainder": "polynomial_remainder_two_linear",
+            "hs_rational_interval_extrema": "rational_interval_extrema",
+            "hs_matrix_product": "symbolic_matrix_product_2x2",
             "hs_composite_sequence": "hs_composite_sequence",
             "hs_composite_sequence_function": "hs_composite_sequence_function",
             "hs1_geometric_sequence": "hs1_geometric_sequence",
@@ -678,11 +723,6 @@ def build_solution_trace(parsed: dict[str, Any], result: dict[str, Any]) -> list
     elif domain == "hs1_polynomial_factor":
         steps.append(f"4. 두 수의 합은 {slots['b']}, 곱은 {slots['c']}가 되도록 찾는다.")
         steps.append(f"5. 인수분해 결과는 {result.get('answer')}이다.")
-    elif domain == "hs2_piecewise_trig_quadratic":
-        steps.append("4. 주기와 최솟값 조건을 비교해 a<4, g(4)=-1을 결정한다.")
-        steps.append("5. 실근 개수 순열 조건에서 5a/6=3이므로 a=18/5이다.")
-        steps.append("6. 이차식은 꼭짓점 (4,-1), 점 (18/5,0)을 지나므로 g(x)=25/4·(x-4)^2-1이다.")
-        steps.append(f"7. x=10을 대입해 g(10)={result.get('answer')}이다.")
     elif domain == "hs_composite_sequence":
         first = slots["a1"] + (slots["n1"] - 1) * slots["d"]
         second = slots["a1"] + (slots["n2"] - 1) * slots["d"]

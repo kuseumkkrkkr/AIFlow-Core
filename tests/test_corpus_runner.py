@@ -15,13 +15,6 @@ def test_sample_corpus() -> None:
     assert report["failed"] == 0
 
 
-def test_official_exam_regression_fixture() -> None:
-    """공개 시험 문항 구조를 보존한 회귀 입력이 정답과 함께 통과하는지 확인한다."""
-    report = run_corpus(Path(__file__).resolve().parents[1] / "benchmarks" / "official_exam_regression.json")
-    assert report["total"] == 1
-    assert report["failed"] == 0
-
-
 if __name__ == "__main__":
     test_sample_corpus()
     print("PASS: corpus runner")

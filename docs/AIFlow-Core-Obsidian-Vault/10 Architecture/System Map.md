@@ -25,6 +25,7 @@ flowchart LR
     RUNNER --> NLP
     GEN --> NLP
 
+    NLP --> TOOLS[engine/math_tools.py<br/>허용된 수학 도구 호출]
     NLP --> GRAPH[knowledge/concept_graph.json]
     NLP --> RULES[knowledge/rule_library.json]
     ALGAPI --> CATALOG[knowledge/high_school_curriculum_catalog.json]

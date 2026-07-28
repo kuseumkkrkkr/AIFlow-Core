@@ -24,12 +24,12 @@
       "subject": "정수론",
       "prerequisite_ids": ["aa_integer_division_algorithm"],
       "input_slots": ["integers"],
-      "tool": {"kind": "planned_math_tool", "id": "gcd_divisibility_check"},
+      "tool": {"kind": "math_tool", "id": "evaluate_integer_gcd"},
       "formula": "d=gcd(a,b)는 a,b의 양의 공약수 중 최대이며 gcd(a,b)=gcd(|a|,|b|)이다.",
       "verification_invariant": "d는 모든 입력을 나누고, 모든 공약수 c는 d를 나누어야 한다.",
       "supported_example": "gcd(84,30)=6이다.",
       "unsupported_boundary": "다항식·이데알의 최대공약수와 0,0의 관례는 이 정수 계약 밖이다.",
-      "execution_status": "도구 구현 대기"
+      "execution_status": "제한 실행"
     },
     {
       "concept_id": "aa_extended_euclidean_bezout",

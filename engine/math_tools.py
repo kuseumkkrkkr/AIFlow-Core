@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 from typing import Any, Callable
+from math import gcd
 
 
 def polynomial_remainder_two_linear(slots: dict[str, Any]) -> dict[str, Any]:
@@ -98,11 +99,27 @@ def evaluate_polynomial_horner(slots: dict[str, Any]) -> dict[str, Any]:
     return {"status": "PASS", "answer": answer, "formula": "Horner: (((c_n x+c_{n-1})x+…)x+c_0)", "verified": answer == direct, "tool": "evaluate_polynomial_horner"}
 
 
+def evaluate_integer_gcd(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: 두 정수. 원리: 유클리드 호제법 결과가 두 수를 나누고 모든 공약수의 배수 관계를 만족하는지 확인한다."""
+    values = slots.get("integers")
+    if not isinstance(values, list) or len(values) != 2:
+        return {"status": "FAIL", "reason": "최대공약수를 구할 서로 다른 두 정수가 필요합니다."}
+    try:
+        left, right = (int(value) for value in values)
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "최대공약수 도구에는 정수만 입력할 수 있습니다."}
+    if left == 0 and right == 0:
+        return {"status": "FAIL", "reason": "gcd(0,0)은 이 도구의 정의 범위 밖입니다."}
+    answer = gcd(left, right)
+    return {"status": "PASS", "answer": answer, "formula": "gcd(a,b)=gcd(b,a mod b)", "verified": left % answer == 0 and right % answer == 0, "tool": "evaluate_integer_gcd"}
+
+
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
     "symbolic_matrix_product_2x2": symbolic_matrix_product_2x2,
     "evaluate_polynomial_horner": evaluate_polynomial_horner,
+    "evaluate_integer_gcd": evaluate_integer_gcd,
 }
 
 

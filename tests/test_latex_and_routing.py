@@ -46,6 +46,16 @@ def test_horner_tool_is_selected_and_verified_by_all_routers() -> None:
         assert response["result"]["verified"] is True
 
 
+def test_integer_gcd_tool_is_selected_and_verified_by_all_routers() -> None:
+    """정수론 지식 계약과 유클리드 호제법 도구가 세 라우터에서 함께 실행되는지 확인한다."""
+    for mode in ("rule", "neural", "embedding"):
+        response = solve_with_router("gcd(84,30)", mode)
+        assert response["status"] == "PASS"
+        assert response["router"]["selected_domain"] == "integer_gcd"
+        assert response["result"]["answer"] == 6
+        assert response["result"]["verified"] is True
+
+
 def test_experiment_metrics_separate_false_pass_and_rejection() -> None:
     """실험 보고서가 정답 정확도·허위 PASS·미지원 거부를 독립 지표로 집계하는지 확인한다."""
     records = [
@@ -64,5 +74,6 @@ if __name__ == "__main__":
     test_all_router_modes_solve_same_latex_cases()
     test_unsupported_latex_is_rejected()
     test_horner_tool_is_selected_and_verified_by_all_routers()
+    test_integer_gcd_tool_is_selected_and_verified_by_all_routers()
     test_experiment_metrics_separate_false_pass_and_rejection()
     print("PASS: latex and routing")

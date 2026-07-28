@@ -82,6 +82,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs1_conditional_probability": ["조건부확률", "P(A|B)", "P(A∩B)"],
         "hs1_polynomial_factor": ["다항식", "인수분해", "인수정리", "나머지정리"],
         "hs_polynomial_value": ["P(x)=", "다항식의 값", "다항식 함숫값"],
+        "integer_gcd": ["최대공약수", "gcd("],
         "hs1_exponential_log": ["지수", "로그", "log", "log_"],
         "hs1_exponential_equation": ["지수방정식", "로그방정식", "2^x", "log_2 x"],
         "hs1_trigonometry": ["삼각함수", "sin", "cos", "tan", "사인", "코사인", "탄젠트"],
@@ -147,6 +148,8 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs_matrix_product"] = scores.get("hs_matrix_product", 0) + 20
     if re.search(r"P\s*\(\s*x\s*\)\s*=", normalized, flags=re.IGNORECASE) and re.search(r"P\s*\(\s*[+-]?\d+\s*\)", normalized, flags=re.IGNORECASE):
         scores["hs_polynomial_value"] = scores.get("hs_polynomial_value", 0) + 20
+    if "최대공약수" in normalized or re.search(r"gcd\s*\(", normalized, flags=re.IGNORECASE):
+        scores["integer_gcd"] = scores.get("integer_gcd", 0) + 20
     domain = max(scores, key=scores.get) if scores else "cm_algebra_basic"
     matched_rules = [r for r in rules if r.get("domain") == domain]
     slots = _extract_slots(normalized, domain)
@@ -296,6 +299,12 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
             return {}
         highest = max(parsed_terms)
         return {"coefficients": [parsed_terms.get(power, 0) for power in range(highest, -1, -1)], "point": int(point_match.group(1))}
+    if domain == "integer_gcd":
+        matched = re.search(r"gcd\s*\(\s*([+-]?\d+)\s*,\s*([+-]?\d+)\s*\)", text, flags=re.IGNORECASE)
+        if matched:
+            return {"integers": [int(matched.group(1)), int(matched.group(2))]}
+        numbers = [int(value) for value in re.findall(r"[+-]?\d+", text)]
+        return {"integers": numbers[:2]} if len(numbers) >= 2 else {}
     if domain == "hs1_exponential_log":
         power = re.search(r"([0-9]+)\s*\^\s*([0-9]+)", text)
         logarithm = re.search(r"log\s*_?\s*([0-9]+)\s*([0-9]+)", text, flags=re.IGNORECASE)
@@ -454,6 +463,7 @@ def verify_result(domain: str, slots: dict[str, Any], answer: int | float) -> bo
 def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     """필요 변수: 분류 도메인과 슬롯. 중3 기본 규칙을 계산하고 검산 결과를 함께 반환한다."""
     tool_by_domain = {
+        "integer_gcd": "evaluate_integer_gcd",
         "hs_polynomial_value": "evaluate_polynomial_horner",
         "hs_polynomial_remainder": "polynomial_remainder_two_linear",
         "hs_rational_interval_extrema": "rational_interval_extrema",
@@ -762,6 +772,7 @@ def select_optimal_rule(parsed: dict[str, Any]) -> dict[str, Any]:
             "hs2_derivative": "hs2_power_derivative",
             "hs2_tangent": "hs2_tangent_slope",
             "hs2_integral": "hs2_power_integral",
+            "integer_gcd": "evaluate_integer_gcd",
             "hs_polynomial_value": "evaluate_polynomial_horner",
             "hs_polynomial_remainder": "polynomial_remainder_two_linear",
             "hs_rational_interval_extrema": "rational_interval_extrema",

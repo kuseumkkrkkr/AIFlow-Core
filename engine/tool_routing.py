@@ -32,6 +32,7 @@ ROUTE_SPECS = (
     RouteSpec("hs1_inverse_function", "역함수", ("역함수", "f⁻¹", "f^-1")),
     RouteSpec("hs1_polynomial_factor", "이차식 인수분해", ("인수분해", "인수정리", "다항식")),
     RouteSpec("hs_polynomial_value", "다항식 함숫값 Horner 계산", ("p(x)=", "p(", "다항식의 값", "함숫값")),
+    RouteSpec("integer_gcd", "정수 최대공약수 유클리드 호제법", ("최대공약수", "gcd(")),
     RouteSpec("hs_polynomial_remainder", "두 일차식 나머지 조건 보간", ("나눈 나머지", "r(x)", "나머지를")),
     RouteSpec("hs1_exponential_log", "지수와 로그 값 계산", ("지수", "로그", "log_", "log ", "^")),
     RouteSpec("hs1_exponential_equation", "지수방정식과 로그방정식", ("지수방정식", "로그방정식", "^x=", "log_")),
@@ -122,6 +123,7 @@ def has_minimum_evidence(text: str, domain: str) -> bool:
         "hs_composite_sequence_function": ("복합상",),
         "hs_matrix_product": ("두 행렬", "ab="),
         "hs_polynomial_value": ("p(x)=", "p(x) ="),
+        "integer_gcd": ("최대공약수", "gcd("),
         "hs_rational_interval_extrema": ("최댓값", "최솟값"),
     }
     markers = strict_markers.get(domain)

@@ -25,6 +25,7 @@ ROUTE_SPECS = (
     RouteSpec("cm_ratio", "비례식과 비율", ("비례", "비율", ":")),
     RouteSpec("cm_probability", "조합 순열 기본 확률", ("확률", "조합", "순열", "경우의 수", "%")),
     RouteSpec("cm_geometry", "피타고라스와 기본 도형 넓이", ("피타고라스", "직각삼각형", "삼각형", "원의 넓이", "직사각형", "반지름")),
+    RouteSpec("hs_cosine_law_side", "코사인 법칙으로 삼각형 변 계산", ("삼각형", "cos", "cosine", "ab=", "bc=")),
     RouteSpec("cm_arith_sequence", "등차수열 일반항과 합", ("등차수열", "첫항", "공차", "수열의 합")),
     RouteSpec("hs1_geometric_sequence", "등비수열 일반항과 합", ("등비수열", "공비")),
     RouteSpec("hs1_function_basic", "일차함수 함숫값", ("함수", "함숫값", "f(x)=")),
@@ -85,6 +86,8 @@ def _rule_score(text: str, spec: RouteSpec) -> float:
         structure_bonus = 14.0
     elif spec.domain == "cm_quadratic" and re.search(r"x\s*(?:\^\s*2|²)", lowered):
         structure_bonus = 8.0
+    elif spec.domain == "hs_cosine_law_side" and re.search(r"ab\s*=\s*\d+.*?bc\s*=\s*\d+.*?cos\s*a\s*=", lowered):
+        structure_bonus = 18.0
     elif spec.domain == "hs1_exponential_equation" and re.search(r"\d+\s*\^\s*\(?\s*[+-]?\s*\d*\s*x", lowered):
         structure_bonus = 16.0
     elif spec.domain == "hs1_exponential_log" and re.search(r"\d+\s*\^\s*\d+|log\s*_?\s*\d+", lowered):

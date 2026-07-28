@@ -52,6 +52,31 @@ def rational_interval_extrema(slots: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def solve_cosine_law_adjacent_side(slots: dict[str, Any]) -> dict[str, Any]:
+    """변수: angle_opposite(맞은편 변), known_adjacent(인접 변), cosine(끼인각 코사인).
+    원리: 코사인 법칙을 미지 인접 변의 이차식으로 풀고, 삼각형 조건을 만족하는 양의 해가 유일할 때만 반환한다.
+    """
+    opposite, adjacent, cosine = (slots.get(key) for key in ("angle_opposite", "known_adjacent", "cosine"))
+    try:
+        opposite, adjacent, cosine = float(opposite), float(adjacent), float(cosine)
+    except (TypeError, ValueError):
+        return {"status": "FAIL", "reason": "맞은편 변·인접 변·코사인값이 필요합니다."}
+    if opposite <= 0 or adjacent <= 0 or not -1 < cosine < 1:
+        return {"status": "FAIL", "reason": "변의 길이와 비퇴화 끼인각 조건이 올바르지 않습니다."}
+    discriminant = opposite * opposite - adjacent * adjacent * (1 - cosine * cosine)
+    if discriminant < -1e-10:
+        return {"status": "FAIL", "reason": "코사인 법칙의 실수 해가 없습니다."}
+    root = sqrt(max(0.0, discriminant))
+    candidates = [adjacent * cosine + root, adjacent * cosine - root]
+    valid = [value for value in candidates if value > 1e-10 and abs(opposite * opposite - (value * value + adjacent * adjacent - 2 * value * adjacent * cosine)) < 1e-8 and abs(value - adjacent) < opposite < value + adjacent]
+    valid = sorted({round(value, 12) for value in valid})
+    if len(valid) != 1:
+        return {"status": "FAIL", "reason": "삼각형 조건을 만족하는 미지 변이 유일하지 않습니다."}
+    answer = valid[0]
+    answer = int(answer) if abs(answer - round(answer)) < 1e-10 else answer
+    return {"status": "PASS", "answer": answer, "formula": "a²=b²+c²-2bc cos(A)", "verified": True, "tool": "solve_cosine_law_adjacent_side"}
+
+
 def symbolic_matrix_product_2x2(slots: dict[str, Any]) -> dict[str, Any]:
     """변수: k를 포함한 2×2 행렬과 곱 조건. 원리: 양의 정수 k 후보를 대입해 수치 조건을 만족하는 곱을 선택한다."""
     left, right, targets, requested = (slots.get(key) for key in ("left", "right", "targets", "requested"))
@@ -362,6 +387,7 @@ def geometry_line_intersection_gui(slots: dict[str, Any]) -> dict[str, Any]:
 MATH_TOOL_REGISTRY: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "polynomial_remainder_two_linear": polynomial_remainder_two_linear,
     "rational_interval_extrema": rational_interval_extrema,
+    "solve_cosine_law_adjacent_side": solve_cosine_law_adjacent_side,
     "symbolic_matrix_product_2x2": symbolic_matrix_product_2x2,
     "evaluate_polynomial_horner": evaluate_polynomial_horner,
     "evaluate_integer_gcd": evaluate_integer_gcd,

@@ -111,6 +111,7 @@ def classify(text: str) -> dict[str, Any]:
         "hs_inverse_log_power_coordinate": ["역함수", "log_", "^k"],
         "hs_log_interval_extrema": ["최댓값", "최솟값", "log_", "구간"],
         "hs_sine_linear_interval": ["sin", "sqrt", "≤", "방정식"],
+        "hs_cosine_law_side": ["코사인 법칙", "삼각형", "cos", "AB=", "BC="],
         "hs1_exponential_log": ["지수", "로그", "log", "log_"],
         "hs1_exponential_equation": ["지수방정식", "로그방정식", "2^x", "log_2 x"],
         "hs1_trigonometry": ["삼각함수", "sin", "cos", "tan", "사인", "코사인", "탄젠트"],
@@ -465,6 +466,11 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         coefficient_raw = equation.group(1)
         coefficient = -1 if coefficient_raw == "-" else int(coefficient_raw or "1")
         return {"coefficient": coefficient, "constant_sign": -1 if equation.group(2) == "-" else 1, "radical": int(equation.group(3)), "left_numerator": left[0], "left_denominator": left[1], "right_numerator": right[0], "right_denominator": right[1]}
+    if domain == "hs_cosine_law_side":
+        match = re.search(r"AB\s*=\s*(\d+)\s*,?\s*BC\s*=\s*(\d+)\s*,?\s*cos\s*A\s*=\s*([+-]?\d+)\s*/\s*(\d+)", text, flags=re.IGNORECASE)
+        if not match:
+            return {}
+        return {"known_adjacent": int(match.group(1)), "angle_opposite": int(match.group(2)), "cosine": int(match.group(3)) / int(match.group(4))}
     if domain == "hs1_exponential_log":
         root_rational_power = re.search(
             r"root_\s*(\d+)\s*\(\s*(\d+)\s*\)\s*\*\s*(\d+)\s*\^\s*\(\s*([+-]?\d+)\s*/\s*(\d+)\s*\)",
@@ -752,6 +758,7 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     tool_by_domain = {
         "hs_polynomial_addition": "add_polynomial_coefficients",
         "hs_sine_linear_interval": "solve_sine_linear_special_interval",
+        "hs_cosine_law_side": "solve_cosine_law_adjacent_side",
         "hs_log_interval_extrema": "solve_log_interval_extrema_sum",
         "hs_inverse_log_power_coordinate": "solve_inverse_log_power_coordinate",
         "hs_exponential_asymptote_distance": "solve_exponential_asymptote_distance_sum",

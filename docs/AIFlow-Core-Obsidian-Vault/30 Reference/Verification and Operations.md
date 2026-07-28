@@ -7,6 +7,7 @@ sources:
   - ../../../tests
   - ../../../scripts/build_local_tool_dataset.py
   - ../../../scripts/train_local_tool_embedder.py
+  - ../../../scripts/import_official_pdf_corpus.py
 ---
 
 # 검증·운영
@@ -44,6 +45,14 @@ python scripts/run_router_experiment.py --corpus private_benchmarks\official\202
 검증 스크립트는 핵심 규칙, 생성 루프, 난이도 입력 검증, seed 매트릭스, 코퍼스 회귀를 실행한다. 보고서는 UTF-8 JSON으로 `docs/`에 기록한다.
 
 `private_benchmarks/`는 Git에서 제외된다. 공개 기출·문제집 전문·PDF·이미지는 이 경로에만 보관하고, 저장소에는 출처·문항번호·원문 SHA-256·집계 결과만 남긴다. `engine/experiment_runner.py`는 실행 전에 문항 전문·LaTeX·정답·출처 문서 해시·문항 번호·교육과정·그림 의존·지원 여부를 검증하고, 같은 전문으로 `rule`, `neural`, `embedding`을 비교해 도구 선택 정확도, 정답 정확도, 검산 통과율, 허위 PASS율, 미지원 거부 정확도, 평균 처리 시간, 반복 실행 결정성 및 단원별 지표를 각각 기록한다. embedding 보고서에는 실제 로컬 E5·도메인 투영 모델 사용 여부와 버전도 기록한다.
+
+## 공식 PDF 수집
+
+평가원 등 원문 공개처의 문제지와 정답표는 아래처럼 **로컬 전용**으로 수집한다. 수집기는 원문을 Git·Vercel에 쓰지 않고, 재현을 위해 URL과 SHA-256만 `manifest.json`에 남긴다.
+
+```powershell
+python scripts/import_official_pdf_corpus.py --exam-id kice_2027_06 --question-url https://cdn2.kice.re.kr/suneung27mo06/suneung27mo06_2.pdf --answer-url https://cdn2.kice.re.kr/suneung27mo06/suneung27mo06_2a.pdf --output-dir private_benchmarks\official\kice_2027_06
+```
 
 라우터 회귀에는 지원 문항뿐 아니라 해가 유일하지 않거나 필수 표현이 빠진 문항도 둔다. 이 경우 유사한 숫자 패턴을 가진 다른 도구가 `PASS`하지 않아야 하며, 예를 들어 정적분 도구는 `정적분`·`부정적분`·`적분` 중 하나가 없는 입력을 실행하지 않는다.
 

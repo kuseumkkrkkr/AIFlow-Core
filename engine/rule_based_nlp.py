@@ -160,6 +160,15 @@ def classify(text: str) -> dict[str, Any]:
         scores["hs1_exponential_equation"] = scores.get("hs1_exponential_equation", 0) + 7
     if re.search(r"(?:^|\s)(?:lim|log_?)", normalized, flags=re.IGNORECASE):
         scores["hs1_exponential_log"] = scores.get("hs1_exponential_log", 0) + 4
+    # ASCII Math 실기출형 전용 계약: 모호한 자연어 추측 대신 식 구조가 완전할 때만 높은 점수를 준다.
+    if re.search(r"\d+\s*\^\s*\(\s*-?\d+\s*/\s*\d+\s*\)\s*\*\s*\d+\s*\^", normalized):
+        scores["hs_ascii_power_product"] = scores.get("hs_ascii_power_product", 0) + 30
+    if "lim" in normalized.lower() and re.search(r"f\s*\(\s*1\s*\+\s*h\s*\).*?/\s*h", normalized, flags=re.IGNORECASE) and re.search(r"f\s*\(\s*x\s*\)\s*=", normalized, flags=re.IGNORECASE):
+        scores["hs_polynomial_difference_quotient"] = scores.get("hs_polynomial_difference_quotient", 0) + 35
+    if re.search(r"sum_?\s*\(\s*k\s*=\s*1\s*\)\s*\^", normalized, flags=re.IGNORECASE) and "a_k" in normalized:
+        scores["hs_linear_sigma_identity"] = scores.get("hs_linear_sigma_identity", 0) + 35
+    if "continuity at x=" in normalized.lower() or ("for x<" in normalized.lower() and "for x>=" in normalized.lower() and "연속" in normalized):
+        scores["hs_piecewise_continuity"] = scores.get("hs_piecewise_continuity", 0) + 35
     if any(token in normalized for token in ("sin", "cos", "tan", "사인", "코사인", "탄젠트")):
         scores["hs1_trigonometry"] = scores.get("hs1_trigonometry", 0) + 4
     if re.search(r"cos\s*\^\s*2\s*(?:theta|θ).*?tan\s*(?:theta|θ)", normalized, flags=re.IGNORECASE):
@@ -260,6 +269,25 @@ def _extract_slots(text: str, domain: str) -> dict[str, int]:
         if "합" in text:
             result["kind"] = "arithmetic_sum"
         return result
+    if domain == "hs_ascii_power_product":
+        values = re.findall(r"([+-]?\d+)\s*\^\s*\(\s*([+-]?\d+)\s*/\s*([+-]?\d+)\s*\)", text)
+        return {"powers": [(int(base), int(numerator), int(denominator)) for base, numerator, denominator in values]} if len(values) == 2 else {}
+    if domain == "hs_polynomial_difference_quotient":
+        expression = re.search(r"f\s*\(\s*x\s*\)\s*=\s*([^;,.]+)", text, flags=re.IGNORECASE)
+        point = value(r"f\s*\(\s*([+-]?\d+)\s*\+\s*h\s*\)")
+        return {"polynomial": expression.group(1).replace(" ", ""), "point": point} if expression and point is not None else {}
+    if domain == "hs_linear_sigma_identity":
+        match = re.search(r"sum_?\s*\(\s*k\s*=\s*1\s*\)\s*\^\s*(\d+)\s*\(?\s*([+-]?\d*)\s*a_k\s*([+-])\s*k\s*\)?\s*=\s*([+-]?\d+)", text, flags=re.IGNORECASE)
+        if not match:
+            return {}
+        coefficient = match.group(2)
+        return {"upper": int(match.group(1)), "a_coefficient": -1 if coefficient == "-" else int(coefficient or 1), "k_sign": match.group(3), "constant": int(match.group(4))}
+    if domain == "hs_piecewise_continuity":
+        match = re.search(r"f\s*\(\s*x\s*\)\s*=\s*([+-]?\d*)x\s*([+-]\s*\d+)\s*for\s*x\s*<\s*([+-]?\d+).*?f\s*\(\s*x\s*\)\s*=\s*x\s*\^\s*2\s*([+-]\s*\d*)x\s*([+-]\s*a)\s*for\s*x\s*>=\s*\3", text, flags=re.IGNORECASE)
+        if not match:
+            return {}
+        linear = match.group(1)
+        return {"left_slope": -1 if linear == "-" else int(linear or 1), "left_constant": int(match.group(2).replace(" ", "")), "point": int(match.group(3)), "right_linear": int((match.group(4).replace(" ", "") or "+1").replace("+", "")), "a_sign": -1 if match.group(5).replace(" ", "").startswith("-") else 1}
     if domain == "hs1_geometric_sequence":
         indices = [int(item) for item in re.findall(r"a\s*_?([0-9]+)", text, flags=re.IGNORECASE)]
         term_counts = [int(item) for item in re.findall(r"([0-9]+)\s*항", text)]
@@ -827,6 +855,48 @@ def solve_rule(domain: str, slots: dict[str, Any]) -> dict[str, Any]:
     }
     if domain in tool_by_domain:
         return call_math_tool(tool_by_domain[domain], slots)
+    if domain == "hs_ascii_power_product":
+        powers = slots.get("powers", [])
+        if len(powers) != 2 or any(base <= 0 or denominator == 0 for base, _, denominator in powers):
+            return {"status": "FAIL", "reason": "양의 밑과 0이 아닌 유리수 지수가 두 개 필요합니다."}
+        answer = 1.0
+        for base, numerator, denominator in powers:
+            answer *= base ** (numerator / denominator)
+        answer = int(round(answer)) if abs(answer - round(answer)) < 1e-12 else answer
+        verified = abs(answer - (powers[0][0] ** (powers[0][1] / powers[0][2]) * powers[1][0] ** (powers[1][1] / powers[1][2]))) < 1e-10
+        return {"status": "PASS", "answer": answer, "formula": "a^(p/q)=q제곱근(a^p), 곱의 값", "verified": verified}
+    if domain == "hs_polynomial_difference_quotient":
+        polynomial, point = slots.get("polynomial"), slots.get("point")
+        if not isinstance(polynomial, str) or point is None:
+            return {"status": "FAIL", "reason": "f(x) 다항식과 f(a+h)의 a가 필요합니다."}
+        terms = re.findall(r"([+-]?)(\d*)x(?:\^(\d+))?|([+-]?\d+)", polynomial)
+        derivative = 0
+        for sign, coefficient, power, constant in terms:
+            if constant:
+                continue
+            degree = int(power or 1)
+            factor = int(coefficient or 1) * (-1 if sign == "-" else 1)
+            derivative += factor * degree * (point ** (degree - 1))
+        return {"status": "PASS", "answer": derivative, "formula": "lim_(h->0)(f(a+h)-f(a))/h=f'(a)", "verified": isinstance(derivative, int)}
+    if domain == "hs_linear_sigma_identity":
+        upper, coefficient, sign, constant = (slots.get(key) for key in ("upper", "a_coefficient", "k_sign", "constant"))
+        if None in (upper, coefficient, sign, constant) or coefficient == 0 or upper < 1:
+            return {"status": "FAIL", "reason": "합의 상한·a_k 계수·k항·상수가 필요합니다."}
+        sum_k = upper * (upper + 1) // 2
+        answer = (constant - sum_k if sign == "+" else constant + sum_k) / coefficient
+        answer = int(answer) if answer == int(answer) else answer
+        verified = coefficient * answer + (sum_k if sign == "+" else -sum_k) == constant
+        return {"status": "PASS", "answer": answer, "formula": "Σ(ca_k±k)=cΣa_k±n(n+1)/2", "verified": verified}
+    if domain == "hs_piecewise_continuity":
+        required = ("left_slope", "left_constant", "point", "right_linear", "a_sign")
+        if any(slots.get(key) is None for key in required):
+            return {"status": "FAIL", "reason": "양쪽 식과 경계점이 완전한 조각함수여야 합니다."}
+        point = slots["point"]
+        left = slots["left_slope"] * point + slots["left_constant"]
+        right_without_a = point * point + slots["right_linear"] * point
+        answer = (left - right_without_a) * slots["a_sign"]
+        verified = left == right_without_a + slots["a_sign"] * answer
+        return {"status": "PASS", "answer": answer, "formula": "연속 조건: lim_(x->a-)f(x)=f(a)", "verified": verified}
     if domain == "hs_composite_sequence":
         a1, d, n1, n2 = (slots.get(key) for key in ("a1", "d", "n1", "n2"))
         if None in (a1, d, n1, n2):

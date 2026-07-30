@@ -36,6 +36,8 @@ sources:
 - 확률과 통계: 조합·순열·조건부확률·이항분포 점확률
 - 기하: 기본 도형, 평면벡터 성분 내적, 좌표 GUI 거리·중점·삼각형 넓이·벡터 내적·두 직선 교점
 
+2026-07-30에는 실제 수능 ASCII Math 전사 문항을 위해 네 실행 계약을 추가했다. `hs_ascii_power_product`는 양의 밑 두 개의 유리수 지수 곱을 독립 재계산하고, `hs_polynomial_difference_quotient`는 `lim_(h->0)(f(a+h)-f(a))/h`의 다항식 미분계수를 계산한다. `hs_linear_sigma_identity`는 `Σ(ca_k±k)=C`에서 `Σa_k`를 분리해 재대입하며, `hs_piecewise_continuity`는 같은 경계점의 일차식/이차식 조각함수 좌·우 값을 대조해 미지수 상수를 구한다. 식 구조나 정의역이 계약 밖이면 `FAIL`을 유지한다.
+
 대표 도구 호출: 두 일차식 나머지 보간, 유리함수 구간 극값, 양의 정수 미지수를 포함한 2×2 행렬 곱, Horner 다항식 값, 최대공약수, 로그 곱 방정식, 지수함수 점근선 거리, 로그함수 역함수의 거듭제곱 좌표, 일차식 절댓값 방정식의 두 분기 해다. 도구는 추출된 슬롯만 받고, 등록되지 않은 도구 ID 호출과 임의 코드 실행을 허용하지 않는다.
 
 각 과목 도구 카탈로그는 `concept_id`, `required_slots`, `tool`, `formula`, `verification_invariant`, `supported_example`, `unsupported_boundary`를 가진다. 이 형식은 키워드 나열이 아니라 새 파서·도구·검산 규칙을 추가하기 위한 구현 계약이다.

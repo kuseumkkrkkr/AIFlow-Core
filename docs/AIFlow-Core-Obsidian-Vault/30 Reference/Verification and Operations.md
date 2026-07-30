@@ -10,9 +10,12 @@ sources:
   - ../../../scripts/import_official_pdf_corpus.py
   - ../../../scripts/render_private_pdf_pages.py
   - ../../../scripts/extract_official_exam_ocr.ps1
+  - ../../../scripts/collect_ebsi_math_archive.py
+  - ../../../scripts/diagnose_pdf_engine_ingestion.py
   - ../../../engine/rule_based_nlp.py
   - ../../../engine/mini_neural_router.py
   - ../../../engine/tool_routing.py
+  - ../../../scripts/train_local_tool_embedder.py
 ---
 
 # 검증·운영
@@ -91,6 +94,18 @@ python scripts/run_router_experiment.py --corpus private_benchmarks\public\gsm8k
 
 같은 문항에서 미니 MLP를 후보마다 다시 계산하지 않고 문항당 한 번만 순전파하도록 최적화했다. 이 변경은 후보 순서를 바꾸지 않으며, GSM8K 전수의 평균 처리 시간을 약 90ms 수준에서 1.72ms로 낮췄다.
 
+### 로컬 임베더 홀드아웃 재학습 (2026-07-29)
+
+`train_local_tool_embedder.py`는 라벨별 고정 80:20 홀드아웃을 먼저 분리하고, 훈련 분할만으로 도구 중심 벡터를 만든다. 따라서 저장되는 `holdout_evaluation.json`의 정확도와 macro-F1은 학습에 포함되지 않은 OMJ 문항의 도구 감지 지표다. 기존 전체 데이터 중심 벡터에 대한 재평가와 혼동하지 않는다.
+
+저메모리 CPU 실행(`batch-size=1`, `max-length=96`, 3 epoch) 결과는 다음과 같다.
+
+| 학습 데이터 | 학습/홀드아웃 | 라벨 수 | 홀드아웃 정확도 | Macro-F1 |
+| --- | ---: | ---: | ---: | ---: |
+| OMJ 규칙 검산 통과 문항 | 309 / 77 | 10 | 89.61% | 87.93% |
+
+모델 산출물은 `private_models/tool-embedder-v2-lowmem`에만 보관한다. 같은 모델의 2027학년도 6월 공식 로컬 코퍼스 10문항 평가에서 embedding 라우터는 지원 문항 정답·검산 100%, 미지원 거부 100%, 허위 PASS 0%, 평균 357.87ms를 기록했다. 이 공식 코퍼스는 10문항의 작은 회귀셋이므로 전국 단위 일반 정확도로 해석하지 않는다. 10개년 수능·모의평가 전체 원문이 로컬 private 코퍼스로 구축된 뒤, 같은 분할 밖의 고정 시험셋으로 다시 측정해야 한다.
+
 ## 공식 PDF 수집
 
 평가원 등 원문 공개처의 문제지와 정답표는 아래처럼 **로컬 전용**으로 수집한다. 수집기는 원문을 Git·Vercel에 쓰지 않고, 재현을 위해 URL과 SHA-256만 `manifest.json`에 남긴다.
@@ -109,6 +124,18 @@ Get-ChildItem private_benchmarks\official\kice_2027_06\ocr_pages\page-*.png | Fo
 ```
 
 2027학년도 6월 수학 영역의 로컬 점검에서는 원문 해시를 붙인 문항을 `private_benchmarks/official/kice_2027_06/corpus.json`에만 추가한다. 이 코퍼스에서 확인된 `a^(mx+p)=b^(nx+q)`, 이차다항식 차분몫, 원점 동시 출발에서 `v₁(t)=at²+bt`, `v₂(t)=ct`인 두 점의 위치 일치 시각, `p=q^r`인 두 로그 밑의 연립 비는 실행 계약으로 승격한다. 속도 계약은 `t=3(c-b)/(2a)>0` 및 위치 차 재대입을, 로그 계약은 공통 밑 좌표 `x=log_q(a), y=log_q(b)`의 두 선형식을 모두 재대입하는 것을 요구한다. 그림 의존 극한, 일반 삼각·로그 식은 성공값을 추정하지 않고 `FAIL`로 남긴다. 보고서의 허위 `PASS`율은 이 미지원 문항까지 포함해 계산한다.
+
+### EBSi 10개년 수학 원문 인덱스 (2026-07-29)
+
+`collect_ebsi_math_archive.py`는 EBSi 공개 기출 목록의 AJAX 응답에서 수학 문제 PDF와 정답 자산 URL만 찾아낸다. 달력 연도 2016~2025의 6·9·11월을 기본 대상에 두며, 원문은 `private_benchmarks/official/ebsi_10y_math_assets` 밖으로 복사하지 않는다. `manifest.json`에는 URL·SHA-256·자산 종류를, `sessions.json`에는 시행일·선택과목별 문제/정답 연결을 남긴다.
+
+```powershell
+python scripts/collect_ebsi_math_archive.py --start-year 2016 --end-year 2025 --months 06,09,11 --download
+```
+
+2026-07-29 실제 수집 결과는 문제 PDF 48개, 정답 이미지 24개, 총 72개 자산(약 42.8MB)과 20개 시행일·과목 묶음이다. 선택과목 체제 이전 회차는 공통 수학으로, 이후 `확률과 통계`·`미적분`·`기하`로 인덱싱된다. 정답 이미지가 홀·짝 문제지마다 별도 제공되지 않는 회차가 있으므로, 문제 PDF 수와 정답 자산 수가 같아야 한다는 검증 조건은 사용하지 않는다. 이 인덱스는 원문 보관·OCR·문항 분할의 입력일 뿐 학습 정답 데이터가 아니다. OCR 및 정답 대조를 거쳐 문항별 구조화가 끝난 레코드만 별도 학습/평가 분할에 넣는다.
+
+`diagnose_pdf_engine_ingestion.py`로 2025년 11월 수능 수학(확률과 통계 선택) PDF의 30문항을 PyMuPDF 원문 텍스트 그대로 현재 엔진에 전달했다. 실행 `PASS`는 4/30(13.3%)였으나 공식 정답표를 원본 이미지로 대조한 결과 네 건 모두 오답이었다. 따라서 **원문 PDF→현재 엔진 종단간 정확도는 0/30, 허위 PASS는 4건**이다. 이 수치는 정답 정확도 검증을 끝낸 표본 결과이며, 10개년 정확도로 일반화하지 않는다. 사설 수식 글리프 정규화와 도구별 입력 계약이 완료되기 전에는 PDF 원문을 곧바로 API 입력으로 제공하지 않는다.
 
 라우터 회귀에는 지원 문항뿐 아니라 해가 유일하지 않거나 필수 표현이 빠진 문항도 둔다. 이 경우 유사한 숫자 패턴을 가진 다른 도구가 `PASS`하지 않아야 하며, 예를 들어 정적분 도구는 `정적분`·`부정적분`·`적분` 중 하나가 없는 입력을 실행하지 않는다.
 
